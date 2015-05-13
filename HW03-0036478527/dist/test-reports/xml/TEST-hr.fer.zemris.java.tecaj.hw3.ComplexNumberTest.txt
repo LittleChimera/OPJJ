@@ -1,0 +1,37 @@
+Testsuite: hr.fer.zemris.java.tecaj.hw3.ComplexNumberTest
+Tests run: 34, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.048 sec
+
+Testcase: divideTest took 0.005 sec
+Testcase: nthRoot took 0 sec
+Testcase: getMagnitude took 0 sec
+Testcase: subTest took 0 sec
+Testcase: parserTestIntInt took 0.003 sec
+Testcase: fromMagnitudeAndAngle3rdQuadrant took 0 sec
+Testcase: fromMagnitudeAndAngle1stQuadrant took 0 sec
+Testcase: fromReal took 0 sec
+Testcase: toPower took 0 sec
+Testcase: addTest took 0 sec
+Testcase: parserTestDoubleDouble took 0.001 sec
+Testcase: parserTestDoubleNone took 0.001 sec
+Testcase: parserTestNoneDouble took 0.001 sec
+Testcase: parserTestDoubleInt took 0 sec
+Testcase: getAngle3rd4thQuadrant took 0 sec
+Testcase: getAngle2ndQuadrant took 0 sec
+Testcase: toRootZero took 0 sec
+Testcase: parserTestIntDouble took 0.001 sec
+Testcase: getAngle4th1stQuadrant took 0 sec
+Testcase: toPowerZero took 0 sec
+Testcase: multiplyTest took 0 sec
+Testcase: parserTestJustAnOperator took 0 sec
+Testcase: getAngle4thQuadrant took 0.001 sec
+Testcase: getAsString took 0.001 sec
+Testcase: fromMagnitudeAndAngle2ndQuadrant took 0 sec
+Testcase: parserTestNoneNone took 0.001 sec
+Testcase: fromImaginary took 0 sec
+Testcase: getAngle1st2ndQuadrant took 0 sec
+Testcase: getAngle3rdQuadrant took 0 sec
+Testcase: toPowerNegative took 0 sec
+Testcase: divideWithZero took 0 sec
+Testcase: getAngle1stQuadrant took 0 sec
+Testcase: fromMagnitudeAndAngle4thQuadrant took 0.001 sec
+Testcase: getAngle2nd3rdQuadrant took 0 sec

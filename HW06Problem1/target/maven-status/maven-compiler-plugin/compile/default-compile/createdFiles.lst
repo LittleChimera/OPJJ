@@ -1,0 +1,17 @@
+hr/fer/zemris/java/simplecomp/impl/MemoryImpl.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrDecrement.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrTestEquals.class
+hr/fer/zemris/java/simplecomp/Simulator.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrJumpIfTrue.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrAdd.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrHalt.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrIncrement.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrLoad.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrIinput.class
+hr/fer/zemris/java/simplecomp/impl/ExecutionUnitImpl.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrMul.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrJump.class
+hr/fer/zemris/java/simplecomp/impl/RegistersImpl.class
+hr/fer/zemris/java/simplecomp/impl/ComputerImpl.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrEcho.class
+hr/fer/zemris/java/simplecomp/impl/instructions/InstrMove.class

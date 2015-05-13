@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="5.2.3" timestamp="2015-03-30T14:02:10.592">
+<file name="hr/fer/zemris/java/tecaj_1/brojevi/Prirodni.java">
+<violation beginline="24" endline="44" begincolumn="23" endcolumn="1" rule="UseUtilityClass" ruleset="Design" package="hr.fer.zemris.java.tecaj_1.brojevi" class="Prirodni" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd-java/rules/java/design.html#UseUtilityClass" priority="3">
+All methods are static.  Consider using a utility class instead. Alternatively, you could add a private constructor or make the class abstract to silence this warning.
+</violation>
+<violation beginline="31" endline="31" begincolumn="46" endcolumn="46" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.tecaj_1.brojevi" class="Prirodni" method="jePrirodni" variable="n" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like n
+</violation>
+<violation beginline="31" endline="31" begincolumn="42" endcolumn="46" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.tecaj_1.brojevi" class="Prirodni" method="jePrirodni" variable="n" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'n' is not assigned and could be declared final
+</violation>
+<violation beginline="40" endline="40" begincolumn="42" endcolumn="42" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.tecaj_1.brojevi" class="Prirodni" method="sljedbenik" variable="n" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like n
+</violation>
+<violation beginline="40" endline="40" begincolumn="38" endcolumn="42" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.tecaj_1.brojevi" class="Prirodni" method="sljedbenik" variable="n" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'n' is not assigned and could be declared final
+</violation>
+</file>
+</pmd>

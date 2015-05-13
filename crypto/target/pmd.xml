@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="5.2.3" timestamp="2015-04-26T17:35:27.267">
+<file name="/home/luka/MEGA/FER/Vjestine/Java/workspace/crypto/src/main/java/hr/fer/zemris/java/tecaj/hw07/crypto/actions/CheckshaAction.java">
+<violation beginline="62" endline="64" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Empty Code" package="hr.fer.zemris.java.tecaj.hw07.crypto.actions" class="CheckshaAction" method="calculateSha" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/home/luka/MEGA/FER/Vjestine/Java/workspace/crypto/src/main/java/hr/fer/zemris/java/tecaj/hw07/crypto/actions/CryptAction.java">
+<violation beginline="51" endline="51" begincolumn="37" endcolumn="43" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.tecaj.hw07.crypto.actions" class="CryptAction" method="execute" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+</file>
+<file name="/home/luka/MEGA/FER/Vjestine/Java/workspace/crypto/src/main/java/hr/fer/zemris/java/tecaj/hw07/crypto/actions/ICryptoAction.java">
+<violation beginline="7" endline="7" begincolumn="16" endcolumn="52" rule="UnusedModifier" ruleset="Unused Code" package="hr.fer.zemris.java.tecaj.hw07.crypto.actions" class="ICryptoAction" method="execute" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+</file>
+</pmd>

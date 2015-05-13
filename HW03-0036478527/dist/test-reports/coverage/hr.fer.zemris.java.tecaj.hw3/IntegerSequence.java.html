@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IntegerSequence.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.tecaj.hw3</a> &gt; <span class="el_source">IntegerSequence.java</span></div><h1>IntegerSequence.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.tecaj.hw3;
+
+import java.util.Iterator;
+
+/**
+ * IntegerSequence provides iteration through range of integers.
+ * Every IntegerSequence is defined with three values:
+ * from	- starting value
+ * to	- end value
+ * step	- step of iteration
+ * 
+ * For example, IntegerSequence(1,9,3) iterates through numbers 1,4,7
+ * @author Luka Skugor
+ *
+ */
+public class IntegerSequence implements Iterable&lt;Integer&gt; {
+	
+	/**
+	 * starting value
+	 */
+	private int from;
+	/**
+	 * end value
+	 */
+	private int to;
+	/**
+	 * step of iteration
+	 */
+	private int step;
+	
+	/**
+	 * Constructs a new sequence given restrictions and step.
+	 * @param from starting value
+	 * @param to end value
+	 * @param step step of iteration
+	 */
+<span class="fc" id="L37">	public IntegerSequence(int from, int to, int step) {</span>
+<span class="fc bfc" id="L38" title="All 8 branches covered.">		if (!((step &gt; 0 &amp;&amp; from &lt;= to) || (step &lt; 0 &amp;&amp; from &gt;= to))) {</span>
+<span class="fc" id="L39">			throw new IllegalArgumentException(&quot;Invalid range of sequence!&quot;);</span>
+		}
+
+<span class="fc" id="L42">		this.from = from;</span>
+<span class="fc" id="L43">		this.to = to;</span>
+<span class="fc" id="L44">		this.step = step;</span>
+<span class="fc" id="L45">	}</span>
+	
+	@Override
+	public Iterator&lt;Integer&gt; iterator() {
+<span class="fc" id="L49">		return new Iterator&lt;Integer&gt;() {</span>
+
+<span class="fc" id="L51">			int current = from - step;</span>
+
+			@Override
+			public boolean hasNext() {
+<span class="fc bfc" id="L55" title="All 4 branches covered.">				if ((step &gt; 0 &amp;&amp; current + step &lt;= to)</span>
+<span class="fc bfc" id="L56" title="All 4 branches covered.">						|| (step &lt; 0 &amp;&amp; current + step &gt;= to)) {</span>
+<span class="fc" id="L57">					return true;</span>
+				}
+<span class="fc" id="L59">				return false;</span>
+			}
+
+			@Override
+			public Integer next() {
+<span class="fc" id="L64">				current += step;</span>
+<span class="fc" id="L65">				return current;</span>
+			}
+		};
+	}
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

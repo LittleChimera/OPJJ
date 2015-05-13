@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CString.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.tecaj.hw3</a> &gt; <span class="el_source">CString.java</span></div><h1>CString.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.tecaj.hw3;
+
+/**
+ * Custom implementation of String type. Similar String can share data array.
+ * 
+ * Note: CString is immutable
+ * 
+ * @author Luka Skugor
+ *
+ */
+public final class CString {
+
+	/**
+	 * array of characters from which CString is built
+	 */
+	private final char[] data;
+	/**
+	 * offset from which actual CString starts in the data array
+	 */
+	private int offset;
+	/**
+	 * Length of the CString. Defines how many characters to take from the data
+	 * array.
+	 */
+	private int length;
+
+	/**
+	 * This is a helper constructor which evaluates how the CString should be
+	 * instanced.
+	 * 
+	 * @param data
+	 *            array of characters from which string is built
+	 * @param offset
+	 *            offset in the data array
+	 * @param length
+	 *            length of the string
+	 * @param safe
+	 *            true if the data field is not available to the user
+	 */
+<span class="fc" id="L40">	private CString(char[] data, int offset, int length, boolean safe) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		if (data == null) {</span>
+<span class="fc" id="L42">			throw new IllegalArgumentException(</span>
+					&quot;Can't construct CString from null array.&quot;);
+		}
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		if (offset &lt; 0) {</span>
+<span class="fc" id="L46">			throw new IllegalArgumentException(&quot;Offset needs to be positive.&quot;);</span>
+		}
+<span class="fc bfc" id="L48" title="All 2 branches covered.">		if (offset + length &gt; data.length) {</span>
+<span class="fc" id="L49">			throw new IllegalArgumentException(</span>
+					&quot;Offset + length can't be greater than size of the array&quot;);
+		}
+
+<span class="fc" id="L53">		this.offset = 0;</span>
+<span class="fc" id="L54">		this.length = length;</span>
+<span class="pc bpc" id="L55" title="2 of 6 branches missed.">		if (safe &amp;&amp; offset == 0 &amp;&amp; length == data.length) {</span>
+<span class="fc" id="L56">			this.data = data;</span>
+		} else {
+<span class="fc" id="L58">			this.data = new char[length];</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">			for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L61">				this.data[i] = data[offset + i];</span>
+			}
+		}
+<span class="fc" id="L64">	}</span>
+
+	/**
+	 * Constructs a CString from a char array for given offset and length.
+	 * 
+	 * @param data
+	 *            char array from which string is built
+	 * @param offset
+	 *            offset in the data array
+	 * @param length
+	 *            length of the string
+	 */
+	public CString(char[] data, int offset, int length) {
+<span class="fc" id="L77">		this(data, offset, length, false);</span>
+<span class="fc" id="L78">	}</span>
+
+	/**
+	 * Construct a CString from a char array.
+	 * 
+	 * @param data
+	 *            char array from which string is built
+	 */
+	public CString(char[] data) {
+<span class="fc" id="L87">		this(data, 0, data.length);</span>
+<span class="fc" id="L88">	}</span>
+
+	/**
+	 * Constructs a CString from existing CString.
+	 * 
+	 * @param original
+	 *            existing CString
+	 */
+	public CString(CString original) {
+<span class="fc" id="L97">		this(original.data, original.offset, original.length, true);</span>
+<span class="fc" id="L98">	}</span>
+
+	/**
+	 * Constructs a CString from existing String
+	 * 
+	 * @param s
+	 *            existing String
+	 */
+<span class="fc" id="L106">	public CString(String s) {</span>
+<span class="fc" id="L107">		this.data = s.toCharArray();</span>
+<span class="fc" id="L108">		this.offset = 0;</span>
+<span class="fc" id="L109">		this.length = data.length;</span>
+<span class="fc" id="L110">	}</span>
+
+	/**
+	 * Return the length of the CString
+	 * 
+	 * @return length
+	 */
+	public int length() {
+<span class="fc" id="L118">		return length;</span>
+	}
+
+	/**
+	 * Returns a char from the index position in the CString.
+	 * 
+	 * @param index
+	 *            position in the CString
+	 * @return char at the index position
+	 */
+	public char charAt(int index) {
+<span class="fc bfc" id="L129" title="All 4 branches covered.">		if (index &gt;= length || index &lt; 0) {</span>
+<span class="fc" id="L130">			throw new IndexOutOfBoundsException(&quot;No data at requested index.&quot;);</span>
+		}
+
+<span class="fc" id="L133">		return data[offset + index];</span>
+	}
+
+	/**
+	 * Converts the CString to array of characters.
+	 * 
+	 * @return array of characters built from the CString
+	 */
+	public char[] toCharArray() {
+<span class="fc" id="L142">		char[] copy = new char[length];</span>
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">		for (int i = 0; i &lt; copy.length; i++) {</span>
+<span class="fc" id="L145">			copy[i] = data[offset + i];</span>
+		}
+
+<span class="fc" id="L148">		return copy;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L153">		return String.copyValueOf(data).substring(offset, offset + length);</span>
+	}
+
+	/**
+	 * Searches the CString for a character and returns the index of the first
+	 * one it finds. If none is found returns -1.
+	 * 
+	 * @param c
+	 *            character to find
+	 * @return index of the first found character or -1 if nout found
+	 */
+	public int indexOf(char c) {
+<span class="fc bfc" id="L165" title="All 2 branches covered.">		for (int index = 0; index &lt; length; index++) {</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">			if (data[index + offset] == c) {</span>
+<span class="fc" id="L167">				return index;</span>
+			}
+		}
+
+<span class="fc" id="L171">		return -1;</span>
+	}
+
+	/**
+	 * Check if CString's start matches requested string.
+	 * 
+	 * @param s
+	 *            starting to match
+	 * @return true if matches, else false
+	 */
+	public boolean startsWith(CString s) {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">		if (this.length &lt; s.length) {</span>
+<span class="fc" id="L183">			return false;</span>
+		}
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">		for (int index = 0; index &lt; s.data.length; index++) {</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">			if (data[index + offset] != s.data[index + s.offset]) {</span>
+<span class="fc" id="L188">				return false;</span>
+			}
+		}
+<span class="fc" id="L191">		return true;</span>
+	}
+
+	/**
+	 * Check if CString's ending matches requested string.
+	 * 
+	 * @param s
+	 *            ending to match
+	 * @return true if matches, else false
+	 */
+	public boolean endsWith(CString s) {
+<span class="fc bfc" id="L202" title="All 2 branches covered.">		if (this.length &lt; s.length) {</span>
+<span class="fc" id="L203">			return false;</span>
+		}
+
+<span class="fc bfc" id="L206" title="All 2 branches covered.">		for (int index = 0; index &lt; s.data.length; index++) {</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">			if (data[length - 1 - index + offset] != s.data[s.length - 1</span>
+					- index + s.offset]) {
+<span class="fc" id="L209">				return false;</span>
+			}
+		}
+<span class="fc" id="L212">		return true;</span>
+	}
+
+	/**
+	 * Checks if the requested string matches any substring of the CString.
+	 * 
+	 * @param s
+	 *            substring to match
+	 * @return true if any substring match is found, else false
+	 */
+	public boolean contains(CString s) {
+<span class="fc bfc" id="L223" title="All 2 branches covered.">		Search: for (int index = offset, end = length - s.length + 1; index &lt; end; index++) {</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">			for (int subIndex = 0; subIndex &lt; s.length; subIndex++) {</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">				if (data[index + subIndex] != s.data[s.offset + subIndex]) {</span>
+<span class="fc" id="L226">					continue Search;</span>
+				}
+			}
+<span class="fc" id="L229">			return true;</span>
+		}
+<span class="fc" id="L231">		return false;</span>
+	}
+
+	/**
+	 * Creates a substring of the CString. Newly created CString has the same
+	 * elements of the CString from startIndex to endIndex - 1 and therefore
+	 * length is endIndex-startIndex.
+	 * 
+	 * For example, substring from 3 to 5 of &quot;sample&quot; would be &quot;le&quot;.
+	 * 
+	 * @param startIndex
+	 *            start index of a substring (inclusive). Must be positive and less or
+	 *            equals than CString's length.
+	 * @param endIndex end index of a substring (exclusive). Must be positive and less or
+	 *            equals than CString's length.
+	 * @return substring
+	 * @throws IndexOutOfBoundsException
+	 *             if start or end index is invalid
+	 */
+	public CString substring(int startIndex, int endIndex) {
+<span class="pc bpc" id="L251" title="1 of 4 branches missed.">		if (startIndex &lt; 0 || startIndex &gt;= length) {</span>
+<span class="fc" id="L252">			throw new IndexOutOfBoundsException(&quot;Start index doesn't exist.&quot;);</span>
+		}
+<span class="pc bpc" id="L254" title="1 of 4 branches missed.">		if (endIndex &lt; startIndex || endIndex &gt; length) {</span>
+<span class="fc" id="L255">			throw new IndexOutOfBoundsException(</span>
+					&quot;End index is invalid. Must be greater or equals than startIndex and less or equals than CString's length.&quot;);
+		}
+<span class="fc" id="L258">		CString sub = new CString(this);</span>
+<span class="fc" id="L259">		sub.offset = offset + startIndex;</span>
+<span class="fc" id="L260">		sub.length = endIndex - startIndex;</span>
+
+<span class="fc" id="L262">		return sub;</span>
+	}
+	
+	/**
+	 * Creates a substring of first n characters.
+	 * @param n length of the string
+	 * @return substring
+	 */
+	public CString left(int n) {
+<span class="fc bfc" id="L271" title="All 4 branches covered.">		if (n &gt; length || n &lt; 0) {</span>
+<span class="fc" id="L272">			throw new IllegalArgumentException(</span>
+					&quot;CString cannot be constructed. (0 &lt;= n &lt;= length)&quot;);
+		}
+<span class="fc" id="L275">		return substring(0, n);</span>
+	}
+	
+	/**
+	 * Creates a substring of last n characters.
+	 * @param n length of the string
+	 * @return substring
+	 */
+	public CString right(int n) {
+<span class="fc bfc" id="L284" title="All 4 branches covered.">		if (n &gt; length || n &lt; 0) {</span>
+<span class="fc" id="L285">			throw new IllegalArgumentException(</span>
+					&quot;CString cannot be constructed. (0 &lt;= n &lt;= length)&quot;);
+		}
+<span class="fc" id="L288">		return substring(length - n, length);</span>
+	}
+	
+	/**
+	 * Merges two CStrings.
+	 * @param s merging CString
+	 * @return merged CString
+	 */
+	public CString add(CString s) {
+<span class="fc" id="L297">		int concatLength = length + s.length;</span>
+<span class="fc" id="L298">		char[] concatData = new char[concatLength];</span>
+
+<span class="fc bfc" id="L300" title="All 2 branches covered.">		for (int index = 0; index &lt; this.length; index++) {</span>
+<span class="fc" id="L301">			concatData[index] = this.data[offset + index];</span>
+		}
+<span class="fc bfc" id="L303" title="All 2 branches covered.">		for (int index = 0; index &lt; s.length; index++) {</span>
+<span class="fc" id="L304">			concatData[index + this.length] = s.charAt(index);</span>
+		}
+
+<span class="fc" id="L307">		return new CString(concatData);</span>
+	}
+	
+	/**
+	 * Replaces all matching characters with another character.
+	 * @param oldChar character to replace
+	 * @param newChar replacement character
+	 * @return string with replaced characters
+	 */
+	public CString replaceAll(char oldChar, char newChar) {
+<span class="fc" id="L317">		char[] replaced = new char[length];</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">		for (int index = 0; index &lt; length; index++) {</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">			if (data[offset + index] == oldChar) {</span>
+<span class="fc" id="L320">				replaced[index] = newChar; </span>
+			} else {
+<span class="fc" id="L322">				replaced[index] = data[offset + index];</span>
+			}
+		}
+<span class="fc" id="L325">		return new CString(replaced);</span>
+	}
+	
+	/**
+	 * Replaces all matching substring with another string.
+	 * @param oldStr substring to replace
+	 * @param newStr replacement string
+	 * @return string with replaced substrings
+	 */
+	public CString replaceAll(CString oldStr, CString newStr) {
+<span class="fc" id="L335">		CString replaced = new CString(&quot;&quot;);</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">		Search: for (int index = offset, end = length - oldStr.length + 1; index &lt; end; index++) {</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">			for (int subIndex = 0; subIndex &lt; oldStr.length; subIndex++) {</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">				if (data[index + subIndex] != oldStr.data[oldStr.offset + subIndex]) {</span>
+<span class="fc" id="L339">					char[] notMatching = {data[index]};</span>
+<span class="fc" id="L340">					replaced = replaced.add(new CString(notMatching));</span>
+<span class="fc" id="L341">					continue Search;</span>
+				}
+			}
+<span class="fc" id="L344">			replaced = replaced.add(newStr);</span>
+<span class="fc" id="L345">			index += oldStr.length - 1;</span>
+			
+		}
+<span class="fc" id="L348">		return new CString(replaced);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

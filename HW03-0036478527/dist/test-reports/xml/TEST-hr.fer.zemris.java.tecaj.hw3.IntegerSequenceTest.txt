@@ -1,0 +1,9 @@
+Testsuite: hr.fer.zemris.java.tecaj.hw3.IntegerSequenceTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.01 sec
+
+Testcase: rangeGoingtoNegativeIterateEndValue took 0.003 sec
+Testcase: rangeGoingtoNegativeIterate took 0 sec
+Testcase: rangeGoingtoPositiveIterateEndValue took 0 sec
+Testcase: rangeGoingtoPositiveInvalid took 0 sec
+Testcase: rangeGoingtoPositiveIterate took 0 sec
+Testcase: rangeGoingtoNegativeInvalid took 0 sec

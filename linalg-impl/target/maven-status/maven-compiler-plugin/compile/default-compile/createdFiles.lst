@@ -1,0 +1,9 @@
+hr/fer/zemris/linearna/VectorMatrixView.class
+hr/fer/zemris/linearna/AbstractVector.class
+hr/fer/zemris/linearna/Matrix.class
+hr/fer/zemris/linearna/Vector.class
+hr/fer/zemris/linearna/AbstractMatrix.class
+hr/fer/zemris/linearna/DoubleBinaryOperator.class
+hr/fer/zemris/linearna/MatrixVectorView.class
+hr/fer/zemris/linearna/MatrixTransposeView.class
+hr/fer/zemris/linearna/MatrixSubMatrixView.class

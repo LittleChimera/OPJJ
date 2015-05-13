@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ComplexNumberTest.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.tecaj.hw3</a> &gt; <span class="el_source">ComplexNumberTest.java</span></div><h1>ComplexNumberTest.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.tecaj.hw3;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+/**
+ * Unit tests for the ComplexNumber class.
+ * @author luka
+ *
+ */
+<span class="fc" id="L12">public class ComplexNumberTest {</span>
+	
+	private static final double DELTA = 10E-6;
+	
+	@Test
+	public void parserTestIntInt() {
+<span class="fc" id="L18">		ComplexNumber cn1 = ComplexNumber.parse(&quot;3 + 2i&quot;);</span>
+<span class="pc bpc" id="L19" title="2 of 4 branches missed.">		assertTrue(cn1.getImaginary() == 2 &amp;&amp; cn1.getReal() == 3);</span>
+<span class="fc" id="L20">	}</span>
+	
+	@Test
+	public void parserTestIntDouble() {
+<span class="fc" id="L24">		ComplexNumber cn1 = ComplexNumber.parse(&quot;3 + 2.22i&quot;);</span>
+<span class="pc bpc" id="L25" title="2 of 4 branches missed.">		assertTrue(cn1.getImaginary() == 2.22 &amp;&amp; cn1.getReal() == 3);</span>
+<span class="fc" id="L26">	}</span>
+	
+	@Test
+	public void parserTestDoubleInt() {
+<span class="fc" id="L30">		ComplexNumber cn1 = ComplexNumber.parse(&quot;33.33 + 2i&quot;);</span>
+<span class="pc bpc" id="L31" title="2 of 4 branches missed.">		assertTrue(cn1.getImaginary() == 2 &amp;&amp; cn1.getReal() == 33.33);</span>
+<span class="fc" id="L32">	}</span>
+	
+	@Test
+	public void parserTestDoubleDouble() {
+<span class="fc" id="L36">		ComplexNumber cn1 = ComplexNumber.parse(&quot;3.76 + 2.14i&quot;);</span>
+<span class="pc bpc" id="L37" title="2 of 4 branches missed.">		assertTrue(cn1.getImaginary() == 2.14 &amp;&amp; cn1.getReal() == 3.76);</span>
+<span class="fc" id="L38">	}</span>
+	
+	@Test
+	public void parserTestNoneDouble() {
+<span class="fc" id="L42">		ComplexNumber cn1 = ComplexNumber.parse(&quot; + 2.56i&quot;);</span>
+<span class="pc bpc" id="L43" title="2 of 4 branches missed.">		assertTrue(cn1.getImaginary() == 2.56 &amp;&amp; cn1.getReal() == 0);</span>
+<span class="fc" id="L44">	}</span>
+	
+	@Test
+	public void parserTestDoubleNone() {
+<span class="fc" id="L48">		ComplexNumber cn1 = ComplexNumber.parse(&quot;-3.66 &quot;);</span>
+<span class="pc bpc" id="L49" title="2 of 4 branches missed.">		assertTrue(cn1.getImaginary() == 0 &amp;&amp; cn1.getReal() == -3.66);</span>
+<span class="fc" id="L50">	}</span>
+	
+	@Test
+	public void parserTestNoneNone() {
+<span class="fc" id="L54">		ComplexNumber cn1 = ComplexNumber.parse(&quot;   &quot;);</span>
+<span class="pc bpc" id="L55" title="2 of 4 branches missed.">		assertTrue(cn1.getImaginary() == 0 &amp;&amp; cn1.getReal() == 0);</span>
+<span class="fc" id="L56">	}</span>
+	
+	@Test(expected=NumberFormatException.class)
+	public void parserTestJustAnOperator() {
+<span class="nc" id="L60">		ComplexNumber.parse(&quot; -  &quot;);</span>
+<span class="nc" id="L61">	}</span>
+	
+	@Test
+	public void fromReal() {
+<span class="fc" id="L65">		ComplexNumber cn1 = ComplexNumber.fromReal(3.33);</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">		assertTrue(Math.abs(3.33 - cn1.getReal()) &lt; DELTA);</span>
+<span class="fc" id="L67">	}</span>
+	
+	@Test
+	public void fromImaginary() {
+<span class="fc" id="L71">		ComplexNumber cn1 = ComplexNumber.fromImaginary(3.33);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">		assertTrue(Math.abs(3.33 - cn1.getImaginary()) &lt; DELTA);</span>
+<span class="fc" id="L73">	}</span>
+	
+	@Test
+	public void fromMagnitudeAndAngle1stQuadrant() {
+<span class="fc" id="L77">		ComplexNumber cn1 = ComplexNumber.fromMagnitudeAndAngle(5, 1./4*Math.PI);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getImaginary() - 5*Math.sqrt(2)/2) &lt; DELTA </span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">				&amp;&amp; Math.abs(cn1.getReal() - 5*Math.sqrt(2)/2) &lt; DELTA);</span>
+<span class="fc" id="L80">	}</span>
+	
+	@Test
+	public void fromMagnitudeAndAngle2ndQuadrant() {
+<span class="fc" id="L84">		ComplexNumber cn1 = ComplexNumber.fromMagnitudeAndAngle(5, 3./4*Math.PI);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getImaginary() - 5*Math.sqrt(2)/2) &lt; DELTA </span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">				&amp;&amp; Math.abs(cn1.getReal() + 5*Math.sqrt(2)/2) &lt; DELTA);</span>
+<span class="fc" id="L87">	}</span>
+	
+	@Test
+	public void fromMagnitudeAndAngle3rdQuadrant() {
+<span class="fc" id="L91">		ComplexNumber cn1 = ComplexNumber.fromMagnitudeAndAngle(5, 5./4*Math.PI);</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getImaginary() + 5*Math.sqrt(2)/2) &lt; DELTA </span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">				&amp;&amp; Math.abs(cn1.getReal() + 5*Math.sqrt(2)/2) &lt; DELTA);</span>
+<span class="fc" id="L94">	}</span>
+	
+	@Test
+	public void fromMagnitudeAndAngle4thQuadrant() {
+<span class="fc" id="L98">		ComplexNumber cn1 = ComplexNumber.fromMagnitudeAndAngle(5, 7./4*Math.PI);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getImaginary() + 5*Math.sqrt(2)/2) &lt; DELTA </span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">				&amp;&amp; Math.abs(cn1.getReal() - 5*Math.sqrt(2)/2) &lt; DELTA);</span>
+<span class="fc" id="L101">	}</span>
+	
+	@Test
+	public void getAngle1stQuadrant() {
+<span class="fc" id="L105">		ComplexNumber cn1 = new ComplexNumber(2, 2);</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() - 1./4*Math.PI) &lt; DELTA);</span>
+<span class="fc" id="L107">	}</span>
+	
+	@Test
+	public void getAngle2ndQuadrant() {
+<span class="fc" id="L111">		ComplexNumber cn1 = new ComplexNumber(-2, 2);</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() - 3./4*Math.PI) &lt; DELTA);</span>
+<span class="fc" id="L113">	}</span>
+	
+	@Test
+	public void getAngle3rdQuadrant() {
+<span class="fc" id="L117">		ComplexNumber cn1 = new ComplexNumber(-2, -2);</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() + 3./4*Math.PI) &lt; DELTA);</span>
+<span class="fc" id="L119">	}</span>
+	
+	@Test
+	public void getAngle4thQuadrant() {
+<span class="fc" id="L123">		ComplexNumber cn1 = new ComplexNumber(2, -2);</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() + 1./4*Math.PI) &lt; DELTA);</span>
+<span class="fc" id="L125">	}</span>
+	
+	@Test
+	public void getAngle1st2ndQuadrant() {
+<span class="fc" id="L129">		ComplexNumber cn1 = new ComplexNumber(0, 2);</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() - 1./2*Math.PI) &lt; DELTA);</span>
+<span class="fc" id="L131">	}</span>
+	
+	@Test
+	public void getAngle2nd3rdQuadrant() {
+<span class="fc" id="L135">		ComplexNumber cn1 = new ComplexNumber(-2, 0);</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() + Math.PI) &lt; DELTA);</span>
+<span class="fc" id="L137">	}</span>
+	
+	@Test
+	public void getAngle3rd4thQuadrant() {
+<span class="fc" id="L141">		ComplexNumber cn1 = new ComplexNumber(0, -2);</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() + 1./2*Math.PI) &lt; DELTA);</span>
+<span class="fc" id="L143">	}</span>
+	
+	@Test
+	public void getAngle4th1stQuadrant() {
+<span class="fc" id="L147">		ComplexNumber cn1 = new ComplexNumber(2, 0);</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getAngle() + 0) &lt; DELTA);</span>
+<span class="fc" id="L149">	}</span>
+	
+	@Test
+	public void addTest() {
+<span class="fc" id="L153">		ComplexNumber cn1 = new ComplexNumber(2, 3);</span>
+<span class="fc" id="L154">		ComplexNumber cn2 = new ComplexNumber(-4, 6);</span>
+<span class="fc" id="L155">		ComplexNumber result = cn1.add(cn2);</span>
+<span class="pc bpc" id="L156" title="2 of 4 branches missed.">		assertTrue(result.getImaginary() == 9 &amp;&amp; result.getReal() == -2);</span>
+<span class="fc" id="L157">	}</span>
+	
+	@Test
+	public void subTest() {
+<span class="fc" id="L161">		ComplexNumber cn1 = new ComplexNumber(2, 3);</span>
+<span class="fc" id="L162">		ComplexNumber cn2 = new ComplexNumber(-4, 6);</span>
+<span class="fc" id="L163">		ComplexNumber result = cn1.sub(cn2);</span>
+<span class="pc bpc" id="L164" title="2 of 4 branches missed.">		assertTrue(result.getImaginary() == -3 &amp;&amp; result.getReal() == 6);</span>
+<span class="fc" id="L165">	}</span>
+	
+	@Test
+	public void multiplyTest() {
+<span class="fc" id="L169">		ComplexNumber cn1 = new ComplexNumber(2.3, 3.7);</span>
+<span class="fc" id="L170">		ComplexNumber cn2 = new ComplexNumber(-4, 7);</span>
+<span class="fc" id="L171">		ComplexNumber result = cn1.mul(cn2);</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">		assertTrue(Math.abs(result.getImaginary() - 1.3) &lt; DELTA</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">				&amp;&amp; Math.abs(result.getReal() + 35.1) &lt; DELTA);</span>
+<span class="fc" id="L174">	}</span>
+	
+	@Test
+	public void divideTest() {
+<span class="fc" id="L178">		ComplexNumber cn1 = new ComplexNumber(2.3, 3.7);</span>
+<span class="fc" id="L179">		ComplexNumber cn2 = new ComplexNumber(-4, 7);</span>
+<span class="fc" id="L180">		ComplexNumber result = cn1.div(cn2);</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">		assertTrue(Math.abs(result.getImaginary() - 0.47538461538) &lt; DELTA</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">				&amp;&amp; Math.abs(result.getReal() - 0.2569230769) &lt; DELTA);</span>
+<span class="fc" id="L183">	}</span>
+	
+	@Test(expected=ArithmeticException.class)
+	public void divideWithZero() {
+<span class="nc" id="L187">		ComplexNumber cn1 = new ComplexNumber(2, 3);</span>
+<span class="nc" id="L188">		ComplexNumber cn2 = new ComplexNumber(0, 0);</span>
+<span class="nc" id="L189">		cn1.div(cn2);</span>
+<span class="nc" id="L190">	}</span>
+	
+	@Test
+	public void getMagnitude() {
+<span class="fc" id="L194">		ComplexNumber cn1 = new ComplexNumber(2.3, 3.7);</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">		assertTrue(Math.abs(cn1.getMagnitude() - 4.35660418215) &lt; DELTA);</span>
+<span class="fc" id="L196">	}</span>
+	
+	@Test
+	public void getAsString() {
+<span class="fc" id="L200">		ComplexNumber cn1 = new ComplexNumber(-2.3, 3.7);</span>
+<span class="fc" id="L201">		assertEquals(cn1.toString(), &quot;-2.3 + 3.7i&quot;);</span>
+<span class="fc" id="L202">	}</span>
+	
+	@Test
+	public void toPower() {
+<span class="fc" id="L206">		ComplexNumber cn1 = new ComplexNumber(-2.3, 3.7);</span>
+<span class="fc" id="L207">		ComplexNumber powered = cn1.power(7);</span>
+<span class="fc" id="L208">		assertEquals(powered.getReal(), -20338.6539736, DELTA);</span>
+<span class="fc" id="L209">		assertEquals(powered.getImaginary(), 21763.3920376, DELTA);</span>
+<span class="fc" id="L210">	}</span>
+	
+	@Test
+	public void nthRoot() {
+<span class="fc" id="L214">		ComplexNumber cn1 = new ComplexNumber(-2.3, 3.7);</span>
+<span class="fc" id="L215">		double[] reals = {1.17745 , 0.445473 , -0.621953 , -1.22104 , -0.900654 , 0.0979392 , 1.02278 };</span>
+<span class="fc" id="L216">		double[] imaginarys = {+0.369203, +1.15076, +1.06577, +0.178236, -0.843517, -1.23008, -0.690373 };</span>
+		
+<span class="fc" id="L218">		ComplexNumber[] roots = cn1.root(7);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">		for (int i = 0; i &lt; roots.length; i++) {</span>
+<span class="fc" id="L220">			assertEquals(roots[i].getReal(), reals[i], DELTA);</span>
+<span class="fc" id="L221">			assertEquals(roots[i].getImaginary(), imaginarys[i], DELTA);			</span>
+		}
+<span class="fc" id="L223">	}</span>
+	
+	@Test
+	public void toPowerZero() {
+<span class="fc" id="L227">		ComplexNumber cn1 = new ComplexNumber(-2.3, 3.7);</span>
+<span class="fc" id="L228">		ComplexNumber powered = cn1.power(0);</span>
+<span class="fc" id="L229">		assertEquals(powered.getReal(), 1, DELTA);</span>
+<span class="fc" id="L230">		assertEquals(powered.getImaginary(), 0, DELTA);</span>
+<span class="fc" id="L231">	}</span>
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void toPowerNegative() {
+<span class="nc" id="L235">		ComplexNumber cn1 = new ComplexNumber(-2.3, 3.7);</span>
+<span class="nc" id="L236">		cn1.power(-2);</span>
+<span class="nc" id="L237">	}</span>
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void toRootZero() {
+<span class="nc" id="L241">		ComplexNumber cn1 = new ComplexNumber(-2.3, 3.7);</span>
+<span class="nc" id="L242">		cn1.root(0);</span>
+<span class="nc" id="L243">	}</span>
+	
+	
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

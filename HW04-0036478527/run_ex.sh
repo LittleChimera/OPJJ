@@ -1,0 +1,1 @@
+java -cp lib/prikaz.jar:bin hr.fer.zemris.java.tecaj.hw4.grafika.demo.Crtalo dat.txt 400 400

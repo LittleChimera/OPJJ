@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ComplexNumber.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.tecaj.hw3</a> &gt; <span class="el_source">ComplexNumber.java</span></div><h1>ComplexNumber.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.tecaj.hw3;
+
+import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * ComplexNumber allows calculations with complex numbers. It supports basic
+ * operations like addition, subtraction, multiplication, division, powering,
+ * rooting.
+ * 
+ * It also offers some additional methods for creating a complex number from
+ * various Objects.
+ * 
+ * Note: ComplexNumber is immutable.
+ * 
+ * @author Luka Skugor
+ *
+ */
+public class ComplexNumber {
+
+	/**
+	 * Value of the real part of the complex number.
+	 */
+	private final double realComponent;
+	/**
+	 * Value of the imaginary part of the complex number.
+	 */
+	private final double imaginaryComponent;
+
+	/**
+	 * Creates a new ComplexNumber.
+	 * 
+	 * @param realComponent
+	 *            value of the real part of the complex number
+	 * @param imaginaryComponent
+	 *            value of the imaginary part of the complex number
+	 */
+<span class="fc" id="L39">	public ComplexNumber(double realComponent, double imaginaryComponent) {</span>
+<span class="fc" id="L40">		this.realComponent = realComponent;</span>
+<span class="fc" id="L41">		this.imaginaryComponent = imaginaryComponent;</span>
+<span class="fc" id="L42">	}</span>
+
+	/**
+	 * Creates a new complex number from a real part of the complex number.
+	 * Imaginary part is set to zero.
+	 * 
+	 * @param realComponent
+	 *            value of the real part of the complex number
+	 * @return new complex number with ReZ = realComponent, ImZ = 0
+	 */
+	public static ComplexNumber fromReal(double realComponent) {
+<span class="fc" id="L53">		return new ComplexNumber(realComponent, 0.0);</span>
+	}
+
+	/**
+	 * Creates a new complex number from an imaginary part of the complex
+	 * number. Real part is set to zero.
+	 * 
+	 * @param imaginaryComponent
+	 *            value of the imaginary part of the complex number
+	 * @return new complex number with ReZ = 0, ImZ = imaginaryComponent
+	 */
+	public static ComplexNumber fromImaginary(double imaginaryComponent) {
+<span class="fc" id="L65">		return new ComplexNumber(0.0, imaginaryComponent);</span>
+	}
+
+	/**
+	 * Creates a new complex number from trigonometric format of a complex
+	 * number.
+	 * 
+	 * @param magnitude
+	 *            magnitude of the complex number in a trigonometric format
+	 * @param angle
+	 *            angle of the complex number in a trigonometric format
+	 * @return created ComplexNumber
+	 */
+	public static ComplexNumber fromMagnitudeAndAngle(double magnitude,
+			double angle) {
+
+<span class="fc" id="L81">		double real = magnitude * Math.cos(angle);</span>
+<span class="fc" id="L82">		double imaginary = magnitude * Math.sin(angle);</span>
+
+<span class="fc" id="L84">		return new ComplexNumber(real, imaginary);</span>
+	}
+
+	/**
+	 * Parses the String and creates a ComplexNumber from parsed variables.
+	 * 
+	 * Allowed string are in following format:
+	 * 
+	 * (+|-)(realPartOfComplexNumber)(+|-)(imaginaryPartOfComplexNumber)i
+	 * 
+	 * Spaces between groups [()] are allowed.
+	 * 
+	 * 
+	 * @param s String representation of a complex number
+	 * @return parsed ComplexNumber
+	 * @throws NumberFormatException if the String s can't be parsed to a ComplexNumber
+	 */
+	public static ComplexNumber parse(String s) {
+		/**
+		 * real part of the complex number followed by spaces:
+		 * ^([+\-]?\s*?(\d+\.?\d+|\d+))?\s*
+		 * imaginary part of the complex number:
+		 * ($|((^[+\-]?|[+\-])\s*?(\d+\.?\d+i|\d+i))?)$
+		 */
+<span class="fc" id="L108">		final Pattern complexPattern = Pattern</span>
+<span class="fc" id="L109">				.compile(&quot;^([+\\-]?\\s*?(\\d+\\.?\\d+|\\d+))?\\s*($|((^[+\\-]?|[+\\-])\\s*?(\\d+\\.?\\d+i|\\d+i))?)$&quot;);</span>
+<span class="fc" id="L110">		Matcher matcher = complexPattern.matcher(s.trim());</span>
+
+		double real, imaginary;
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		if (matcher.matches()) {</span>
+			try {
+<span class="fc" id="L115">				real = Double.parseDouble(matcher.group(1).replaceAll(</span>
+						&quot;[\\t\\r\\n ]&quot;, &quot;&quot;));
+<span class="fc" id="L117">			} catch (Exception noRealPart) {</span>
+<span class="fc" id="L118">				real = 0;</span>
+<span class="fc" id="L119">			}</span>
+			try {
+<span class="fc" id="L121">				imaginary = Double.parseDouble(matcher.group(3)</span>
+<span class="fc" id="L122">						.replaceAll(&quot;[\\t\\r\\n ]&quot;, &quot;&quot;).replace(&quot;i&quot;, &quot;&quot;));</span>
+<span class="fc" id="L123">			} catch (Exception noImaginaryPart) {</span>
+<span class="fc" id="L124">				imaginary = 0;</span>
+<span class="fc" id="L125">			}</span>
+		} else {
+<span class="fc" id="L127">			throw new NumberFormatException(</span>
+					&quot;Given string is not a standard complex number&quot;);
+		}
+
+<span class="fc" id="L131">		return new ComplexNumber(real, imaginary);</span>
+	}
+	
+	/**
+	 * Gets the value of the real part of the complex number.
+	 * @return ReZ
+	 */
+	public double getReal() {
+<span class="fc" id="L139">		return realComponent;</span>
+	}
+	
+	/**
+	 * Gets the value of the imaginary part of the complex number.
+	 * @return ImZ
+	 */
+	public double getImaginary() {
+<span class="fc" id="L147">		return imaginaryComponent;</span>
+	}
+	
+	/**
+	 * Gets the magnitude of the trigonometric expression of the complex number.
+	 * @return magnitude
+	 */
+	public double getMagnitude() {
+<span class="fc" id="L155">		return Math.sqrt(Math.pow(realComponent, 2)</span>
+<span class="fc" id="L156">				+ Math.pow(imaginaryComponent, 2));</span>
+	}
+	
+	/**
+	 * Gets the angle of the trigonometric expression of the complex number.
+	 * @return angle
+	 */
+	public double getAngle() {
+<span class="fc bfc" id="L164" title="All 2 branches covered.">		if (realComponent == 0) {</span>
+<span class="fc" id="L165">			return Math.signum(imaginaryComponent) * Math.PI / 2;</span>
+		}
+
+<span class="fc" id="L168">		double angle = Math.atan(imaginaryComponent / realComponent);</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">		if (realComponent &lt; 0) {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">			if (angle &lt; 0) {</span>
+<span class="fc" id="L171">				angle += Math.PI;</span>
+			} else {
+<span class="fc" id="L173">				angle -= Math.PI;</span>
+			}
+		}
+
+<span class="fc" id="L177">		return angle;</span>
+	}
+	
+	/**
+	 * Adds two complex numbers.
+	 * @param c complex number to add to this ComplexNumber
+	 * @return result
+	 */
+	public ComplexNumber add(ComplexNumber c) {
+<span class="fc" id="L186">		double realAdd = this.realComponent + c.getReal();</span>
+<span class="fc" id="L187">		double imaginaryAdd = this.imaginaryComponent + c.getImaginary();</span>
+
+<span class="fc" id="L189">		return new ComplexNumber(realAdd, imaginaryAdd);</span>
+	}
+	
+	/**
+	 * Subtracts another complex number from this complex number.
+	 * @param c complex number to subtract from this ComplexNumber
+	 * @return result
+	 */
+	public ComplexNumber sub(ComplexNumber c) {
+<span class="fc" id="L198">		double realSub = this.realComponent - c.getReal();</span>
+<span class="fc" id="L199">		double imaginarySub = this.imaginaryComponent - c.getImaginary();</span>
+
+<span class="fc" id="L201">		return new ComplexNumber(realSub, imaginarySub);</span>
+	}
+	
+	/**
+	 * Multiplies this complex number with another one.
+	 * @param c complex number with which this Complex number is multiplied
+	 * @return result
+	 */
+	public ComplexNumber mul(ComplexNumber c) {
+<span class="fc" id="L210">		double realMul = this.realComponent * c.realComponent</span>
+				- this.imaginaryComponent * c.imaginaryComponent;
+<span class="fc" id="L212">		double imaginaryMul = this.realComponent * c.imaginaryComponent</span>
+				+ this.imaginaryComponent * c.realComponent;
+
+<span class="fc" id="L215">		return new ComplexNumber(realMul, imaginaryMul);</span>
+	}
+	
+	/**
+	 * Divides this complex number with another one.
+	 * @param c complex number with which this Complex number is divided
+	 * @return result
+	 * @throws ArithmeticException if c is zero
+	 */
+	public ComplexNumber div(ComplexNumber c) {
+<span class="pc bpc" id="L225" title="1 of 4 branches missed.">		if (c.getReal() == 0 &amp;&amp; c.getImaginary() == 0) {</span>
+<span class="fc" id="L226">			throw new ArithmeticException(&quot;Can't divide with zero!&quot;);</span>
+		}
+<span class="fc" id="L228">		double realDiv = (this.realComponent * c.getReal() + this.imaginaryComponent</span>
+<span class="fc" id="L229">				* c.getImaginary())</span>
+<span class="fc" id="L230">				/ (Math.pow(c.realComponent, 2) + Math.pow(</span>
+						c.imaginaryComponent, 2));
+<span class="fc" id="L232">		double imaginaryDiv = (this.realComponent * c.getImaginary() - this.imaginaryComponent</span>
+<span class="fc" id="L233">				* c.getReal())</span>
+<span class="fc" id="L234">				/ (Math.pow(c.realComponent, 2) + Math.pow(</span>
+						c.imaginaryComponent, 2));
+
+<span class="fc" id="L237">		return new ComplexNumber(realDiv, imaginaryDiv);</span>
+	}
+	
+	/**
+	 * Calculates nth power of this complex number.
+	 * @param n level of power
+	 * @return result
+	 */
+	public ComplexNumber power(int n) {
+<span class="fc bfc" id="L246" title="All 2 branches covered.">		if (n &lt; 0) {</span>
+<span class="fc" id="L247">			throw new IllegalArgumentException(&quot;Power must be at least 0&quot;);</span>
+		}
+<span class="fc" id="L249">		double angle = getAngle();</span>
+<span class="fc" id="L250">		double magnitude = getMagnitude();</span>
+
+<span class="fc" id="L252">		double magnitudePow = Math.pow(magnitude, n);</span>
+<span class="fc" id="L253">		double anglePow = n * angle;</span>
+<span class="fc" id="L254">		double realPow = magnitudePow * Math.cos(anglePow);</span>
+<span class="fc" id="L255">		double imaginaryPow = magnitudePow * Math.sin(anglePow);</span>
+
+<span class="fc" id="L257">		return new ComplexNumber(realPow, imaginaryPow);</span>
+	}
+	
+	/**
+	 * Calculates nth roots of this complex number.
+	 * @param n level of root
+	 * @return array of results
+	 */
+	public ComplexNumber[] root(int n) {
+<span class="fc bfc" id="L266" title="All 2 branches covered.">		if (n &lt;= 0) {</span>
+<span class="fc" id="L267">			throw new IllegalArgumentException(</span>
+					&quot;Can't require less than 1st root&quot;);
+		}
+
+<span class="fc" id="L271">		double angle = getAngle();</span>
+<span class="fc" id="L272">		double magnitude = getMagnitude();</span>
+
+<span class="fc" id="L274">		double magnitudeRoot = Math.pow(magnitude, 1. / n);</span>
+
+<span class="fc" id="L276">		ComplexNumber[] result = new ComplexNumber[n];</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">		for (int ithRoot = 0; ithRoot &lt; n; ithRoot++) {</span>
+<span class="fc" id="L278">			double angleRoot = (angle + 2 * ithRoot * Math.PI) / n;</span>
+<span class="fc" id="L279">			double realRoot = magnitudeRoot * Math.cos(angleRoot);</span>
+<span class="fc" id="L280">			double imaginaryRoot = magnitudeRoot * Math.sin(angleRoot);</span>
+
+<span class="fc" id="L282">			result[ithRoot] = new ComplexNumber(realRoot, imaginaryRoot);</span>
+		}
+
+<span class="fc" id="L285">		return result;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L290">		DecimalFormat imaginaryFormatter = new DecimalFormat(</span>
+				&quot; + #.####i; - #.####i&quot;);
+<span class="fc" id="L292">		return realComponent + imaginaryFormatter.format(imaginaryComponent);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

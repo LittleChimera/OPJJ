@@ -1,0 +1,11 @@
+Potrebno je instalirati ant, junit, jacoco, pmd i xalan kako je opisano u knjizi u dodatku.
+
+Potom se ovaj demonstracijski projekt može izgraditi uporabom alata ant.
+
+Opremite još ovu ant skriptu tako da podrži pakiranje kompajliranih razreda u jar arhivu. Zadatak se mora pokretati naredbom:
+
+ant package
+
+i mora ovisiti o cilju "compile".
+
+U datoteci config.properties nalaze se lokalne postavke korisnika: gdje je što instalirao. Tamo podesite staze.

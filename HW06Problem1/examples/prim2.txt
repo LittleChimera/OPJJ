@@ -1,0 +1,26 @@
+			load r1, @nextN
+			load r0, @nula
+			load r5, @newline
+			load r6, @porukaUnesi
+			load r7, @porukaERR		; ucitaj poruku u r7
+@read:		echo r6
+			iinput @procitaniBroj
+			jumpIfTrue @procitan
+			echo r7
+			jump @read
+@procitan:	load r2, @procitaniBroj
+@printN:	increment r2
+			echo r2
+			echo r5
+			decrement r1
+			testEquals r1, r0
+			jumpIfTrue @kraj
+			jump @printN
+@kraj:		halt	
+			
+@procitaniBroj:	DEFINT 0
+@nula:	DEFINT 0
+@nextN:	DEFINT 5
+@porukaERR:	DEFSTR "Unos nije moguće protumačiti kao cijeli broj.\n"
+@porukaUnesi:	DEFSTR "Unesite početni broj: "
+@newline:	DEFSTR "\n"

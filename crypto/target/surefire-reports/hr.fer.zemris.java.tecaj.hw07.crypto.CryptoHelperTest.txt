@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: hr.fer.zemris.java.tecaj.hw07.crypto.CryptoHelperTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.392 sec

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="5.2.3" timestamp="2015-04-24T23:43:28.311">
+<file name="/home/luka/MEGA/FER/Vjestine/Java/workspace/Multistack/src/main/java/hr/fer/zemris/java/custom/scripting/exec/ValueWrapper.java">
+<violation beginline="49" endline="51" begincolumn="27" endcolumn="25" rule="EmptyCatchBlock" ruleset="Empty Code" package="hr.fer.zemris.java.custom.scripting.exec" class="ValueWrapper" method="parseStringToValue" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="55" endline="57" begincolumn="27" endcolumn="25" rule="EmptyCatchBlock" ruleset="Empty Code" package="hr.fer.zemris.java.custom.scripting.exec" class="ValueWrapper" method="parseStringToValue" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+</pmd>

@@ -1,0 +1,17 @@
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrIncrement.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrAdd.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrJumpIfTrue.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrIinput.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/ExecutionUnitImpl.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrDecrement.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrHalt.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrMove.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrTestEquals.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/RegistersImpl.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrJump.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrLoad.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrMul.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/Simulator.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/ComputerImpl.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/MemoryImpl.java
+/home/luka/MEGA/FER/Vjestine/Java/workspace/HW06Problem1/src/main/java/hr/fer/zemris/java/simplecomp/impl/instructions/InstrEcho.java
