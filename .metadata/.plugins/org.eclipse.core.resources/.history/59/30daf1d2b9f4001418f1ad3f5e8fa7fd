@@ -1,0 +1,179 @@
+package hr.fer.zemris.java.raytracer.model;
+
+import java.util.LinkedList;
+
+public class Sphere extends GraphicalObject {
+
+	private Point3D center;
+	private double radius;
+	private double kdr;
+	private double kdg;
+	private double kdb;
+	private double krr;
+	private double krg;
+	private double krb;
+	private double krn;
+
+	public Sphere(Point3D center, double radius, double kdr, double kdg,
+			double kdb, double krr, double krg, double krb, double krn) {
+		super();
+		this.center = center;
+		this.radius = radius;
+		this.kdr = kdr;
+		this.kdg = kdg;
+		this.kdb = kdb;
+		this.krr = krr;
+		this.krg = krg;
+		this.krb = krb;
+		this.krn = krn;
+	}
+
+	@Override
+	public RayIntersection findClosestRayIntersection(Ray arg0) {
+		class SphereRayIntersection extends RayIntersection {
+			
+			private double kdr;
+			private double kdg;
+			private double kdb;
+			private double krr;
+			private double krg;
+			private double krb;
+			private double krn;
+			
+			public SphereRayIntersection() {
+				super(Point3D)
+				kdr = Sphere.this.kdr;
+				kdg = Sphere.this.kdg;
+				kdb = Sphere.this.kdb;
+				krr = Sphere.this.krr;
+				krg = Sphere.this.krg;
+				krb = Sphere.this.krb;
+				krn = Sphere.this.krn;
+			}
+			
+			@Override
+			public Point3D getNormal() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public double getKdr() {
+				return kdr;
+			}
+
+			@Override
+			public double getKdg() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public double getKdb() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public double getKrr() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public double getKrg() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public double getKrb() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public double getKrn() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+		}
+		
+		
+		// using equation from
+		// http://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
+		// o - c (origin of the line - center of the sphere)
+		Point3D oMinC = arg0.start.sub(center);
+		double eqArg1 = - arg0.direction.scalarProduct(oMinC);
+		// root arguments
+		double rootArg1sqrt = arg0.direction.scalarProduct(oMinC); 
+		double rootArg1 = rootArg1sqrt * rootArg1sqrt;
+		double rootArg2sqrt = oMinC.norm();
+		double rootArg2 = - rootArg2sqrt * rootArg2sqrt;
+		double rootArg3 = radius * radius;
+		
+		double underRoot = rootArg1 + rootArg2 + rootArg3;
+		double eqArg2 = Math.sqrt(underRoot);
+		
+		double sol1 = eqArg1 - eqArg2;
+		double sol2 = eqArg1 + eqArg2;
+		
+		
+		if (sol1 > 0) {
+			return new RayIntersection() {
+				
+				@Override
+				public Point3D getNormal() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public double getKrr() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+				
+				@Override
+				public double getKrn() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+				
+				@Override
+				public double getKrg() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+				
+				@Override
+				public double getKrb() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+				
+				@Override
+				public double getKdr() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+				
+				@Override
+				public double getKdg() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+				
+				@Override
+				public double getKdb() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+			};
+		}
+		
+		
+		
+	}
+}

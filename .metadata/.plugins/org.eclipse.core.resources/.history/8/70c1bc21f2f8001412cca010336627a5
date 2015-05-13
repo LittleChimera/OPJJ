@@ -1,0 +1,22 @@
+package hr.fer.zemris.java.gui.calc.buttons.functions;
+
+import hr.fer.zemris.java.gui.calc.buttons.FunctionButton;
+
+public class CotangentButton extends FunctionButton {
+	
+	public CotangentButton() {
+		super("ctg", "actg");
+	}
+
+	@Override
+	protected double normalApply(double number) {
+		return 1/Math.tan(number);
+	}
+
+	@Override
+	protected double invertedApply(double number) {
+		return Math.PI/2 - Math.atan(number);
+	}
+	
+	
+}

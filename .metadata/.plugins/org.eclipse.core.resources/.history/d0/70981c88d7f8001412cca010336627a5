@@ -1,0 +1,18 @@
+package hr.fer.zemris.java.gui.calc.buttons;
+
+import javax.swing.JButton;
+
+public abstract class FunctionButton extends JButton {
+	
+	private String name;
+	private String nameInverted;
+	
+	public FunctionButton(String name, String nameInverted) {
+		this.name = name;
+		this.nameInverted = nameInverted;
+	}
+	
+	public abstract double apply(double number);
+	public abstract double invertedApply(double number);
+	
+}

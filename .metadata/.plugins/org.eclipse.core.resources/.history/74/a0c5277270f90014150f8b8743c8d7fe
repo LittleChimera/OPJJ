@@ -1,0 +1,23 @@
+package hr.fer.zemris.java.gui.calc.buttons;
+
+import javax.swing.JButton;
+
+public class OperatorButton extends JButton {
+	
+	
+	private BinaryOperator operator;
+
+	public OperatorButton(String name, BinaryOperator operator) {
+		super(name);
+		this.operator = operator;
+	}
+
+	public BinaryOperator getOperator() {
+		return operator;
+	}
+	
+	public interface BinaryOperator {
+		public Double operate(double d1, double d2);
+	}
+	
+}

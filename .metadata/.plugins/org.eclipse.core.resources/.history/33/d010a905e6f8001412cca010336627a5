@@ -1,0 +1,17 @@
+package hr.fer.zemris.java.gui.calc.buttons.functions;
+
+public class CotangentFunction extends FunctionButton {
+
+	@Override
+	protected double normalApply(double number) {
+		return 1/Math.tan(number);
+	}
+
+	@Override
+	protected double invertedApply(double number) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	
+}

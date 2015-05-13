@@ -1,0 +1,14 @@
+package hr.fer.zemris.java.gui.calc.buttons;
+
+import javax.swing.JButton;
+
+public class NumberButton extends JButton {
+	
+	protected int number;
+	
+	public NumberButton(int number) {
+		this.number = number;
+	}
+	
+	
+}

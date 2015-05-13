@@ -1,0 +1,21 @@
+package hr.fer.zemris.java.gui.calc.buttons.functions;
+
+import hr.fer.zemris.java.gui.calc.buttons.FunctionButton;
+
+public class Logarithm10Button extends FunctionButton {
+
+	public Logarithm10Button() {
+		super("log", "10^x");
+	}
+
+	@Override
+	protected double normalApply(double number) {
+		return Math.log10(number);
+	}
+
+	@Override
+	protected double invertedApply(double number) {
+		return Math.pow(number, 10);
+	}
+	
+}

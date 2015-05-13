@@ -1,0 +1,13 @@
+package hr.fer.zemris.java.gui.calc.buttons;
+
+
+public class InvertibleOperatorButton extends OperatorButton {
+
+	public InvertibleOperatorButton(String name, String nameInverted,
+			BinaryOperator normalOperator, BinaryOperator invertedOperator) {
+		
+	}
+	
+	
+
+}

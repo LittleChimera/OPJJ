@@ -1,0 +1,202 @@
+package hr.fer.zemris.java.fractals;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import hr.fer.zemris.java.fractals.complex.Complex;
+import hr.fer.zemris.java.fractals.complex.ComplexPolynomial;
+import hr.fer.zemris.java.fractals.complex.ComplexRootedPolynomial;
+import hr.fer.zemris.java.fractals.threads.DaemonicThreadFactory;
+import hr.fer.zemris.java.fractals.viewer.FractalViewer;
+import hr.fer.zemris.java.fractals.viewer.IFractalProducer;
+import hr.fer.zemris.java.fractals.viewer.IFractalResultObserver;
+
+public class Newton {
+
+	private static ComplexRootedPolynomial rootedPolynomial = new ComplexRootedPolynomial(
+			Complex.ONE, Complex.ONE_NEG, Complex.IM, Complex.IM_NEG);
+	private static ComplexPolynomial polynomial = rootedPolynomial
+			.toComplexPolynom();
+	private static ComplexPolynomial polynomialDerivative = polynomial
+			.derive();
+
+	/**
+	 * Otvara prozor i prikazuje Mandelbrotov fraktal koji se računa slijedno.
+	 */
+	public static void showSequential() {
+		FractalViewer.show(getSequentialFractalproducer());
+	}
+
+	/**
+	 * Slijedna implementacija koja računa Mandelbrotov fraktal. Omogućava da se
+	 * u predano polje pohrane rezultati samo za zadani raspon y-koordinata
+	 * (ostatak polja se ne dira).
+	 * 
+	 * @param reMin
+	 *            minimalna vrijednost po realnoj osi
+	 * @param reMax
+	 *            maksimalna vrijednost po realnoj osi
+	 * @param imMin
+	 *            minimalna vrijednost po imaginarnoj osi
+	 * @param imMax
+	 *            maksimalna vrijednost po imaginarnoj osi
+	 * @param width
+	 *            širina zaslona na kojem se prikazuje fraktal
+	 * @param height
+	 *            visina zaslona na kojem se prikazuje fraktal
+	 * @param m
+	 *            broj pokušaja otkrivanja divergencije
+	 * @param ymin
+	 *            y-linija od koje se popunjava polje (uključiva)
+	 * @param ymax
+	 *            y-linija do koje se popunjava polje (uključiva)
+	 * @param data
+	 *            polje u koje treba pohraniti rezultat
+	 */
+	public static void calculate(double reMin, double reMax, double imMin,
+			double imMax, int width, int height, int m, int ymin, int ymax,
+			short[] data) {
+
+		int offset = ymin * width;
+		for (int y = ymin; y <= ymax; y++) {
+			for (int x = 0; x < width; x++) {
+
+				double cre = x / (width - 1.0) * (reMax - reMin) + reMin;
+				double cim = ((height - 1) - y) / (height - 1.0)
+						* (imMax - imMin) + imMin;
+				Complex c = new Complex(cre, cim);
+				Complex zn = c;
+				double treshold = 0;
+				int iters = 0;
+
+				do {
+					Complex zn1 = zn.sub(polynomial.apply(zn).divide(
+							polynomialDerivative.apply(zn)));
+					treshold = zn.sub(zn1).module();
+					zn = zn1;
+					iters++;
+				} while (iters < m && treshold > 1e-3);
+
+				int index = rootedPolynomial.indexOfClosestRootFor(zn, 1e-3);
+				if (index == -1) {
+					data[offset++] = 0;
+				} else {
+					data[offset++] = (short) index;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Vraća objekt koji Mandelbrotov fraktal generira slijedno.
+	 * 
+	 * @return slijedni generator Mandelbrotovog fraktala
+	 */
+	private static IFractalProducer getSequentialFractalproducer() {
+		return new IFractalProducer() {
+
+			int jobCount = 8 * Runtime.getRuntime().availableProcessors();
+			ExecutorService executor = Executors.newFixedThreadPool(Runtime
+					.getRuntime().availableProcessors(),
+					new DaemonicThreadFactory());
+
+			@Override
+			public void produce(double reMin, double reMax, double imMin,
+					double imMax, int width, int height, long requestNo,
+					IFractalResultObserver observer) {
+
+				short[] data = new short[width * height];
+				int m = 16*16*16;
+
+				class DataCalculator implements Runnable {
+
+					private int ymin;
+					private int ymax;
+
+					public DataCalculator(int ymin, int ymax) {
+						super();
+						this.ymin = ymin;
+						this.ymax = ymax;
+					}
+
+					@Override
+					public void run() {
+						calculate(reMin, reMax, imMin, imMax, width, height, m,
+								ymin, ymax, data);
+					}
+
+				}
+				System.out.println("Započinjem izračune...");
+
+				int eachJobHeight = height / jobCount;
+				Future<?>[] jobs = new Future[jobCount];
+				for (int i = 0; i < jobCount - 1; i++) {
+					jobs[i] = executor.submit(new DataCalculator(i
+							* eachJobHeight, (i + 1) * eachJobHeight - 1));
+				}
+				jobs[jobCount - 1] = executor.submit(new DataCalculator(
+						(jobCount - 1) * eachJobHeight, height - 1));
+
+				for (Future<?> future : jobs) {
+					while (true) {
+						try {
+							future.get();
+							break;
+						} catch (InterruptedException | ExecutionException e) {
+						}
+					}
+				}
+
+				System.out.println("Izračuni gotovi...");
+				observer.acceptResult(data, (short) (polynomial.order()),
+						requestNo);
+				System.out.println("Dojava gotova...");
+			}
+
+		};
+	}
+
+	public static void main(String[] args) throws IOException {
+		System.out
+				.println("Welcome to Newton-Raphson iteration-based fractal viewer.");
+		System.out
+				.println("Please enter at least two roots, one root per line. Enter 'done' when done.");
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String line = null;
+		List<Complex> roots = new LinkedList<Complex>();
+		
+		int rootNumber = 1;
+		Input: while (true) {
+			Complex readRoot = null;
+			while (readRoot == null) {
+				System.out.format("Root %d> ", rootNumber);
+				
+				line = reader.readLine();	
+				if (line.equalsIgnoreCase("done")) {
+					break Input;
+				}
+				try {					
+					readRoot = Complex.parseComplex(line);
+					rootNumber++;
+				} catch (NumberFormatException e) {
+					//loop
+					System.out.println(e.getLocalizedMessage());
+				}
+			}
+			roots.add(readRoot);
+		}
+		rootedPolynomial = new ComplexRootedPolynomial(roots.toArray(new Complex[rootNumber -1]));
+		polynomial = rootedPolynomial.toComplexPolynom();
+		polynomialDerivative = polynomial.derive();
+		showSequential();		
+	}
+
+}

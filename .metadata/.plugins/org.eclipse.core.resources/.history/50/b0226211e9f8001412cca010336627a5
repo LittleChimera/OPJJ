@@ -1,0 +1,19 @@
+package hr.fer.zemris.java.gui.calc.buttons.functions;
+
+public class TangentFunction extends FunctionButton {
+
+	public TangentFunction() {
+		super("tan", "atan");
+	}
+	
+	@Override
+	protected double normalApply(double number) {
+		return Math.tan(number);
+	}
+
+	@Override
+	protected double invertedApply(double number) {
+		return Math.atan(number);
+	}
+
+}

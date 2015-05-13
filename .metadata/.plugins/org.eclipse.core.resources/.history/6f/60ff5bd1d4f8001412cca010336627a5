@@ -1,0 +1,26 @@
+package hr.fer.zemris.java.gui.calc.buttons.functions;
+
+import hr.fer.zemris.java.gui.calc.buttons.FunctionButton;
+
+public class SinusButton extends FunctionButton {
+
+	public SinusButton(String name) {
+		super(name);
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public double apply(double number) {
+		return Math.sin(number);
+	}
+
+	@Override
+	public double invertedApply(double number) {
+		return Math.asin(number);
+	}
+
+}

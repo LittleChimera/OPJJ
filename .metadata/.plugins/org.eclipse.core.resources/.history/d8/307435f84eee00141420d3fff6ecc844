@@ -1,0 +1,20 @@
+package hr.fer.zemris.linearna;
+
+public class MatrixSubMatrixView {
+	
+	private IMatrix original;
+	private int[] rowIndexes;
+	private int[] colIndexes;
+	
+	public MatrixSubMatrixView(IMatrix original, int row, int col) {
+		
+	}
+	private MatrixSubMatrixView(IMatrix original, int[] rowIndexes, int[] colIndexes) {
+		
+	}
+	public IMatrix subMatrix(int row, int col, boolean liveView) {
+	// can use private constructor with original and additionally
+	// filtered indexes...
+	}
+
+}

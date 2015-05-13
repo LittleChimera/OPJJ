@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=crypto/src\/main\/java&lt;hr.fer.zemris.java.tecaj.hw07.crypto.actions{ICryptoAction.java[ICryptoAction" modifiers="513" timestamp="1431511351000"/>
+<typeInfo handle="=myshell/src\/main\/java&lt;hr.fer.zemris.java.tecaj.hw07.shell.commands{ShellCommand.java[ShellCommand" modifiers="513" timestamp="1431511352000"/>
+<typeInfo handle="=myshell/src\/main\/java&lt;hr.fer.zemris.java.tecaj.hw07.shell{Environment.java[Environment" modifiers="513" timestamp="1431511352000"/>
+<typeInfo handle="=myshell/src\/main\/java&lt;hr.fer.zemris.java.tecaj.hw07.shell.commands{AbstractShellCommand.java[AbstractShellCommand" modifiers="1025" timestamp="1431511352000"/>
+<typeInfo handle="=linalg-impl/\/home\/luka\/.m2\/repository\/hr\/fer\/zemris\/linearna\/linalg-models\/1.0\/linalg-models-1.0.jar&lt;hr.fer.zemris.linearna(IVector.class[IVector" modifiers="1537" timestamp="1430216916000"/>
+<typeInfo handle="=linalg-impl/\/home\/luka\/.m2\/repository\/hr\/fer\/zemris\/linearna\/linalg-models\/1.0\/linalg-models-1.0.jar&lt;hr.fer.zemris.linearna(IMatrix.class[IMatrix" modifiers="1537" timestamp="1430216916000"/>
+<typeInfo handle="=linalg-impl/src\/main\/java&lt;hr.fer.zemris.linearna{AbstractMatrix.java[AbstractMatrix" modifiers="1025" timestamp="1431511352000"/>
+<typeInfo handle="=linalg-impl/src\/main\/java&lt;hr.fer.zemris.linearna{AbstractVector.java[AbstractVector" modifiers="1025" timestamp="1431511352000"/>
+<typeInfo handle="=raycaster/\/home\/luka\/.m2\/repository\/hr\/fer\/zemris\/java\/raytracer\/raytracer\/1.0\/raytracer-1.0.jar&lt;hr.fer.zemris.java.raytracer.model(GraphicalObject.class[GraphicalObject" modifiers="1057" timestamp="1430935964000"/>
+<typeInfo handle="=calculator/\/usr\/lib\/jvm\/java-8-jdk\/jre\/lib\/rt.jar&lt;javax.swing(JButton.class[JButton" modifiers="33" timestamp="1428686542000"/>
+<typeInfo handle="=calculator/src\/main\/java&lt;hr.fer.zemris.java.gui.calc.buttons{FunctionButton.java[FunctionButton" modifiers="1" timestamp="1431523984000"/>
+</typeInfoHistroy>

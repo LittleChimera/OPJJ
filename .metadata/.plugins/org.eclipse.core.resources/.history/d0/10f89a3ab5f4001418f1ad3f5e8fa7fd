@@ -1,0 +1,14 @@
+package hr.fer.zemris.java.raytracer.model;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class SphereTest {
+
+	@Test
+	public void interesectionTest() {
+		
+	}
+
+}
