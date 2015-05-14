@@ -12,8 +12,10 @@ import hr.fer.zemris.java.gui.layouts.CalcLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Collection;
+import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import java.util.function.DoubleBinaryOperator;
 
 import javax.swing.BorderFactory;
@@ -21,11 +23,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-
 
 public class Calculator extends JFrame {
 
@@ -33,12 +35,13 @@ public class Calculator extends JFrame {
 	private static final String INPUT_ERROR = "Input error";
 
 	private JLabel screen;
-	private BinaryOperator operator;
 
 	private Double operationStackValue;
 	private BinaryOperator operation;
-	
-	private Double currentValue;
+
+	private boolean input;
+
+	private Stack<Double> stack;
 
 	public Calculator() {
 		setLocation(200, 100);
@@ -47,7 +50,12 @@ public class Calculator extends JFrame {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout());
 
+		initFields();
 		initGUI();
+	}
+
+	private void initFields() {
+		stack = new Stack<Double>();
 	}
 
 	private void initGUI() {
@@ -59,7 +67,7 @@ public class Calculator extends JFrame {
 		screen.setBackground(Color.WHITE);
 		screen.setOpaque(true);
 		p.add(screen, "1,1");
-		
+
 		addNumbers(p);
 
 		JCheckBox invert = new JCheckBox();
@@ -70,7 +78,7 @@ public class Calculator extends JFrame {
 
 		invertibles.addAll(addFunctions(p));
 		invertibles.addAll(addOperatorts(p));
-		
+
 		invert.addActionListener((e) -> {
 			SwingUtilities.invokeLater(() -> {
 				for (InvertibleButton iButton : invertibles) {
@@ -80,9 +88,11 @@ public class Calculator extends JFrame {
 				}
 			});
 		});
+
+		addResultControls(p);
 		
-		addSpecialUseButtons(p);
-		
+		//TODO reset input on button press
+
 		p.add(invert, "5,7");
 
 		setMinimumSize(p.getMinimumSize());
@@ -90,15 +100,62 @@ public class Calculator extends JFrame {
 		add(p, BorderLayout.CENTER);
 	}
 
-	private void addSpecialUseButtons(JPanel p) {
+	private void addResultControls(JPanel p) {
 		JButton equals = new JButton("=");
 		equals.addActionListener((e) -> {
 			screen.setText(applyCurrentOperation().toString());
-			resetCurrentValue();
+			resetInput();
 			removeStackedOperation();
 		});
-		
+
 		p.add(equals, "1,6");
+
+		JButton push = new JButton("PUSH");
+		push.addActionListener((e) -> {
+			SwingUtilities.invokeLater(() -> {
+				Double screenValue = getScreenValue();
+				if (screenValue != null) {
+					stack.push(screenValue);					
+				}
+			});
+		});
+		JButton pop = new JButton("POP");
+		pop.addActionListener((e) -> {
+			SwingUtilities.invokeLater(() -> {
+				try {
+					resetInput();
+					screen.setText(stack.pop().toString());
+					revalidate();
+				} catch (EmptyStackException emptyStack) {
+					JOptionPane.showMessageDialog(this, "No elements on stack",
+							"EmptyStack", JOptionPane.ERROR_MESSAGE);
+				}
+			});
+		});
+		p.add(push, "3,7");
+		p.add(pop, "4,7");
+		
+		JButton clear = new JButton("CLR");
+		clear.addActionListener((e) -> {
+			SwingUtilities.invokeLater(() -> {
+				resetScreen();
+				resetInput();
+				revalidate();
+			});
+		});
+		p.add(clear, "1,7");
+		
+		JButton reset = new JButton("RES");
+		reset.addActionListener(e -> {
+			SwingUtilities.invokeLater(() -> {
+				resetScreen();
+				resetInput();
+				stack = new Stack<Double>();
+				removeStackedOperation();
+				revalidate();
+			});
+		});
+		p.add(reset, "2,7");
 	}
 
 	private Collection<? extends InvertibleButton> addOperatorts(JPanel p) {
@@ -120,24 +177,25 @@ public class Calculator extends JFrame {
 		OperatorButton division = new OperatorButton("/", (d1, d2) -> d1 / d2);
 		p.add(division, "2,6");
 		operatorButtons.add(division);
-		
-		OperatorButton pow = new InvertibleOperatorButton("x^n", "nRootx", Math::pow, (a,b) -> Math.pow(a, 1/b));
+
+		OperatorButton pow = new InvertibleOperatorButton("x^n", "nRootx",
+				Math::pow, (a, b) -> Math.pow(a, 1 / b));
 		p.add(pow, "5,1");
 		operatorButtons.add(pow);
-		
+
 		for (OperatorButton operator : operatorButtons) {
 			operator.addActionListener((e) -> {
 				SwingUtilities.invokeLater(() -> {
 					operationStackValue = applyCurrentOperation();
 					operation = operator.getOperator();
-					resetCurrentValue();
+					resetInput();
 				});
 			});
 		}
-		
+
 		return filterInvertibleButtons(operatorButtons);
 	}
-	
+
 	private Double applyCurrentOperation() {
 		if (operation != null) {
 			return operation.operate(operationStackValue, getScreenValue());
@@ -197,21 +255,22 @@ public class Calculator extends JFrame {
 					} catch (Exception mathError) {
 						screen.setText(MATH_ERROR);
 					} finally {
-						resetCurrentValue();
+						resetInput();
 					}
 					revalidate();
 				});
 			});
 		}
-		
+
 		return filterInvertibleButtons(functionButtons);
 	}
-	
-	private Collection<? extends InvertibleButton> filterInvertibleButtons(Collection<? extends JButton> buttons) {
+
+	private Collection<? extends InvertibleButton> filterInvertibleButtons(
+			Collection<? extends JButton> buttons) {
 		List<InvertibleButton> invertibles = new LinkedList<InvertibleButton>();
 		buttons.forEach((f) -> {
 			if (f instanceof InvertibleButton) {
-				invertibles.add((InvertibleButton)f);
+				invertibles.add((InvertibleButton) f);
 			}
 		});
 		return invertibles;
@@ -241,13 +300,16 @@ public class Calculator extends JFrame {
 			numberButton
 					.addActionListener((e) -> {
 						SwingUtilities.invokeLater(() -> {
-							if (currentValue == null) {
+							if (input == false) {
 								resetScreen();
 							}
 
+							input = true;
 							screen.setText(screen.getText()
 									+ numberButton.getNumber());
-							updateCurrentValue();
+							if (getScreenValue() == null) {
+								resetScreen();
+							}
 
 							revalidate();
 						});
@@ -255,7 +317,6 @@ public class Calculator extends JFrame {
 		}
 
 	}
-
 
 	public static void main(String[] args) {
 
@@ -275,19 +336,16 @@ public class Calculator extends JFrame {
 			return null;
 		}
 	}
-	
-	private void updateCurrentValue() {
-		currentValue = getScreenValue();
-	}
 
-	public void resetCurrentValue() {
-		currentValue = null;
+	public void resetInput() {
+		input = false;
 	}
 
 	public void resetScreen() {
 		screen.setText("");
+		resetInput();
 	}
-	
+
 	private void removeStackedOperation() {
 		operation = null;
 		operationStackValue = null;
