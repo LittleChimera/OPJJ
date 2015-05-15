@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -69,8 +68,6 @@ public class BarChartComponent extends JComponent {
 	}
 
 	private void drawChartGrid(Graphics2D g2d, Rectangle chartSpace) {
-		List<XYValue> chartValues = chart.getValues();
-		
 		FontMetrics fm = g2d.getFontMetrics();
 		
 		// calculate maximum string width of all values on y-axis
@@ -90,7 +87,7 @@ public class BarChartComponent extends JComponent {
 		chartSpace.width -= (gridOverflow + verticalValuesTotalWidth);
 		chartSpace.x += verticalValuesTotalWidth;
 
-		final int lineDistance = chartSpace.width / chartValues.size();
+		final int lineDistance = chartSpace.width / chart.maxX(); //chartValues.size();
 		
 		Color gridColor = new Color(180, 80, 60, 100);
 		g2d.setColor(gridColor);
@@ -114,7 +111,7 @@ public class BarChartComponent extends JComponent {
 		//distance of x-lines
 		double spacing = chartSpace.height / (double) spacingCount;
 		
-		valueCounter = chart.getMaxY();
+		valueCounter = chart.getMinY() + ((chart.getMaxY() - chart.getMinY())/ chart.getSpacingY()) * chart.getSpacingY();
 		valueSpacing = chart.getSpacingY();
 		// draw x-axis grid
 		for (double y = chartSpace.y, maxHeight = chartSpace.height
@@ -139,7 +136,7 @@ public class BarChartComponent extends JComponent {
 		Dimension size = chartSpace.getSize();
 
 		final int maxBarHeight = chart.getMaxY() - chart.getMinY();
-		final int barWidth = size.width / chart.getValues().size();
+		final int barWidth = size.width / chart.maxX();
 		final int minYValue = chart.getMinY();
 
 		for (XYValue value : chart.getValues()) {

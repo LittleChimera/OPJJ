@@ -19,6 +19,9 @@ public class BarChart {
 		this.yAxisName = yAxisName;
 		this.minY = Math.min(minY, maxY);
 		this.maxY = Math.max(minY, maxY);
+		if (spacingY <= 0) {
+			throw new IllegalArgumentException("Spacing needs to be positive");
+		}
 		this.spacingY = spacingY;
 	}
 	
@@ -44,6 +47,10 @@ public class BarChart {
 	
 	public String getyAxisName() {
 		return yAxisName;
+	}
+
+	public int maxX() {
+		return values.stream().max((xy1, xy2) -> xy1.getX() - xy2.getX()).get().getX();
 	}
 
 }

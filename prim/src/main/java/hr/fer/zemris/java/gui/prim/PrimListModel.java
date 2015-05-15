@@ -19,6 +19,7 @@ public class PrimListModel implements ListModel<Integer> {
 		prims = new LinkedList<Integer>();
 		listeners = new HashMap<ListDataListener, ListDataListener>();
 		lastPrim = 1;
+		prims.add(lastPrim);
 	}
 
 	public int getSize() {
