@@ -9,12 +9,31 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+/**
+ * PrimListModel is a {@link ListModel} which stores and generates prime
+ * numbers.
+ * 
+ * @author Luka Skugor
+ *
+ */
 public class PrimListModel implements ListModel<Integer> {
 
+	/**
+	 * List of prime numbers which are stored in the list mode.
+	 */
 	private List<Integer> prims;
+	/**
+	 * Listeners which are observing this model.
+	 */
 	private Map<ListDataListener, ListDataListener> listeners;
+	/**
+	 * Last generated prime number.
+	 */
 	int lastPrim;
 
+	/**
+	 * Creates a new PrimListModel.
+	 */
 	public PrimListModel() {
 		prims = new LinkedList<Integer>();
 		listeners = new HashMap<ListDataListener, ListDataListener>();
@@ -22,22 +41,51 @@ public class PrimListModel implements ListModel<Integer> {
 		prims.add(lastPrim);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.ListModel#getSize()
+	 */
 	public int getSize() {
 		return prims.size();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
 	public Integer getElementAt(int index) {
 		return prims.get(index);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener
+	 * )
+	 */
 	public void addListDataListener(ListDataListener l) {
 		listeners.put(l, l);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.ListModel#removeListDataListener(javax.swing.event.
+	 * ListDataListener)
+	 */
 	public void removeListDataListener(ListDataListener l) {
 		listeners.remove(l);
 	}
 
+	/**
+	 * Generates next prime number and stores it in the model. Consequently, all
+	 * listeners are notified.
+	 * 
+	 * @return generated prime number
+	 */
 	public int next() {
 		boolean searching = true;
 		Search: while (searching) {
