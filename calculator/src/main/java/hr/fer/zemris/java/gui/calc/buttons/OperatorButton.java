@@ -25,8 +25,11 @@ public class OperatorButton extends JButton {
 
 	/**
 	 * Creates a new button with given name and binary operation.
-	 * @param name display name
-	 * @param operator binary operation which button holds
+	 * 
+	 * @param name
+	 *            display name
+	 * @param operator
+	 *            binary operation which button holds
 	 */
 	public OperatorButton(String name, BinaryOperator operator) {
 		super(name);
@@ -36,6 +39,7 @@ public class OperatorButton extends JButton {
 
 	/**
 	 * Gets held binary operation.
+	 * 
 	 * @return binary operation
 	 */
 	public BinaryOperator getOperator() {
@@ -50,8 +54,10 @@ public class OperatorButton extends JButton {
 	 */
 	public interface BinaryOperator {
 		/**
-		 * @param d1 first operand
-		 * @param d2 second operand
+		 * @param d1
+		 *            first operand
+		 * @param d2
+		 *            second operand
 		 * @return result of the opeartion
 		 */
 		public Double operate(double d1, double d2);

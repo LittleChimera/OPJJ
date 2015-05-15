@@ -30,7 +30,7 @@ public class CalcLayout implements LayoutManager2 {
 	private static final int COLUMNS = 7;
 
 	/**
-	 * Spacing between cells
+	 * Spacing between cells.
 	 */
 	private int spacing;
 	/**

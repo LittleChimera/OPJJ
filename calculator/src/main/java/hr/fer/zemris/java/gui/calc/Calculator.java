@@ -420,7 +420,9 @@ public class Calculator extends JFrame {
 
 	/**
 	 * Parses screen value.
-	 * @return parsed screen value or <code>null</code> if screen can't be parsed
+	 * 
+	 * @return parsed screen value or <code>null</code> if screen can't be
+	 *         parsed
 	 */
 	private Double getScreenValue() {
 		try {

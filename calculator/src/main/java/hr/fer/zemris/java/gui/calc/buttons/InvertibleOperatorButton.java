@@ -33,10 +33,14 @@ public class InvertibleOperatorButton extends OperatorButton implements
 	 * Creates a new InvertibleOperatorButton with given names and binary
 	 * operations for both states.
 	 * 
-	 * @param name display name of normal state
-	 * @param nameInverted display name inverted state
-	 * @param normalOperator binary operation of normal state
-	 * @param invertedOperator binary operation of inverted state
+	 * @param name
+	 *            display name of normal state
+	 * @param nameInverted
+	 *            display name inverted state
+	 * @param normalOperator
+	 *            binary operation of normal state
+	 * @param invertedOperator
+	 *            binary operation of inverted state
 	 */
 	public InvertibleOperatorButton(String name, String nameInverted,
 			BinaryOperator normalOperator, BinaryOperator invertedOperator) {

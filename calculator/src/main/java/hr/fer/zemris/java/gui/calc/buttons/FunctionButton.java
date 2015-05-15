@@ -41,10 +41,14 @@ public class FunctionButton extends JButton implements InvertibleButton {
 	 * Creates a new FunctionButton with given names and function for both
 	 * normal and inverted state.
 	 * 
-	 * @param name normal state display name
-	 * @param nameInverted inverted state display name
-	 * @param normal normal function
-	 * @param inverted inverted function
+	 * @param name
+	 *            normal state display name
+	 * @param nameInverted
+	 *            inverted state display name
+	 * @param normal
+	 *            normal function
+	 * @param inverted
+	 *            inverted function
 	 */
 	public FunctionButton(String name, String nameInverted, Function normal,
 			Function inverted) {
@@ -57,7 +61,9 @@ public class FunctionButton extends JButton implements InvertibleButton {
 
 	/**
 	 * Applies a function based on the current state on a number.
-	 * @param number number on which function will be applied
+	 * 
+	 * @param number
+	 *            number on which function will be applied
 	 * @return result of the function
 	 */
 	public Double apply(double number) {
@@ -76,14 +82,17 @@ public class FunctionButton extends JButton implements InvertibleButton {
 
 	/**
 	 * Function has only one functionality: applying a function on a number.
+	 * 
 	 * @author Luka Skugor
 	 *
 	 */
 	public static interface Function {
-		
+
 		/**
 		 * Applies the function on a number.
-		 * @param number number on which function will be applied
+		 * 
+		 * @param number
+		 *            number on which function will be applied
 		 * @return result of the function
 		 */
 		Double apply(double number);

@@ -1,7 +1,9 @@
 package hr.fer.zemris.java.gui.layouts;
 
 /**
- * RCPosition is a pair of integers (row, column) which indicate a cell in a matrix.
+ * RCPosition is a pair of integers (row, column) which indicate a cell in a
+ * matrix.
+ * 
  * @author Luka Skugor
  *
  */
@@ -18,8 +20,11 @@ public class RCPosition {
 
 	/**
 	 * Creates a new RCPosition with given row and column indexes.
-	 * @param row row index of the position
-	 * @param column column index of the position
+	 * 
+	 * @param row
+	 *            row index of the position
+	 * @param column
+	 *            column index of the position
 	 */
 	public RCPosition(int row, int column) {
 		super();
@@ -29,6 +34,7 @@ public class RCPosition {
 
 	/**
 	 * Gets column index.
+	 * 
 	 * @return column index
 	 */
 	public int getColumn() {
@@ -37,13 +43,16 @@ public class RCPosition {
 
 	/**
 	 * Gets row index.
+	 * 
 	 * @return row index
 	 */
 	public int getRow() {
 		return row;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -59,7 +68,9 @@ public class RCPosition {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -67,8 +78,10 @@ public class RCPosition {
 		return Integer.valueOf(row).hashCode()
 				+ Integer.valueOf(column).hashCode();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

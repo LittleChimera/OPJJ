@@ -12,7 +12,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 /**
- * Demonstration of the {@link CalcLayout}
+ * Demonstration of the {@link CalcLayout}.
  * 
  * @author Luka Skugor
  *
