@@ -27,24 +27,59 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+/**
+ * This is a simple calculator program which supports trigonometric and
+ * logarithmic functions.
+ * 
+ * @author Luka Skugor
+ *
+ */
 public class Calculator extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Math error display message.
+	 */
 	private static final String MATH_ERROR = "Math error";
+	/**
+	 * Input error display message.
+	 */
 	private static final String INPUT_ERROR = "Input error";
 
+	/**
+	 * Calculator's screen.
+	 */
 	private JLabel screen;
 
+	/**
+	 * If there's an operation waiting for a second operand this holds reference
+	 * to the first one.
+	 */
 	private Double operationStackValue;
+	/**
+	 * Operation which will be performed when second operand is inputed. By
+	 * default it's value is <code>null</code>. It will hold an
+	 * {@link BinaryOperation} when the operation button is pressed.
+	 */
 	private BinaryOperator operation;
 
+	/**
+	 * A flag indicating if user is inputing something. It will be false if last
+	 * pressed button is not a number, otherwise true.
+	 */
 	private boolean input;
 
+	/**
+	 * Calculator's stack.
+	 */
 	private Stack<Double> stack;
 
+	/**
+	 * Creates a new calculator window.
+	 */
 	public Calculator() {
 		setLocation(200, 100);
 		setSize(500, 300);
@@ -56,10 +91,16 @@ public class Calculator extends JFrame {
 		initGUI();
 	}
 
+	/**
+	 * Initializes fields.
+	 */
 	private void initFields() {
 		stack = new Stack<Double>();
 	}
 
+	/**
+	 * Initializes GUI.
+	 */
 	private void initGUI() {
 		JPanel p = new JPanel(new CalcLayout(3));
 		p.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -92,8 +133,8 @@ public class Calculator extends JFrame {
 		});
 
 		addResultControls(p);
-		
-		//TODO reset input on button press
+
+		// TODO reset input on button press
 
 		p.add(invert, "5,7");
 
@@ -102,6 +143,13 @@ public class Calculator extends JFrame {
 		add(p, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Adds buttons to the calculator panel, which control what to do with
+	 * current configuration of the calculator.
+	 * 
+	 * @param p
+	 *            calculator's central panel
+	 */
 	private void addResultControls(JPanel p) {
 		JButton equals = new JButton("=");
 		equals.addActionListener((e) -> {
@@ -117,7 +165,7 @@ public class Calculator extends JFrame {
 			SwingUtilities.invokeLater(() -> {
 				Double screenValue = getScreenValue();
 				if (screenValue != null) {
-					stack.push(screenValue);					
+					stack.push(screenValue);
 				}
 			});
 		});
@@ -136,7 +184,7 @@ public class Calculator extends JFrame {
 		});
 		p.add(push, "3,7");
 		p.add(pop, "4,7");
-		
+
 		JButton clear = new JButton("CLR");
 		clear.addActionListener((e) -> {
 			SwingUtilities.invokeLater(() -> {
@@ -146,7 +194,7 @@ public class Calculator extends JFrame {
 			});
 		});
 		p.add(clear, "1,7");
-		
+
 		JButton reset = new JButton("RES");
 		reset.addActionListener(e -> {
 			SwingUtilities.invokeLater(() -> {
@@ -160,6 +208,13 @@ public class Calculator extends JFrame {
 		p.add(reset, "2,7");
 	}
 
+	/**
+	 * Adds binary operators to the calculator panel.
+	 * 
+	 * @param p
+	 *            calculator's central panel
+	 * @return button which have inverse functionality
+	 */
 	private Collection<? extends InvertibleButton> addOperatorts(JPanel p) {
 		List<OperatorButton> operatorButtons = new LinkedList<OperatorButton>();
 
@@ -198,6 +253,13 @@ public class Calculator extends JFrame {
 		return filterInvertibleButtons(operatorButtons);
 	}
 
+	/**
+	 * Applies currently saved binary operation. If none is saved returns screen
+	 * value.
+	 * 
+	 * @return result of the operation if there's an operation to perform or
+	 *         else screen value.
+	 */
 	private Double applyCurrentOperation() {
 		if (operation != null) {
 			return operation.operate(operationStackValue, getScreenValue());
@@ -206,6 +268,13 @@ public class Calculator extends JFrame {
 		}
 	}
 
+	/**
+	 * Adds functions to the calculator's panel.
+	 * 
+	 * @param p
+	 *            calculator's central panel
+	 * @return invertible functions
+	 */
 	private Collection<? extends InvertibleButton> addFunctions(JPanel p) {
 		List<FunctionButton> functionButtons = new LinkedList<FunctionButton>();
 
@@ -267,6 +336,13 @@ public class Calculator extends JFrame {
 		return filterInvertibleButtons(functionButtons);
 	}
 
+	/**
+	 * Filters {@link InvertibleButton}s from a {@link java.util.Collection}.
+	 * 
+	 * @param buttons
+	 *            collection of buttons to filter
+	 * @return collection of filtered invertible buttons
+	 */
 	private Collection<? extends InvertibleButton> filterInvertibleButtons(
 			Collection<? extends JButton> buttons) {
 		List<InvertibleButton> invertibles = new LinkedList<InvertibleButton>();
@@ -278,6 +354,12 @@ public class Calculator extends JFrame {
 		return invertibles;
 	}
 
+	/**
+	 * Adds number buttons and decimal point button to the calculator's panel.
+	 * 
+	 * @param p
+	 *            calculator's central panel
+	 */
 	private void addNumbers(JPanel p) {
 		NumberButton[] numbers = new NumberButton[11];
 		for (int i = 0; i < numbers.length - 1; i++) {
@@ -320,6 +402,12 @@ public class Calculator extends JFrame {
 
 	}
 
+	/**
+	 * Called on program start. Creates program windows.
+	 * 
+	 * @param args
+	 *            command line arguments
+	 */
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
@@ -330,7 +418,11 @@ public class Calculator extends JFrame {
 
 	}
 
-	public Double getScreenValue() {
+	/**
+	 * Parses screen value.
+	 * @return parsed screen value or <code>null</code> if screen can't be parsed
+	 */
+	private Double getScreenValue() {
 		try {
 			return Double.parseDouble(screen.getText());
 		} catch (Exception e) {
@@ -339,15 +431,24 @@ public class Calculator extends JFrame {
 		}
 	}
 
-	public void resetInput() {
+	/**
+	 * Sets input flag to false.
+	 */
+	private void resetInput() {
 		input = false;
 	}
 
-	public void resetScreen() {
+	/**
+	 * Resets screen.
+	 */
+	private void resetScreen() {
 		screen.setText("");
 		resetInput();
 	}
 
+	/**
+	 * Clears operation waiting for a second operand.
+	 */
 	private void removeStackedOperation() {
 		operation = null;
 		operationStackValue = null;
