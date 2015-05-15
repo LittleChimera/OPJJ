@@ -16,8 +16,8 @@ public class SimetricFunctionButton extends FunctionButton {
 
 	/**
 	 * Creates new SimetricFunctionButton with given name and function.
-	 * @param name
-	 * @param function
+	 * @param name display name
+	 * @param function button's function
 	 */
 	public SimetricFunctionButton(String name, Function function) {
 		super(name, name, function, function);

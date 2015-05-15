@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="5.2.3" timestamp="2015-05-15T13:00:25.139">
+<file name="/home/luka/Copy/FER/Vjestine/Java/workspace/calculator/src/main/java/hr/fer/zemris/java/gui/calc/buttons/FunctionButton.java">
+<violation beginline="64" endline="64" begincolumn="26" endcolumn="35" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.gui.calc.buttons" class="FunctionButton" method="apply" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="74" endline="74" begincolumn="26" endcolumn="33" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.gui.calc.buttons" class="FunctionButton" method="invert" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="82" endline="90" begincolumn="23" endcolumn="9" rule="UnusedModifier" ruleset="Unused Code" package="hr.fer.zemris.java.gui.calc.buttons" class="FunctionButton" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+</file>
+<file name="/home/luka/Copy/FER/Vjestine/Java/workspace/calculator/src/main/java/hr/fer/zemris/java/gui/calc/buttons/InvertibleButton.java">
+<violation beginline="19" endline="19" begincolumn="16" endcolumn="43" rule="UnusedModifier" ruleset="Unused Code" package="hr.fer.zemris.java.gui.calc.buttons" class="InvertibleButton" method="invert" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+</file>
+<file name="/home/luka/Copy/FER/Vjestine/Java/workspace/calculator/src/main/java/hr/fer/zemris/java/gui/calc/buttons/InvertibleOperatorButton.java">
+<violation beginline="55" endline="55" begincolumn="25" endcolumn="32" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.gui.calc.buttons" class="InvertibleOperatorButton" method="getOperator" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="65" endline="65" begincolumn="26" endcolumn="33" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.gui.calc.buttons" class="InvertibleOperatorButton" method="invert" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+</file>
+<file name="/home/luka/Copy/FER/Vjestine/Java/workspace/calculator/src/main/java/hr/fer/zemris/java/gui/calc/buttons/OperatorButton.java">
+<violation beginline="57" endline="57" begincolumn="24" endcolumn="60" rule="UnusedModifier" ruleset="Unused Code" package="hr.fer.zemris.java.gui.calc.buttons" class="OperatorButton$BinaryOperator" method="operate" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+</file>
+<file name="/home/luka/Copy/FER/Vjestine/Java/workspace/calculator/src/main/java/hr/fer/zemris/java/gui/layouts/CalcLayout.java">
+<violation beginline="244" endline="244" begincolumn="22" endcolumn="42" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.gui.layouts" class="CalcLayout" method="processConstraints" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="244" endline="244" begincolumn="49" endcolumn="78" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.gui.layouts" class="CalcLayout" method="processConstraints" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="249" endline="249" begincolumn="34" endcolumn="59" rule="UselessParentheses" ruleset="Unnecessary" package="hr.fer.zemris.java.gui.layouts" class="CalcLayout" method="processConstraints" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+</file>
+</pmd>

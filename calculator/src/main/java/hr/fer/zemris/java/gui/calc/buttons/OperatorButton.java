@@ -3,7 +3,7 @@ package hr.fer.zemris.java.gui.calc.buttons;
 import javax.swing.JButton;
 
 /**
- * OperatorButton holds a reference to an {@link Operation}.
+ * OperatorButton holds a reference to an {@link BinaryOperator}.
  * 
  * @author Luka Skugor
  *

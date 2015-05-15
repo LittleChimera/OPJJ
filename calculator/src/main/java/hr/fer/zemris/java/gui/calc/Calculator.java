@@ -62,7 +62,7 @@ public class Calculator extends JFrame {
 	/**
 	 * Operation which will be performed when second operand is inputed. By
 	 * default it's value is <code>null</code>. It will hold an
-	 * {@link BinaryOperation} when the operation button is pressed.
+	 * {@link BinaryOperator} when the operation button is pressed.
 	 */
 	private BinaryOperator operation;
 
@@ -103,7 +103,7 @@ public class Calculator extends JFrame {
 	 */
 	private void initGUI() {
 		JPanel p = new JPanel(new CalcLayout(3));
-		p.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		p.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
 		screen = new JLabel();
 		screen.setHorizontalAlignment(SwingConstants.RIGHT);
