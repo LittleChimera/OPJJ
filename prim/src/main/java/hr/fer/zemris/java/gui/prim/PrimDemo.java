@@ -13,6 +13,11 @@ import javax.swing.WindowConstants;
 
 public class PrimDemo extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public PrimDemo() {
 		setLocation(200, 100);
 		setSize(500, 300);

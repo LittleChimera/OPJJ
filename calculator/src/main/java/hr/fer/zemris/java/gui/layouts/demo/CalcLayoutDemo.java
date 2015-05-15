@@ -13,6 +13,11 @@ import javax.swing.WindowConstants;
 
 public class CalcLayoutDemo extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public CalcLayoutDemo() {
 		setLocation(20, 50);
 		setSize(500, 300);

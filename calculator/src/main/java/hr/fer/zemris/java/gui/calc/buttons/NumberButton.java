@@ -4,6 +4,10 @@ import javax.swing.JButton;
 
 public class NumberButton extends JButton {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String number;
 	
 	public NumberButton(String number) {

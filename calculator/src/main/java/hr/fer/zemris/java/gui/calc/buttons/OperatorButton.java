@@ -5,6 +5,10 @@ import javax.swing.JButton;
 public class OperatorButton extends JButton {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected BinaryOperator operator;
 	protected String name;
 

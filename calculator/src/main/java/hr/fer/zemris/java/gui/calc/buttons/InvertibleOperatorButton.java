@@ -3,6 +3,10 @@ package hr.fer.zemris.java.gui.calc.buttons;
 
 public class InvertibleOperatorButton extends OperatorButton implements InvertibleButton {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nameInverted;
 	private BinaryOperator invertedOperator;
 	

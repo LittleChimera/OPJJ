@@ -4,6 +4,10 @@ import javax.swing.JButton;
 
 public class FunctionButton extends JButton implements InvertibleButton {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String nameInverted;
 	private boolean isInverted;

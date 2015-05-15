@@ -16,8 +16,6 @@ import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-import java.util.function.DoubleBinaryOperator;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -31,6 +29,10 @@ import javax.swing.WindowConstants;
 
 public class Calculator extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final String MATH_ERROR = "Math error";
 	private static final String INPUT_ERROR = "Input error";
 
