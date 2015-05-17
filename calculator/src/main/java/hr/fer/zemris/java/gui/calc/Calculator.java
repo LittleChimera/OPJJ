@@ -136,8 +136,6 @@ public class Calculator extends JFrame {
 
 		addResultControls(p);
 
-		// TODO reset input on button press
-
 		p.add(invert, "5,7");
 
 		setMinimumSize(p.getMinimumSize());
@@ -413,12 +411,6 @@ public class Calculator extends JFrame {
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			JFrame frame = new Calculator();
 			frame.pack();
 			frame.setVisible(true);

@@ -280,7 +280,6 @@ public class CalcLayout implements LayoutManager2 {
 	 */
 	@Override
 	public float getLayoutAlignmentX(Container target) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -291,7 +290,6 @@ public class CalcLayout implements LayoutManager2 {
 	 */
 	@Override
 	public float getLayoutAlignmentY(Container target) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -302,8 +300,7 @@ public class CalcLayout implements LayoutManager2 {
 	 */
 	@Override
 	public void invalidateLayout(Container target) {
-		// TODO Auto-generated method stub
-
+		components = new HashMap<RCPosition, Component>();
 	}
 
 }
