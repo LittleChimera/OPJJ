@@ -25,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -45,7 +46,7 @@ public class JNotepadPP extends JFrame {
 	private void initGUI() {
 		getContentPane().setLayout(new BorderLayout());
 
-		editorTabs = new JTabbedEditor();
+		editorTabs = new JTabbedEditor(tabCloseAction);
 		editorTabs.addChangeListener(e -> {
 			updateTitle();
 		});
@@ -72,6 +73,8 @@ public class JNotepadPP extends JFrame {
 		//toggleCaseAction.putValue(Action.NAME, "Toggle case in selection");
 		
 		newDocumentAction.putValue(Action.NAME, "New");
+		
+		calculateStatisticsAction.putValue(Action.NAME, "Statistics");
 	}
 
 	private void createMenus() {		
@@ -89,6 +92,11 @@ public class JNotepadPP extends JFrame {
 		menuBar.add(editMenu);
 		
 		editMenu.add(new JMenuItem(deleteSelectedPartAction));
+		
+		JMenu toolsMenu = new JMenu("Tools");
+		menuBar.add(toolsMenu);
+		toolsMenu.add(new JMenuItem(calculateStatisticsAction));
+		
 		//editMenu.add(new JMenuItem(toggleCaseAction));
 		
 		setJMenuBar(menuBar);
@@ -147,45 +155,53 @@ public class JNotepadPP extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (getActiveEditor().getFilePath() == null) {
-				JFileChooser fc = new JFileChooser();
-				fc.setDialogTitle("Save document");
-				if (fc.showSaveDialog(JNotepadPP.this) != JFileChooser.APPROVE_OPTION) {
-					JOptionPane.showMessageDialog(
-							JNotepadPP.this, "Nista nije pogranjeno.", 
-							"Poruka", 
-							JOptionPane.INFORMATION_MESSAGE);
-					return;
-				}
-				
-				Path file = fc.getSelectedFile().toPath();
-				if (Files.exists(file)) {
-					int rez = JOptionPane.showConfirmDialog(JNotepadPP.this,
-							"Odabrana datoteka " + file + " vec postoji. Jeste li sigurni da je zelite pregaziti?", 
-							"Upozoronje", 
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE);
-					
-					if (rez != JOptionPane.YES_OPTION) {
-						return;
-					}
-				}
-				getActiveEditor().setFilePath(file);
-			}
-			
-			try {
-				Files.write(getActiveEditor().getFilePath(), getActiveEditor().getText().getBytes(StandardCharsets.UTF_8));
-				editorTabs.saveActiveTabContents();
-				updateTitle();
-			} catch (IOException e1) {
-				JOptionPane.showMessageDialog(
-						JNotepadPP.this,
-						"Pogreska pri pisanju datoteke " + getActiveEditor().getFilePath() + ": " + e1.getMessage(),
-						"Pogreska",
-						JOptionPane.ERROR_MESSAGE);
-			}
+			saveDocument();
 		}
 	};
+	
+	private boolean saveDocument() {
+		if (getActiveEditor().getFilePath() == null) {
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("Save document");
+			if (fc.showSaveDialog(JNotepadPP.this) != JFileChooser.APPROVE_OPTION) {
+				JOptionPane.showMessageDialog(
+						JNotepadPP.this, "Nista nije pogranjeno.", 
+						"Poruka", 
+						JOptionPane.INFORMATION_MESSAGE);
+				return false;
+			}
+			
+			Path file = fc.getSelectedFile().toPath();
+			if (Files.exists(file)) {
+				int rez = JOptionPane.showConfirmDialog(JNotepadPP.this,
+						"Odabrana datoteka " + file + " vec postoji. Jeste li sigurni da je zelite pregaziti?", 
+						"Upozoronje", 
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+				
+				if (rez == JOptionPane.CANCEL_OPTION) {
+					return false;
+				} else if (rez != JOptionPane.YES_OPTION) {
+					return true;
+				}
+			}
+			getActiveEditor().setFilePath(file);
+		}
+		
+		try {
+			Files.write(getActiveEditor().getFilePath(), getActiveEditor().getText().getBytes(StandardCharsets.UTF_8));
+			editorTabs.saveActiveTabContents();
+			updateTitle();
+			return true;
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(
+					JNotepadPP.this,
+					"Pogreska pri pisanju datoteke " + getActiveEditor().getFilePath() + ": " + e1.getMessage(),
+					"Pogreska",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+	}
 	
 	private Action exitAction = new AbstractAction() {
 		
@@ -249,11 +265,37 @@ public class JNotepadPP extends JFrame {
 			getContentPane().add(editorTabs, BorderLayout.CENTER);
 		}
 	};
+	
+	private Action calculateStatisticsAction = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JFileEditor editor = getActiveEditor();
+			
+			String fileContents = editor.getText();
+			int characterCount = fileContents.length();
+			int nonBlankCharacterCount = fileContents.replaceAll("\\s", "").length();
+			int linesCount = fileContents.length() - fileContents.replaceAll("\\n", "").length();
+			
+			String statistics = String.format(
+					"%n"
+					+ "Characters: %d%n"
+					+ "Non-blank characters: %d%n"
+					+ "Lines: %d%n", 
+					characterCount, nonBlankCharacterCount, linesCount);
+			
+			JOptionPane.showMessageDialog(
+					JNotepadPP.this, 
+					"File statistics:" + statistics, 
+					"File statistics: " + editor.getName(), 
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+	};
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			try {
-				//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (Exception e) {
 				// TODO remove this
 				e.printStackTrace();
@@ -284,26 +326,41 @@ public class JNotepadPP extends JFrame {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			while (editorTabs.getSelectedIndex() != -1) {
-				if (!editorTabs.isSelectedSaved()) {
-					
-					int result = JOptionPane.showConfirmDialog(
-							JNotepadPP.this,
-							"File " + getActiveEditor().getName() + 
-							" has unsaved changes. Do you want to save changes?",
-							"Unsaved changes",
-							JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.WARNING_MESSAGE);
-					
-					if (result == JOptionPane.YES_OPTION) {
-						saveDocumentAction.actionPerformed(null);
-					} else if (result == JOptionPane.CANCEL_OPTION) {
-						return;
-					}
-					
+				if (!closeActiveTab()) {
+					return;
 				}
-				editorTabs.remove(editorTabs.getSelectedIndex());
 			}
 			dispose();
 		};
 	};
+	
+	private Action tabCloseAction = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			closeActiveTab();
+		}
+	};
+	
+	private boolean closeActiveTab() {
+		if (!editorTabs.isSelectedSaved()) {
+			
+			int result = JOptionPane.showConfirmDialog(
+					JNotepadPP.this,
+					"File " + getActiveEditor().getName() + 
+					" has unsaved changes. Do you want to save changes?",
+					"Unsaved changes",
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+			
+			if (result == JOptionPane.YES_OPTION) {
+				saveDocument();
+			} else if (result == JOptionPane.CANCEL_OPTION) {
+				return false;
+			}
+			
+		}
+		editorTabs.remove(editorTabs.getSelectedIndex());
+		return true;
+	}
 }

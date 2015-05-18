@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.nio.file.Path;
 
+
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,8 +18,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class JTabbedEditor extends JTabbedPane {
+public class JTabbedEditor extends JTabbedPane {	
 	
+	private Action tabCloseAction;
+	
+	public JTabbedEditor(Action tabCloseAction) {
+		this.tabCloseAction = tabCloseAction;
+	}
 	
 	public Component addTab(JFileEditor editor) {
 		JScrollPane scrollableEditor = new JScrollPane(editor);
@@ -73,9 +80,11 @@ public class JTabbedEditor extends JTabbedPane {
 			JButton closeButton = new JButton("x");
 			closeButton.addActionListener(e -> {
 				if (modified) {
-					
+					setSelectedIndex(indexOfTabComponent(this));
+					tabCloseAction.actionPerformed(null);
+				} else {
+					JTabbedEditor.this.remove(indexOfTabComponent(this));					
 				}
-				JTabbedEditor.this.remove(indexOfTabComponent(this));
 			});
 			final int buttonBorder = 3;
 			closeButton.setBorder(
@@ -84,6 +93,7 @@ public class JTabbedEditor extends JTabbedPane {
 			add(closeButton);
 			
 			fileName = new JLabel(editor.getName());
+			// sets icon to right
 			fileName.setHorizontalTextPosition(JLabel.LEFT);
 			add(fileName);
 		}
