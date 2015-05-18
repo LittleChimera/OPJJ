@@ -35,6 +35,8 @@ public class JNotepadPP extends JFrame {
 	private static final String APP_NAME = "JNotepad++";
 
 	private JTabbedEditor editorTabs;
+	private String clipboard = "";
+	private boolean clipOneUsage = false; 
 
 	public JNotepadPP() {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -65,16 +67,43 @@ public class JNotepadPP extends JFrame {
 		openDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_O);
 		
 		saveDocumentAction.putValue(Action.NAME, "Save");
+		saveDocumentAction.putValue(Action.SHORT_DESCRIPTION, "Used to save currently editing document");
+		saveDocumentAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
+		saveDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
 		
 		exitAction.putValue(Action.NAME, "Exit");
+		exitAction.putValue(Action.SHORT_DESCRIPTION, "Exits " + APP_NAME);
+		exitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Q"));
+		exitAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_Q);
 		
-		deleteSelectedPartAction.putValue(Action.NAME, "Delete selection");
+		// deleteSelectedPartAction.putValue(Action.NAME, "Delete selection");
 		
 		//toggleCaseAction.putValue(Action.NAME, "Toggle case in selection");
 		
 		newDocumentAction.putValue(Action.NAME, "New");
+		newDocumentAction.putValue(Action.SHORT_DESCRIPTION, "Used to create new document");
+		newDocumentAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control N"));
+		newDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_N);
 		
 		calculateStatisticsAction.putValue(Action.NAME, "Statistics");
+		openDocumentAction.putValue(Action.SHORT_DESCRIPTION, "Generates statistics for the document");
+		openDocumentAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control T"));
+		openDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_T);
+		
+		copyTextAction.putValue(Action.NAME, "Copy");
+		copyTextAction.putValue(Action.SHORT_DESCRIPTION, "Used to copy selection");
+		copyTextAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+		copyTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
+		
+		cutTextAction.putValue(Action.NAME, "Cut");
+		cutTextAction.putValue(Action.SHORT_DESCRIPTION, "Used to cut selection");
+		cutTextAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
+		cutTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_X);
+		
+		pasteTextAction.putValue(Action.NAME, "Paste");
+		pasteTextAction.putValue(Action.SHORT_DESCRIPTION, "Used to paste clipboards content");
+		pasteTextAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+		pasteTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_V);
 	}
 
 	private void createMenus() {		
@@ -92,6 +121,10 @@ public class JNotepadPP extends JFrame {
 		menuBar.add(editMenu);
 		
 		editMenu.add(new JMenuItem(deleteSelectedPartAction));
+		editMenu.add(new JMenuItem(copyTextAction));
+		editMenu.add(new JMenuItem(cutTextAction));
+		editMenu.add(new JMenuItem(pasteTextAction));
+	
 		
 		JMenu toolsMenu = new JMenu("Tools");
 		menuBar.add(toolsMenu);
@@ -266,6 +299,60 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 	
+	private Action copyTextAction = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Document doc = getActiveEditor().getDocument();
+			int selectionStart = Math.min(getActiveEditor().getCaret().getDot(), getActiveEditor().getCaret().getMark());
+			int selectionLength = Math.max(getActiveEditor().getCaret().getDot(), getActiveEditor().getCaret().getMark()) - selectionStart;
+			try {
+				updateClipboard(doc.getText(selectionStart, selectionLength), false);
+				pasteTextAction.setEnabled(true);
+			} catch (Exception ignorable) {
+			}
+		}
+	};
+	
+	private Action cutTextAction = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Document doc = getActiveEditor().getDocument();
+			int selectionStart = Math.min(getActiveEditor().getCaret().getDot(), getActiveEditor().getCaret().getMark());
+			int selectionLength = Math.max(getActiveEditor().getCaret().getDot(), getActiveEditor().getCaret().getMark()) - selectionStart;
+			try {
+				updateClipboard(doc.getText(selectionStart, selectionLength), true);
+				doc.remove(selectionStart, selectionLength);
+				pasteTextAction.setEnabled(true);
+			} catch (Exception ignorable) {
+			}
+		}
+	};
+	
+	private Action pasteTextAction = new AbstractAction() {
+		
+		{
+			setEnabled(false);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Document doc = getActiveEditor().getDocument();
+			int selectionStart = Math.min(getActiveEditor().getCaret().getDot(), getActiveEditor().getCaret().getMark());
+			int selectionLength = Math.max(getActiveEditor().getCaret().getDot(), getActiveEditor().getCaret().getMark()) - selectionStart;
+			try {
+				doc.remove(selectionStart, selectionLength);
+				doc.insertString(selectionStart, clipboard, null);
+				if (clipOneUsage) {
+					pasteTextAction.setEnabled(false);
+					updateClipboard("", false);
+				}
+			} catch (Exception ignorable) {
+			}
+		}
+	};
+	
 	private Action calculateStatisticsAction = new AbstractAction() {
 		
 		@Override
@@ -362,5 +449,10 @@ public class JNotepadPP extends JFrame {
 		}
 		editorTabs.remove(editorTabs.getSelectedIndex());
 		return true;
+	}
+	
+	private void updateClipboard(String text, boolean oneUse) {
+		clipboard = text;
+		clipOneUsage = oneUse;
 	}
 }
