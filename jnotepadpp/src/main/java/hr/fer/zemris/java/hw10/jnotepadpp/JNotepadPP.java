@@ -12,6 +12,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.Date;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -38,6 +40,8 @@ import javax.swing.text.Utilities;
 
 public class JNotepadPP extends JFrame {
 
+	private boolean closingFlag = false;
+
 	private static final String APP_NAME = "JNotepad++";
 
 	private JTabbedEditor editorTabs;
@@ -59,21 +63,31 @@ public class JNotepadPP extends JFrame {
 
 		editorTabs = new JTabbedEditor(tabCloseAction);
 		editorTabs.addChangeListener(e -> {
-				updateTitle();
-				// will be true if at least one tab is opened
+			updateTitle();
+			// will be true if at least one tab is opened
 				boolean editorActive = editorTabs.getTabCount() != 0;
 				calculateStatisticsAction.setEnabled(editorActive);
 				saveDocumentAction.setEnabled(editorActive);
 				copyTextAction.setEnabled(editorActive);
 				cutTextAction.setEnabled(editorActive);
 				pasteTextAction.setEnabled(editorActive && clipboard != "");
-			});
 
-		newDocumentAction.actionPerformed(null);
+				JFileEditor activeEditor = getActiveEditor();
+				if (activeEditor == null) {
+					statusBar.updateCaret(0, 0, 0);
+					statusBar.updateLength(0);
+				} else {
+					activeEditor.fireEditorUpdate();
+					statusBar.updateLength(activeEditor.getDocument().getLength());
+				}
+			});
+		getContentPane().add(editorTabs, BorderLayout.CENTER);
 
 		createActions();
 		createMenus();
 		createToolbars();
+
+		newDocumentAction.actionPerformed(null);
 	}
 
 	private void createActions() {
@@ -177,6 +191,19 @@ public class JNotepadPP extends JFrame {
 
 		statusBar = new StatusBar();
 		statusBar.setFloatable(true);
+		Thread clockUpdater = new Thread(() -> {
+			while (!closingFlag) {
+				SwingUtilities.invokeLater(() -> {
+					statusBar.updateClock(new Date());
+				});
+				try {
+					Thread.sleep(500);
+				} catch (Exception ignorable) {
+				}
+			}
+		});
+		clockUpdater.setDaemon(true);
+		clockUpdater.start();
 
 		getContentPane().add(toolBar, BorderLayout.PAGE_START);
 		getContentPane().add(statusBar, BorderLayout.PAGE_END);
@@ -323,8 +350,9 @@ public class JNotepadPP extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			editorTabs.addTab(fileEditorFactory.createEditor("", null));
-			getContentPane().add(editorTabs, BorderLayout.CENTER);
+			JFileEditor editor = fileEditorFactory.createEditor("", null);
+			editor.setText("");
+			editorTabs.addTab(editor);
 		}
 	};
 
@@ -459,6 +487,7 @@ public class JNotepadPP extends JFrame {
 					return;
 				}
 			}
+			closingFlag = true;
 			dispose();
 		};
 	};
@@ -557,4 +586,5 @@ public class JNotepadPP extends JFrame {
 			}
 		};
 	}
+
 }

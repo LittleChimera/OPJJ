@@ -3,6 +3,7 @@ package hr.fer.zemris.java.hw10.jnotepadpp;
 import java.nio.file.Path;
 
 import javax.swing.JTextArea;
+import javax.swing.event.CaretEvent;
 
 public class JFileEditor extends JTextArea {
 
@@ -28,5 +29,20 @@ public class JFileEditor extends JTextArea {
 	public void setFilePath(Path filePath) {
 		this.filePath = filePath;
 		
+	}
+	
+	public void fireEditorUpdate() {
+		fireCaretUpdate(new CaretEvent(this) {
+			
+			@Override
+			public int getMark() {
+				return JFileEditor.this.getCaret().getMark();
+			}
+			
+			@Override
+			public int getDot() {
+				return JFileEditor.this.getCaret().getDot();
+			}
+		});
 	}
 }

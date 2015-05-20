@@ -68,6 +68,7 @@ public class StatusBar extends JToolBar {
 	
 	public void updateClock(Date time) {
 		clock.setText(time.toString());
+		clock.repaint();
 	}
 
 
