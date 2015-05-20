@@ -300,7 +300,7 @@ public class CalcLayout implements LayoutManager2 {
 	 */
 	@Override
 	public void invalidateLayout(Container target) {
-		components = new HashMap<RCPosition, Component>();
+		//components = new HashMap<RCPosition, Component>();
 	}
 
 }

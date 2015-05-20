@@ -134,6 +134,8 @@ public class Newton {
 				short[] data = new short[width * height];
 				int m = 16 * 16 * 16;
 
+				long t0 = System.currentTimeMillis();
+
 				/**
 				 * Calculates data of Newton's fractal for given range of y-coordinates.
 				 * @author Luka Skugor
@@ -192,10 +194,13 @@ public class Newton {
 					}
 				}
 
+
 				System.out.println("Izračuni gotovi...");
 				observer.acceptResult(data, (short) (polynomial.order() + 1),
 						requestNo);
 				System.out.println("Dojava gotova...");
+				long t1 = System.currentTimeMillis();
+				System.out.println("Trajalo je: " + (t1 - t0) + "ms.");
 			}
 
 		};

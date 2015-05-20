@@ -5,11 +5,13 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.nio.file.Path;
 
-
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -33,7 +35,7 @@ public class JTabbedEditor extends JTabbedPane {
 				
 		JTabComponent tabComponent = new JTabComponent(editor);
 		setTabComponentAt(getSelectedIndex(), tabComponent);
-		saveActiveTabContents();
+		//saveActiveTabContents();
 		
 		return tab;
 	}
@@ -66,7 +68,7 @@ public class JTabbedEditor extends JTabbedPane {
 				}
 				
 				private void docChanged() {
-					setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
+					setIcon(notSaved);
 					modified = true;
 				}
 			});
@@ -117,12 +119,16 @@ public class JTabbedEditor extends JTabbedPane {
 		}
 		
 		selectedTabComponent.updateDisplayName();
-		selectedTabComponent.setIcon(null);
+		selectedTabComponent.setIcon(saved);
 		selectedTabComponent.modified = false;
 	}
 	
 	public boolean isSelectedSaved() {
 		return !((JTabComponent) getTabComponentAt(getSelectedIndex())).modified;
 	}
+	
+	private static ImageIcon saved = new ImageIcon("icons/saved.png", "File saved");
+	private static ImageIcon notSaved = new ImageIcon("icons/not_saved.png", "File not saved");
+	
 	
 }
