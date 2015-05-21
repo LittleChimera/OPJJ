@@ -35,7 +35,6 @@ public class JTabbedEditor extends JTabbedPane {
 				
 		JTabComponent tabComponent = new JTabComponent(editor);
 		setTabComponentAt(getSelectedIndex(), tabComponent);
-		//saveActiveTabContents();
 		
 		return tab;
 	}
@@ -50,6 +49,7 @@ public class JTabbedEditor extends JTabbedPane {
 		public JTabComponent(JFileEditor editor) {
 			this.editor = editor;
 			this.modified = false;
+			updateTooltipForSelected(editor);
 			editor.getDocument().addDocumentListener(new DocumentListener() {
 				
 				@Override
@@ -113,10 +113,7 @@ public class JTabbedEditor extends JTabbedPane {
 	public void saveActiveTabContents() {
 		JTabComponent selectedTabComponent = (JTabComponent)getTabComponentAt(getSelectedIndex());
 		
-		Path tooltip = selectedTabComponent.editor.getFilePath();
-		if (tooltip != null) {
-			setToolTipTextAt(getSelectedIndex(), tooltip.toString());			
-		}
+		updateTooltipForSelected(selectedTabComponent.editor);
 		
 		selectedTabComponent.updateDisplayName();
 		selectedTabComponent.setIcon(saved);
@@ -125,6 +122,13 @@ public class JTabbedEditor extends JTabbedPane {
 	
 	public boolean isSelectedSaved() {
 		return !((JTabComponent) getTabComponentAt(getSelectedIndex())).modified;
+	}
+	
+	private void updateTooltipForSelected(JFileEditor editor) {
+		Path tooltip = editor.getFilePath();
+		if (tooltip != null) {
+			setToolTipTextAt(getSelectedIndex(), tooltip.toString());			
+		}
 	}
 	
 	private static ImageIcon saved = new ImageIcon("icons/saved.png", "File saved");

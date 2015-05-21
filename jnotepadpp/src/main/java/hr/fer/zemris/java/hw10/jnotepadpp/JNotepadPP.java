@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw10.jnotepadpp;
 
+import hr.fer.zemris.java.hw10.jnotepadpp.localization.LocalizationProvider;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -11,8 +13,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import java.util.Date;
+import java.text.Collator;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -60,29 +65,45 @@ public class JNotepadPP extends JFrame {
 
 	private void initGUI() {
 		getContentPane().setLayout(new BorderLayout());
+		
+		LocalizationProvider.getInstance().addLocalizationListener(() -> {
+			LocalizationProvider lProvider = LocalizationProvider.getInstance();
+			saveDocumentAction.putValue(Action.NAME, lProvider.getString("save"));
+		});
+		
+		LocalizationProvider.getInstance().fire();
 
 		editorTabs = new JTabbedEditor(tabCloseAction);
-		editorTabs.addChangeListener(e -> {
-			updateTitle();
-			// will be true if at least one tab is opened
-				boolean editorActive = editorTabs.getTabCount() != 0;
-				calculateStatisticsAction.setEnabled(editorActive);
-				saveDocumentAction.setEnabled(editorActive);
-				copyTextAction.setEnabled(editorActive);
-				cutTextAction.setEnabled(editorActive);
-				pasteTextAction.setEnabled(editorActive && clipboard != "");
+		editorTabs
+				.addChangeListener(e -> {
+					updateTitle();
+					// will be true if at least one tab is opened
+					boolean editorActive = editorTabs.getTabCount() != 0;
+					calculateStatisticsAction.setEnabled(editorActive);
+					saveDocumentAction.setEnabled(editorActive);
+					copyTextAction.setEnabled(editorActive);
+					cutTextAction.setEnabled(editorActive);
+					saveDocumentAsAction.setEnabled(editorActive);
+					pasteTextAction.setEnabled(editorActive && clipboard != "");
 
-				JFileEditor activeEditor = getActiveEditor();
-				if (activeEditor == null) {
-					statusBar.updateCaret(0, 0, 0);
-					statusBar.updateLength(0);
-				} else {
-					activeEditor.fireEditorUpdate();
-					statusBar.updateLength(activeEditor.getDocument().getLength());
-				}
-			});
+					JFileEditor activeEditor = getActiveEditor();
+					if (activeEditor == null) {
+						statusBar.updateCaret(0, 0, 0);
+						statusBar.updateLength(0);
+					} else {
+						activeEditor.fireEditorUpdate();
+						statusBar.updateLength(activeEditor.getDocument()
+								.getLength());
+					}
+					
+					boolean textSelected = (activeEditor != null) ? activeEditor
+							.getCaret().getDot() != activeEditor.getCaret()
+							.getMark() : false;
+					enableSelectionActions(textSelected);
+
+				});
 		getContentPane().add(editorTabs, BorderLayout.CENTER);
-
+		
 		createActions();
 		createMenus();
 		createToolbars();
@@ -91,6 +112,8 @@ public class JNotepadPP extends JFrame {
 	}
 
 	private void createActions() {
+		LocalizationProvider lProvider = LocalizationProvider.getInstance();
+		
 		openDocumentAction.putValue(Action.NAME, "Open");
 		openDocumentAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to open existing document");
@@ -98,12 +121,18 @@ public class JNotepadPP extends JFrame {
 				KeyStroke.getKeyStroke("control O"));
 		openDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_O);
 
-		saveDocumentAction.putValue(Action.NAME, "Save");
 		saveDocumentAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to save currently editing document");
 		saveDocumentAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control S"));
 		saveDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
+
+		saveDocumentAsAction.putValue(Action.NAME, "Save As");
+		saveDocumentAsAction.putValue(Action.SHORT_DESCRIPTION,
+				"Used to save currently editing document as a different file");
+		saveDocumentAsAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke("control shift S"));
+		saveDocumentAsAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
 
 		exitAction.putValue(Action.NAME, "Exit");
 		exitAction.putValue(Action.SHORT_DESCRIPTION, "Exits " + APP_NAME);
@@ -113,7 +142,20 @@ public class JNotepadPP extends JFrame {
 
 		// deleteSelectedPartAction.putValue(Action.NAME, "Delete selection");
 
-		// toggleCaseAction.putValue(Action.NAME, "Toggle case in selection");
+		invertCaseAction.putValue(Action.NAME, "Invert case");
+		invertCaseAction.putValue(Action.SHORT_DESCRIPTION,
+				"Used to invert case of selected text");
+		invertCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
+
+		toLowerCaseAction.putValue(Action.NAME, "To lower case");
+		toLowerCaseAction.putValue(Action.SHORT_DESCRIPTION,
+				"Transforms text in lower case");
+		toLowerCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
+
+		toUpperCaseAction.putValue(Action.NAME, "To upper case");
+		toUpperCaseAction.putValue(Action.SHORT_DESCRIPTION,
+				"Transforms text in upper case");
+		toUpperCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
 
 		newDocumentAction.putValue(Action.NAME, "New");
 		newDocumentAction.putValue(Action.SHORT_DESCRIPTION,
@@ -172,9 +214,46 @@ public class JNotepadPP extends JFrame {
 
 		JMenu toolsMenu = new JMenu("Tools");
 		menuBar.add(toolsMenu);
-		toolsMenu.add(new JMenuItem(calculateStatisticsAction));
 
-		// editMenu.add(new JMenuItem(toggleCaseAction));
+		JMenu transforMenu = new JMenu("Transform");
+		transforMenu.add(new JMenuItem(invertCaseAction));
+		transforMenu.add(new JMenuItem(toLowerCaseAction));
+		transforMenu.add(new JMenuItem(toUpperCaseAction));
+		
+		JMenu sortMenu = new JMenu("Sort");
+		sortMenu.add(new JMenuItem(sortAscendingAction));
+		sortMenu.add(new JMenuItem(sortDescendingAction));
+
+		toolsMenu.add(transforMenu);
+		toolsMenu.add(sortMenu);
+		toolsMenu.addSeparator();
+		toolsMenu.add(new JMenuItem(calculateStatisticsAction));
+		
+		JMenu helpMenu = new JMenu("Help");
+		JMenu languageMenu = new JMenu("Language");
+		
+		class LanguageSetter extends JMenuItem {
+			
+			public LanguageSetter(String language) {
+				setAction(new AbstractAction() {
+					
+					{
+						putValue(Action.NAME, language);
+					}
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						LocalizationProvider.getInstance().setLanguage(language);
+					}
+				});
+			}
+		}
+		languageMenu.add(new LanguageSetter("hr"));
+		languageMenu.add(new LanguageSetter("en"));
+		languageMenu.add(new LanguageSetter("de"));
+		helpMenu.add(languageMenu);
+		
+		menuBar.add(helpMenu);
 
 		setJMenuBar(menuBar);
 	}
@@ -186,6 +265,7 @@ public class JNotepadPP extends JFrame {
 		toolBar.add(new JButton(newDocumentAction));
 		toolBar.add(new JButton(openDocumentAction));
 		toolBar.add(new JButton(saveDocumentAction));
+		toolBar.add(new JButton(saveDocumentAsAction));
 		toolBar.addSeparator();
 		// toolBar.add(new JButton(toggleCaseAction));
 
@@ -194,7 +274,7 @@ public class JNotepadPP extends JFrame {
 		Thread clockUpdater = new Thread(() -> {
 			while (!closingFlag) {
 				SwingUtilities.invokeLater(() -> {
-					statusBar.updateClock(new Date());
+					statusBar.updateClock();
 				});
 				try {
 					Thread.sleep(500);
@@ -251,6 +331,20 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	private Action saveDocumentAsAction = new AbstractAction() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JFileEditor activeEditor = getActiveEditor();
+			Path oldPath = activeEditor.getFilePath();
+			activeEditor.setFilePath(null);
+
+			if (!saveDocument()) {
+				activeEditor.setFilePath(oldPath);
+			}
+		}
+	};
+
 	private boolean saveDocument() {
 		if (getActiveEditor().getFilePath() == null) {
 			JFileChooser fc = new JFileChooser();
@@ -303,7 +397,7 @@ public class JNotepadPP extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			dispose();
+			onWindowClosing.windowClosing(null);
 		}
 	};
 
@@ -323,28 +417,79 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	/*
-	 * private Action toggleCaseAction = new AbstractAction() {
-	 * 
-	 * @Override public void actionPerformed(ActionEvent e) { Document doc =
-	 * getActiveEditor().getDocument(); int pocetak =
-	 * Math.min(getActiveEditor().getCaret().getDot(),
-	 * getActiveEditor().getCaret().getMark()); int duljina =
-	 * Math.max(getActiveEditor().getCaret().getDot(),
-	 * getActiveEditor().getCaret().getMark() - pocetak);
-	 * 
-	 * try { String text = doc.getText(pocetak, duljina); text =
-	 * toggleCase(text); doc.remove(pocetak, duljina); doc.insertString(pocetak,
-	 * text, null); } catch (BadLocationException ignorable) { } }
-	 * 
-	 * private String toggleCase(String text) { char[] znakovi =
-	 * text.toCharArray(); for (int i = 0; i < znakovi.length; i++) { char c =
-	 * znakovi[i]; if (Character.isLowerCase(c)) { znakovi[i] =
-	 * Character.toUpperCase(c); } else if (Character.isUpperCase(c)) {
-	 * znakovi[i] = Character.toLowerCase(c); } }
-	 * 
-	 * return new String(znakovi); } };
-	 */
+	private Action invertCaseAction = new AbstractAction() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Document doc = getActiveEditor().getDocument();
+			int pocetak = Math.min(getActiveEditor().getCaret().getDot(),
+					getActiveEditor().getCaret().getMark());
+			int duljina = Math.max(getActiveEditor().getCaret().getDot(),
+					getActiveEditor().getCaret().getMark()) - pocetak;
+
+			try {
+				String text = doc.getText(pocetak, duljina);
+				text = toggleCase(text);
+				doc.remove(pocetak, duljina);
+				doc.insertString(pocetak, text, null);
+			} catch (BadLocationException ignorable) {
+			}
+		}
+
+		private String toggleCase(String text) {
+			char[] znakovi = text.toCharArray();
+			for (int i = 0; i < znakovi.length; i++) {
+				char c = znakovi[i];
+				if (Character.isLowerCase(c)) {
+					znakovi[i] = Character.toUpperCase(c);
+				} else if (Character.isUpperCase(c)) {
+					znakovi[i] = Character.toLowerCase(c);
+				}
+			}
+
+			return new String(znakovi);
+		}
+	};
+
+	private Action toLowerCaseAction = new AbstractAction() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Document doc = getActiveEditor().getDocument();
+			int pocetak = Math.min(getActiveEditor().getCaret().getDot(),
+					getActiveEditor().getCaret().getMark());
+			int duljina = Math.max(getActiveEditor().getCaret().getDot(),
+					getActiveEditor().getCaret().getMark()) - pocetak;
+
+			try {
+				String text = doc.getText(pocetak, duljina);
+				text = text.toLowerCase();
+				doc.remove(pocetak, duljina);
+				doc.insertString(pocetak, text, null);
+			} catch (BadLocationException ignorable) {
+			}
+		}
+	};
+
+	private Action toUpperCaseAction = new AbstractAction() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Document doc = getActiveEditor().getDocument();
+			int pocetak = Math.min(getActiveEditor().getCaret().getDot(),
+					getActiveEditor().getCaret().getMark());
+			int duljina = Math.max(getActiveEditor().getCaret().getDot(),
+					getActiveEditor().getCaret().getMark()) - pocetak;
+
+			try {
+				String text = doc.getText(pocetak, duljina);
+				text = text.toUpperCase();
+				doc.remove(pocetak, duljina);
+				doc.insertString(pocetak, text, null);
+			} catch (BadLocationException ignorable) {
+			}
+		}
+	};
 
 	private Action newDocumentAction = new AbstractAction() {
 
@@ -446,15 +591,69 @@ public class JNotepadPP extends JFrame {
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	};
+	
+	private Action sortAscendingAction = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			sortSelected(true);
+		}
+	};
+	
+	private Action sortDescendingAction = new AbstractAction() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			sortSelected(false);
+		}
+	};
+	
+	private void sortSelected(boolean ascending) {
+		JFileEditor activeEditor = getActiveEditor();
+		int dot = activeEditor.getCaret().getDot();
+		int mark = activeEditor.getCaret().getMark();
+		
+		int offsetStart = 0, offsetEnd = 0;
+		try {
+			offsetStart = Utilities.getRowStart(activeEditor, Math.min(mark, dot));
+			offsetEnd = Utilities.getRowEnd(activeEditor, Math.max(mark, dot));
+		} catch (BadLocationException ignorable) {
+		}
+		
+		String selectedLines = null;
+		try {
+			selectedLines = activeEditor.getDocument().getText(offsetStart, offsetEnd - offsetStart);
+		} catch (BadLocationException ignorable) {
+			System.out.println("terrible");
+		}
+		
+		String[] lines = selectedLines.split("\\n");
+		Locale hrLocale = new Locale("hr");
+		Collator hrCollator = Collator.getInstance(hrLocale);
+		Comparator<Object> comparator = (ascending)?hrCollator:hrCollator.reversed();
+		Collections.sort(Arrays.asList(lines), comparator);
+		
+		StringBuilder sortedSelectionBuilder = new StringBuilder(offsetEnd - offsetStart + 2);
+		for (String string : lines) {
+			sortedSelectionBuilder.append(string).append(String.format("%n"));
+		}
+		
+		String sortedSelection = sortedSelectionBuilder.toString().trim();
+		
+		try {
+			activeEditor.getDocument().remove(offsetStart, offsetEnd - offsetStart);
+			activeEditor.getDocument().insertString(offsetStart, sortedSelection, null);
+		} catch (BadLocationException ignorable) {
+		}
+	}
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
+			LocalizationProvider.getInstance().setLanguage("en");
 			try {
 				UIManager.setLookAndFeel(UIManager
 						.getSystemLookAndFeelClassName());
-			} catch (Exception e) {
-				// TODO remove this
-				e.printStackTrace();
+			} catch (Exception ignorable) {
 			}
 			new JNotepadPP().setVisible(true);
 		});
@@ -546,6 +745,8 @@ public class JNotepadPP extends JFrame {
 				int mark = e.getMark();
 				int selectionStart = Math.min(dot, mark);
 				int selectionLength = Math.max(dot, mark) - selectionStart;
+				
+				enableSelectionActions(selectionLength != 0); 
 
 				int offset = 0;
 				try {
@@ -585,6 +786,14 @@ public class JNotepadPP extends JFrame {
 				statusBar.updateLength(e.getDocument().getLength());
 			}
 		};
+	}
+	
+	private void enableSelectionActions(boolean enable) {
+		copyTextAction.setEnabled(enable);
+		cutTextAction.setEnabled(enable);
+		invertCaseAction.setEnabled(enable);
+		toLowerCaseAction.setEnabled(enable);
+		toUpperCaseAction.setEnabled(enable);
 	}
 
 }
