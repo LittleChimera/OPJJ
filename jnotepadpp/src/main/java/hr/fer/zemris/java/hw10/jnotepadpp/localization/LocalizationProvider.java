@@ -33,4 +33,8 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
 		fire();
 	}
 
+	public String getLanguage() {
+		return language;
+	}
+
 }

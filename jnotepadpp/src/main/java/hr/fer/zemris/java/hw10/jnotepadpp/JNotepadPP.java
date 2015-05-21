@@ -1,6 +1,9 @@
 package hr.fer.zemris.java.hw10.jnotepadpp;
 
+import hr.fer.zemris.java.hw10.jnotepadpp.localization.FormLocalizationProvider;
+import hr.fer.zemris.java.hw10.jnotepadpp.localization.LocalizableAction;
 import hr.fer.zemris.java.hw10.jnotepadpp.localization.LocalizationProvider;
+import hr.fer.zemris.java.hw10.jnotepadpp.localization.LocalizationProviderBridge;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -45,6 +48,9 @@ import javax.swing.text.Utilities;
 
 public class JNotepadPP extends JFrame {
 
+	private FormLocalizationProvider flp = new FormLocalizationProvider(
+			LocalizationProvider.getInstance(), this);
+
 	private boolean closingFlag = false;
 
 	private static final String APP_NAME = "JNotepad++";
@@ -65,56 +71,74 @@ public class JNotepadPP extends JFrame {
 
 	private void initGUI() {
 		getContentPane().setLayout(new BorderLayout());
-		
-		LocalizationProvider.getInstance().addLocalizationListener(() -> {
-			LocalizationProvider lProvider = LocalizationProvider.getInstance();
-			saveDocumentAction.putValue(Action.NAME, lProvider.getString("save"));
-		});
-		
-		LocalizationProvider.getInstance().fire();
 
 		editorTabs = new JTabbedEditor(tabCloseAction);
-		editorTabs
-				.addChangeListener(e -> {
-					updateTitle();
-					// will be true if at least one tab is opened
-					boolean editorActive = editorTabs.getTabCount() != 0;
-					calculateStatisticsAction.setEnabled(editorActive);
-					saveDocumentAction.setEnabled(editorActive);
-					copyTextAction.setEnabled(editorActive);
-					cutTextAction.setEnabled(editorActive);
-					saveDocumentAsAction.setEnabled(editorActive);
-					pasteTextAction.setEnabled(editorActive && clipboard != "");
+		editorTabs.addChangeListener(e -> {
+			updateTitle();
+			// will be true if at least one tab is opened
+				boolean editorActive = editorTabs.getTabCount() != 0;
+				calculateStatisticsAction.setEnabled(editorActive);
+				saveDocumentAction.setEnabled(editorActive);
+				copyTextAction.setEnabled(editorActive);
+				cutTextAction.setEnabled(editorActive);
+				saveDocumentAsAction.setEnabled(editorActive);
+				pasteTextAction.setEnabled(editorActive && clipboard != "");
 
-					JFileEditor activeEditor = getActiveEditor();
-					if (activeEditor == null) {
-						statusBar.updateCaret(0, 0, 0);
-						statusBar.updateLength(0);
-					} else {
-						activeEditor.fireEditorUpdate();
-						statusBar.updateLength(activeEditor.getDocument()
-								.getLength());
-					}
-					
-					boolean textSelected = (activeEditor != null) ? activeEditor
-							.getCaret().getDot() != activeEditor.getCaret()
-							.getMark() : false;
-					enableSelectionActions(textSelected);
+				JFileEditor activeEditor = getActiveEditor();
+				if (activeEditor == null) {
+					statusBar.updateCaret(0, 0, 0);
+					statusBar.updateLength(0);
+				} else {
+					activeEditor.fireEditorUpdate();
+					statusBar.updateLength(activeEditor.getDocument()
+							.getLength());
+				}
 
-				});
+				boolean textSelected = (activeEditor != null) ? activeEditor
+						.getCaret().getDot() != activeEditor.getCaret()
+						.getMark() : false;
+				enableSelectionActions(textSelected);
+
+			});
 		getContentPane().add(editorTabs, BorderLayout.CENTER);
-		
+
 		createActions();
 		createMenus();
 		createToolbars();
+
+		LocalizationProvider.getInstance().fire();
 
 		newDocumentAction.actionPerformed(null);
 	}
 
 	private void createActions() {
-		LocalizationProvider lProvider = LocalizationProvider.getInstance();
-		
-		openDocumentAction.putValue(Action.NAME, "Open");
+		/*
+		 * LocalizationProvider.getInstance().addLocalizationListener(() -> {
+		 * LocalizationProvider lProvider = LocalizationProvider.getInstance();
+		 * saveDocumentAction.putValue(Action.NAME,
+		 * lProvider.getString("save"));
+		 * openDocumentAction.putValue(Action.NAME,
+		 * lProvider.getString("open"));
+		 * saveDocumentAsAction.putValue(Action.NAME,
+		 * lProvider.getString("save_as")); exitAction.putValue(Action.NAME,
+		 * lProvider.getString("exit")); invertCaseAction.putValue(Action.NAME,
+		 * lProvider.getString("invert"));
+		 * toLowerCaseAction.putValue(Action.NAME,
+		 * lProvider.getString("to_lower_case"));
+		 * toUpperCaseAction.putValue(Action.NAME,
+		 * lProvider.getString("to_upper_case"));
+		 * newDocumentAction.putValue(Action.NAME, lProvider.getString("new"));
+		 * calculateStatisticsAction.putValue(Action.NAME,
+		 * lProvider.getString("statistics"));
+		 * copyTextAction.putValue(Action.NAME, lProvider.getString("copy"));
+		 * cutTextAction.putValue(Action.NAME, lProvider.getString("cut"));
+		 * pasteTextAction.putValue(Action.NAME, lProvider.getString("paste"));
+		 * sortAscendingAction.putValue(Action.NAME,
+		 * lProvider.getString("ascending"));
+		 * sortDescendingAction.putValue(Action.NAME,
+		 * lProvider.getString("descending")); });
+		 */
+
 		openDocumentAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to open existing document");
 		openDocumentAction.putValue(Action.ACCELERATOR_KEY,
@@ -127,76 +151,75 @@ public class JNotepadPP extends JFrame {
 				KeyStroke.getKeyStroke("control S"));
 		saveDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
 
-		saveDocumentAsAction.putValue(Action.NAME, "Save As");
 		saveDocumentAsAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to save currently editing document as a different file");
 		saveDocumentAsAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control shift S"));
 		saveDocumentAsAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
 
-		exitAction.putValue(Action.NAME, "Exit");
 		exitAction.putValue(Action.SHORT_DESCRIPTION, "Exits " + APP_NAME);
 		exitAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control Q"));
 		exitAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_Q);
 
-		// deleteSelectedPartAction.putValue(Action.NAME, "Delete selection");
-
-		invertCaseAction.putValue(Action.NAME, "Invert case");
 		invertCaseAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to invert case of selected text");
 		invertCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
 
-		toLowerCaseAction.putValue(Action.NAME, "To lower case");
 		toLowerCaseAction.putValue(Action.SHORT_DESCRIPTION,
 				"Transforms text in lower case");
 		toLowerCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
 
-		toUpperCaseAction.putValue(Action.NAME, "To upper case");
 		toUpperCaseAction.putValue(Action.SHORT_DESCRIPTION,
 				"Transforms text in upper case");
 		toUpperCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
 
-		newDocumentAction.putValue(Action.NAME, "New");
 		newDocumentAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to create new document");
 		newDocumentAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control N"));
 		newDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_N);
 
-		calculateStatisticsAction.putValue(Action.NAME, "Statistics");
 		openDocumentAction.putValue(Action.SHORT_DESCRIPTION,
 				"Generates statistics for the document");
 		openDocumentAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control T"));
 		openDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_T);
 
-		copyTextAction.putValue(Action.NAME, "Copy");
 		copyTextAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to copy selection");
 		copyTextAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control C"));
 		copyTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
 
-		cutTextAction.putValue(Action.NAME, "Cut");
 		cutTextAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to cut selection");
 		cutTextAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control X"));
 		cutTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_X);
 
-		pasteTextAction.putValue(Action.NAME, "Paste");
 		pasteTextAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to paste clipboards content");
 		pasteTextAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control V"));
 		pasteTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_V);
+
+		sortAscendingAction.putValue(Action.SHORT_DESCRIPTION,
+				"Sorts selected text in ascending order");
+		sortAscendingAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
+
+		sortDescendingAction.putValue(Action.SHORT_DESCRIPTION,
+				"Sorts selected text in descending order");
+		sortDescendingAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
+
 	}
 
 	private void createMenus() {
+		LocalizationProvider lProvider = LocalizationProvider.getInstance();
+
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu(lProvider.getString("file"));
 		menuBar.add(fileMenu);
 
 		fileMenu.add(new JMenuItem(openDocumentAction));
@@ -204,23 +227,22 @@ public class JNotepadPP extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(new JMenuItem(exitAction));
 
-		JMenu editMenu = new JMenu("Edit");
+		JMenu editMenu = new JMenu(lProvider.getString("edit"));
 		menuBar.add(editMenu);
 
-		editMenu.add(new JMenuItem(deleteSelectedPartAction));
 		editMenu.add(new JMenuItem(copyTextAction));
 		editMenu.add(new JMenuItem(cutTextAction));
 		editMenu.add(new JMenuItem(pasteTextAction));
 
-		JMenu toolsMenu = new JMenu("Tools");
+		JMenu toolsMenu = new JMenu(lProvider.getString("tools"));
 		menuBar.add(toolsMenu);
 
-		JMenu transforMenu = new JMenu("Transform");
+		JMenu transforMenu = new JMenu(lProvider.getString("transform"));
 		transforMenu.add(new JMenuItem(invertCaseAction));
 		transforMenu.add(new JMenuItem(toLowerCaseAction));
 		transforMenu.add(new JMenuItem(toUpperCaseAction));
-		
-		JMenu sortMenu = new JMenu("Sort");
+
+		JMenu sortMenu = new JMenu(lProvider.getString("sort"));
 		sortMenu.add(new JMenuItem(sortAscendingAction));
 		sortMenu.add(new JMenuItem(sortDescendingAction));
 
@@ -228,22 +250,23 @@ public class JNotepadPP extends JFrame {
 		toolsMenu.add(sortMenu);
 		toolsMenu.addSeparator();
 		toolsMenu.add(new JMenuItem(calculateStatisticsAction));
-		
-		JMenu helpMenu = new JMenu("Help");
-		JMenu languageMenu = new JMenu("Language");
-		
+
+		JMenu helpMenu = new JMenu(lProvider.getString("help"));
+		JMenu languageMenu = new JMenu(lProvider.getString("language"));
+
 		class LanguageSetter extends JMenuItem {
-			
+
 			public LanguageSetter(String language) {
 				setAction(new AbstractAction() {
-					
+
 					{
 						putValue(Action.NAME, language);
 					}
-					
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						LocalizationProvider.getInstance().setLanguage(language);
+						LocalizationProvider.getInstance()
+								.setLanguage(language);
 					}
 				});
 			}
@@ -252,14 +275,16 @@ public class JNotepadPP extends JFrame {
 		languageMenu.add(new LanguageSetter("en"));
 		languageMenu.add(new LanguageSetter("de"));
 		helpMenu.add(languageMenu);
-		
+
 		menuBar.add(helpMenu);
 
 		setJMenuBar(menuBar);
 	}
 
 	private void createToolbars() {
-		JToolBar toolBar = new JToolBar("Tools");
+		LocalizationProvider lProvider = LocalizationProvider.getInstance();
+
+		JToolBar toolBar = new JToolBar(lProvider.getString("tools"));
 		toolBar.setFloatable(true);
 
 		toolBar.add(new JButton(newDocumentAction));
@@ -289,7 +314,8 @@ public class JNotepadPP extends JFrame {
 		getContentPane().add(statusBar, BorderLayout.PAGE_END);
 	}
 
-	private javax.swing.Action openDocumentAction = new AbstractAction() {
+	private LocalizableAction openDocumentAction = new LocalizableAction(
+			"open", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -323,7 +349,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action saveDocumentAction = new AbstractAction() {
+	private LocalizableAction saveDocumentAction = new LocalizableAction(
+			"save", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -331,7 +358,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action saveDocumentAsAction = new AbstractAction() {
+	private LocalizableAction saveDocumentAsAction = new LocalizableAction(
+			"save_as", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -393,7 +421,7 @@ public class JNotepadPP extends JFrame {
 		}
 	}
 
-	private Action exitAction = new AbstractAction() {
+	private LocalizableAction exitAction = new LocalizableAction("exit", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -401,23 +429,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action deleteSelectedPartAction = new AbstractAction() {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Document doc = getActiveEditor().getDocument();
-			int pocetak = Math.min(getActiveEditor().getCaret().getDot(),
-					getActiveEditor().getCaret().getMark());
-			int duljina = Math.max(getActiveEditor().getCaret().getDot(),
-					getActiveEditor().getCaret().getMark()) - pocetak;
-			try {
-				doc.remove(pocetak, duljina);
-			} catch (BadLocationException ignorable) {
-			}
-		}
-	};
-
-	private Action invertCaseAction = new AbstractAction() {
+	private LocalizableAction invertCaseAction = new LocalizableAction(
+			"invert_case", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -451,7 +464,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action toLowerCaseAction = new AbstractAction() {
+	private LocalizableAction toLowerCaseAction = new LocalizableAction(
+			"to_lower_case", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -471,7 +485,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action toUpperCaseAction = new AbstractAction() {
+	private LocalizableAction toUpperCaseAction = new LocalizableAction(
+			"to_upper_case", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -491,7 +506,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action newDocumentAction = new AbstractAction() {
+	private LocalizableAction newDocumentAction = new LocalizableAction(
+			"new_document", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -501,7 +517,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action copyTextAction = new AbstractAction() {
+	private LocalizableAction copyTextAction = new LocalizableAction("copy",
+			flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -521,7 +538,7 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action cutTextAction = new AbstractAction() {
+	private LocalizableAction cutTextAction = new LocalizableAction("cut", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -542,7 +559,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action pasteTextAction = new AbstractAction() {
+	private LocalizableAction pasteTextAction = new LocalizableAction("paste",
+			flp) {
 
 		{
 			setEnabled(false);
@@ -569,7 +587,8 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
-	private Action calculateStatisticsAction = new AbstractAction() {
+	private LocalizableAction calculateStatisticsAction = new LocalizableAction(
+			"statstics", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -591,58 +610,67 @@ public class JNotepadPP extends JFrame {
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	};
-	
-	private Action sortAscendingAction = new AbstractAction() {
-		
+
+	private LocalizableAction sortAscendingAction = new LocalizableAction(
+			"sort_asc", flp) {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			sortSelected(true);
 		}
 	};
-	
-	private Action sortDescendingAction = new AbstractAction() {
-		
+
+	private LocalizableAction sortDescendingAction = new LocalizableAction(
+			"sort_desc", flp) {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			sortSelected(false);
 		}
 	};
-	
+
 	private void sortSelected(boolean ascending) {
 		JFileEditor activeEditor = getActiveEditor();
 		int dot = activeEditor.getCaret().getDot();
 		int mark = activeEditor.getCaret().getMark();
-		
+
 		int offsetStart = 0, offsetEnd = 0;
 		try {
-			offsetStart = Utilities.getRowStart(activeEditor, Math.min(mark, dot));
+			offsetStart = Utilities.getRowStart(activeEditor,
+					Math.min(mark, dot));
 			offsetEnd = Utilities.getRowEnd(activeEditor, Math.max(mark, dot));
 		} catch (BadLocationException ignorable) {
 		}
-		
+
 		String selectedLines = null;
 		try {
-			selectedLines = activeEditor.getDocument().getText(offsetStart, offsetEnd - offsetStart);
+			selectedLines = activeEditor.getDocument().getText(offsetStart,
+					offsetEnd - offsetStart);
 		} catch (BadLocationException ignorable) {
 			System.out.println("terrible");
 		}
-		
+
 		String[] lines = selectedLines.split("\\n");
-		Locale hrLocale = new Locale("hr");
-		Collator hrCollator = Collator.getInstance(hrLocale);
-		Comparator<Object> comparator = (ascending)?hrCollator:hrCollator.reversed();
+		Locale locale = Locale.forLanguageTag(LocalizationProvider
+				.getInstance().getLanguage());
+		Collator collator = Collator.getInstance(locale);
+		Comparator<Object> comparator = (ascending) ? collator : collator
+				.reversed();
 		Collections.sort(Arrays.asList(lines), comparator);
-		
-		StringBuilder sortedSelectionBuilder = new StringBuilder(offsetEnd - offsetStart + 2);
+
+		StringBuilder sortedSelectionBuilder = new StringBuilder(offsetEnd
+				- offsetStart + 2);
 		for (String string : lines) {
 			sortedSelectionBuilder.append(string).append(String.format("%n"));
 		}
-		
+
 		String sortedSelection = sortedSelectionBuilder.toString().trim();
-		
+
 		try {
-			activeEditor.getDocument().remove(offsetStart, offsetEnd - offsetStart);
-			activeEditor.getDocument().insertString(offsetStart, sortedSelection, null);
+			activeEditor.getDocument().remove(offsetStart,
+					offsetEnd - offsetStart);
+			activeEditor.getDocument().insertString(offsetStart,
+					sortedSelection, null);
 		} catch (BadLocationException ignorable) {
 		}
 	}
@@ -745,8 +773,8 @@ public class JNotepadPP extends JFrame {
 				int mark = e.getMark();
 				int selectionStart = Math.min(dot, mark);
 				int selectionLength = Math.max(dot, mark) - selectionStart;
-				
-				enableSelectionActions(selectionLength != 0); 
+
+				enableSelectionActions(selectionLength != 0);
 
 				int offset = 0;
 				try {
@@ -787,13 +815,15 @@ public class JNotepadPP extends JFrame {
 			}
 		};
 	}
-	
+
 	private void enableSelectionActions(boolean enable) {
 		copyTextAction.setEnabled(enable);
 		cutTextAction.setEnabled(enable);
 		invertCaseAction.setEnabled(enable);
 		toLowerCaseAction.setEnabled(enable);
 		toUpperCaseAction.setEnabled(enable);
+		sortAscendingAction.setEnabled(enable);
+		sortDescendingAction.setEnabled(enable);
 	}
 
 }
