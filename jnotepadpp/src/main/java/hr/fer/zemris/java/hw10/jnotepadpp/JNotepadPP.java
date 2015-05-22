@@ -324,6 +324,7 @@ public class JNotepadPP extends JFrame {
 		toolBar.add(new JButton(openDocumentAction));
 		toolBar.add(new JButton(saveDocumentAction));
 		toolBar.add(new JButton(saveDocumentAsAction));
+		toolBar.add(new JButton(tabCloseAction));
 		toolBar.addSeparator();
 		toolBar.add(new JButton(copyTextAction));
 		toolBar.add(new JButton(cutTextAction));
