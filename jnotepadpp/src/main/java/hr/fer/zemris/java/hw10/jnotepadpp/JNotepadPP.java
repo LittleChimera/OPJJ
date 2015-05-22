@@ -47,22 +47,57 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Utilities;
 
+/**
+ * JNotepadPP is a simple text editing application. It supports tabs and some
+ * other text manipulation functions.
+ * 
+ * @author Luka Skugor
+ *
+ */
 public class JNotepadPP extends JFrame {
 
+	/**
+	 * Frame's localization provider.
+	 */
 	private FormLocalizationProvider flp = new FormLocalizationProvider(
 			LocalizationProvider.getInstance(), this);
 
+	/**
+	 * Indicates if application is closing.
+	 */
 	private boolean closingFlag = false;
 
+	/**
+	 * App's name.
+	 */
 	private static final String APP_NAME = "JNotepad++";
 
+	/**
+	 * Tab panel containing editors.
+	 */
 	private JTabbedEditor editorTabs;
+	/**
+	 * Clipboard's content.
+	 */
 	private String clipboard = "";
+	/**
+	 * Indicates whether clipboard's content should be used once only (i.e. if
+	 * cut is called)
+	 */
 	private boolean clipOneUsage = false;
+	/**
+	 * JFileEditor factory.
+	 */
 	private FileEditorFactory fileEditorFactory = new FileEditorFactory();
 
+	/**
+	 * Status bar.
+	 */
 	private StatusBar statusBar;
 
+	/**
+	 * Creates a new JNotepad++
+	 */
 	public JNotepadPP() {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(onWindowClosing);
@@ -70,6 +105,9 @@ public class JNotepadPP extends JFrame {
 		initGUI();
 	}
 
+	/**
+	 * Initializes GUI
+	 */
 	private void initGUI() {
 		getContentPane().setLayout(new BorderLayout());
 
@@ -112,6 +150,9 @@ public class JNotepadPP extends JFrame {
 		newDocumentAction.actionPerformed(null);
 	}
 
+	/**
+	 * Initializes actions.
+	 */
 	private void createActions() {
 
 		openDocumentAction.putValue(Action.SHORT_DESCRIPTION,
@@ -193,12 +234,16 @@ public class JNotepadPP extends JFrame {
 
 	}
 
+	/**
+	 * Creates frame's menus.
+	 */
 	private void createMenus() {
 		LocalizationProvider lProvider = LocalizationProvider.getInstance();
 
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu(new DefaultLocalizableAction("file", lProvider));
+		JMenu fileMenu = new JMenu(new DefaultLocalizableAction("file",
+				lProvider));
 		menuBar.add(fileMenu);
 
 		fileMenu.add(new JMenuItem(openDocumentAction));
@@ -206,22 +251,26 @@ public class JNotepadPP extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(new JMenuItem(exitAction));
 
-		JMenu editMenu = new JMenu(new DefaultLocalizableAction("edit", lProvider));
+		JMenu editMenu = new JMenu(new DefaultLocalizableAction("edit",
+				lProvider));
 		menuBar.add(editMenu);
 
 		editMenu.add(new JMenuItem(copyTextAction));
 		editMenu.add(new JMenuItem(cutTextAction));
 		editMenu.add(new JMenuItem(pasteTextAction));
 
-		JMenu toolsMenu = new JMenu(new DefaultLocalizableAction("tools", lProvider));
+		JMenu toolsMenu = new JMenu(new DefaultLocalizableAction("tools",
+				lProvider));
 		menuBar.add(toolsMenu);
 
-		JMenu transforMenu = new JMenu(new DefaultLocalizableAction("transform", lProvider));
+		JMenu transforMenu = new JMenu(new DefaultLocalizableAction(
+				"transform", lProvider));
 		transforMenu.add(new JMenuItem(invertCaseAction));
 		transforMenu.add(new JMenuItem(toLowerCaseAction));
 		transforMenu.add(new JMenuItem(toUpperCaseAction));
 
-		JMenu sortMenu = new JMenu(new DefaultLocalizableAction("sort", lProvider));
+		JMenu sortMenu = new JMenu(new DefaultLocalizableAction("sort",
+				lProvider));
 		sortMenu.add(new JMenuItem(sortAscendingAction));
 		sortMenu.add(new JMenuItem(sortDescendingAction));
 
@@ -231,11 +280,28 @@ public class JNotepadPP extends JFrame {
 		toolsMenu.addSeparator();
 		toolsMenu.add(new JMenuItem(calculateStatisticsAction));
 
-		JMenu helpMenu = new JMenu(new DefaultLocalizableAction("help", lProvider));
-		JMenu languageMenu = new JMenu(new DefaultLocalizableAction("language", lProvider));
+		JMenu helpMenu = new JMenu(new DefaultLocalizableAction("help",
+				lProvider));
+		JMenu languageMenu = new JMenu(new DefaultLocalizableAction("language",
+				lProvider));
 
+		/**
+		 * LanguageSetter is a JMenuItem which changes localization of the
+		 * application.
+		 * 
+		 * @author Luka Skugor
+		 *
+		 */
 		class LanguageSetter extends JMenuItem {
 
+			/**
+			 * Creates a new LanguageSetter which changes application language
+			 * to the given one.
+			 * 
+			 * @param language
+			 *            language which will be set when LanguageSetter is
+			 *            clicked
+			 */
 			public LanguageSetter(String language) {
 				setAction(new AbstractAction() {
 
@@ -243,6 +309,9 @@ public class JNotepadPP extends JFrame {
 						putValue(Action.NAME, language);
 					}
 
+					/* (non-Javadoc)
+					 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+					 */
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						LocalizationProvider.getInstance()
@@ -261,6 +330,9 @@ public class JNotepadPP extends JFrame {
 		setJMenuBar(menuBar);
 	}
 
+	/**
+	 * Creates toolbars.
+	 */
 	private void createToolbars() {
 		LocalizationProvider lProvider = LocalizationProvider.getInstance();
 
@@ -298,6 +370,9 @@ public class JNotepadPP extends JFrame {
 		getContentPane().add(statusBar, BorderLayout.PAGE_END);
 	}
 
+	/**
+	 * Action which opens a document.
+	 */
 	private LocalizableAction openDocumentAction = new LocalizableAction(
 			"open", flp) {
 
@@ -333,6 +408,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which saves a document.
+	 */
 	private LocalizableAction saveDocumentAction = new LocalizableAction(
 			"save", flp) {
 
@@ -342,6 +420,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which saves document as a different file.
+	 */
 	private LocalizableAction saveDocumentAsAction = new LocalizableAction(
 			"save_as", flp) {
 
@@ -357,6 +438,10 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Saves document of active JFileEditor. Can be interrupted by the user.
+	 * @return true if saved, false otherwise
+	 */
 	private boolean saveDocument() {
 		if (getActiveEditor().getFilePath() == null) {
 			JFileChooser fc = new JFileChooser();
@@ -405,6 +490,9 @@ public class JNotepadPP extends JFrame {
 		}
 	}
 
+	/**
+	 * Action which exits the application.
+	 */
 	private LocalizableAction exitAction = new LocalizableAction("exit", flp) {
 
 		@Override
@@ -413,6 +501,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which inverts case of selected text.
+	 */
 	private LocalizableAction invertCaseAction = new LocalizableAction(
 			"invert_case", flp) {
 
@@ -448,6 +539,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which transforms selected text to lower case.
+	 */
 	private LocalizableAction toLowerCaseAction = new LocalizableAction(
 			"to_lower_case", flp) {
 
@@ -469,6 +563,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which transforms selected text to upper case.
+	 */
 	private LocalizableAction toUpperCaseAction = new LocalizableAction(
 			"to_upper_case", flp) {
 
@@ -490,6 +587,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which creates a new document.
+	 */
 	private LocalizableAction newDocumentAction = new LocalizableAction(
 			"new_document", flp) {
 
@@ -501,6 +601,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which copies selected text.
+	 */
 	private LocalizableAction copyTextAction = new LocalizableAction("copy",
 			flp) {
 
@@ -522,6 +625,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which cuts selected text.
+	 */
 	private LocalizableAction cutTextAction = new LocalizableAction("cut", flp) {
 
 		@Override
@@ -543,6 +649,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which pastes text from clipboard at dot index.
+	 */
 	private LocalizableAction pasteTextAction = new LocalizableAction("paste",
 			flp) {
 
@@ -571,6 +680,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which calculates statistics of the active document.
+	 */
 	private LocalizableAction calculateStatisticsAction = new LocalizableAction(
 			"statistics", flp) {
 
@@ -589,12 +701,16 @@ public class JNotepadPP extends JFrame {
 					+ "Non-blank characters: %d%n" + "Lines: %d%n",
 					characterCount, nonBlankCharacterCount, linesCount);
 
-			JOptionPane.showMessageDialog(JNotepadPP.this, flp.getString("file_statistics") + ":"
-					+ statistics, flp.getString("file_statistics") + ": " + editor.getName(),
+			JOptionPane.showMessageDialog(JNotepadPP.this,
+					flp.getString("file_statistics") + ":" + statistics,
+					flp.getString("file_statistics") + ": " + editor.getName(),
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	};
 
+	/**
+	 * Action which sorts selected lines ascending. If part of the line is selected, whole line will be affected.
+	 */
 	private LocalizableAction sortAscendingAction = new LocalizableAction(
 			"sort_asc", flp) {
 
@@ -604,6 +720,9 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Action which sorts selected lines descending. If part of the line is selected, whole line will be affected.
+	 */
 	private LocalizableAction sortDescendingAction = new LocalizableAction(
 			"sort_desc", flp) {
 
@@ -613,6 +732,10 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Sorts selected lines. If part of the line is selected, whole line will be affected.
+	 * @param ascending if true result will be in ascending order and if false in descending order
+	 */
 	private void sortSelected(boolean ascending) {
 		JFileEditor activeEditor = getActiveEditor();
 		int dot = activeEditor.getCaret().getDot();
@@ -658,6 +781,9 @@ public class JNotepadPP extends JFrame {
 		}
 	}
 
+	/**
+	 * Action which removes duplicates from selected lines. If part of the line is selected, whole line will be affected.
+	 */
 	private LocalizableAction uniqueLines = new LocalizableAction("unique", flp) {
 
 		@Override
@@ -704,6 +830,10 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Called on program start.
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			LocalizationProvider.getInstance().setLanguage("en");
@@ -716,6 +846,10 @@ public class JNotepadPP extends JFrame {
 		});
 	}
 
+	/**
+	 * Gets active editor.
+	 * @return active editor
+	 */
 	private JFileEditor getActiveEditor() {
 		Component selectedTab = editorTabs.getSelectedComponent();
 		if (selectedTab == null) {
@@ -725,6 +859,9 @@ public class JNotepadPP extends JFrame {
 				.getView();
 	}
 
+	/**
+	 * Updates frame's title based on currently active editor.
+	 */
 	private void updateTitle() {
 		JFileEditor activEditor = getActiveEditor();
 		if (activEditor == null) {
@@ -734,6 +871,9 @@ public class JNotepadPP extends JFrame {
 		}
 	}
 
+	/**
+	 * Defines closing action for the frame.
+	 */
 	private WindowListener onWindowClosing = new WindowAdapter() {
 
 		@Override
@@ -748,6 +888,9 @@ public class JNotepadPP extends JFrame {
 		};
 	};
 
+	/**
+	 * Action which closes active tab.
+	 */
 	private Action tabCloseAction = new AbstractAction() {
 
 		@Override
@@ -756,6 +899,10 @@ public class JNotepadPP extends JFrame {
 		}
 	};
 
+	/**
+	 * Closes active tab. Can be interrupted by the user.
+	 * @return true if close, false otherwise
+	 */
 	private boolean closeActiveTab() {
 		if (!editorTabs.isSelectedSaved()) {
 
@@ -776,13 +923,29 @@ public class JNotepadPP extends JFrame {
 		return true;
 	}
 
+	/**
+	 * Updates clipboard's contents.
+	 * @param text clipboards's new text
+	 * @param oneUse indicates whether clipoboard's contents should be used only once (i.e. if cut is called)
+	 */
 	private void updateClipboard(String text, boolean oneUse) {
 		clipboard = text;
 		clipOneUsage = oneUse;
 	}
 
+	/**
+	 * Factory class for JFileEditor.
+	 * @author Luka Skugor
+	 *
+	 */
 	private class FileEditorFactory {
 
+		/**
+		 * Creates a new JFileEditor and adds appropriate Listeners to it.
+		 * @param text editor's text
+		 * @param filePath editor's source or destination path
+		 * @return created editor
+		 */
 		public JFileEditor createEditor(String text, Path filePath) {
 			JFileEditor editor = new JFileEditor(filePath);
 			editor.setText(text);
@@ -792,6 +955,9 @@ public class JNotepadPP extends JFrame {
 			return editor;
 		}
 
+		/**
+		 * Caret listener which updates status bar of JNotepad++
+		 */
 		private CaretListener editorCaretListener = new CaretListener() {
 
 			@Override
@@ -826,6 +992,9 @@ public class JNotepadPP extends JFrame {
 			}
 		};
 
+		/**
+		 * Document listener which updates JNotepad++ status bar.
+		 */
 		private DocumentListener editorDocumentListener = new DocumentListener() {
 
 			@Override
@@ -845,6 +1014,10 @@ public class JNotepadPP extends JFrame {
 		};
 	}
 
+	/**
+	 * Updates enable status of actions which are performed on selected text.
+	 * @param enable if no text is selected this parameter should be false, true otherwise
+	 */
 	private void enableSelectionActions(boolean enable) {
 		copyTextAction.setEnabled(enable);
 		cutTextAction.setEnabled(enable);
