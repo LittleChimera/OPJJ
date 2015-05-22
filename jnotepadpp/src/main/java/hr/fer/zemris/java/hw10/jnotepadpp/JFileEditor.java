@@ -59,11 +59,10 @@ public class JFileEditor extends JTextArea {
 	 */
 	public void setFilePath(Path filePath) {
 		this.filePath = filePath;
-
 	}
 
 	/**
-	 * Forces notify on editor's {@link CaretListener}s.
+	 * Forces notify on editor's {@link javax.swing.event.CaretListener}s.
 	 */
 	public void fireEditorUpdate() {
 		fireCaretUpdate(new CaretEvent(this) {

@@ -172,7 +172,7 @@ public class JTabbedEditor extends JTabbedPane {
 
 	/**
 	 * Checks if selected tab is saved.
-	 * @return
+	 * @return true if saved, false otherwise
 	 */
 	public boolean isSelectedSaved() {
 		return !((JTabComponent) getTabComponentAt(getSelectedIndex())).modified;
