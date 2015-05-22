@@ -1,9 +1,9 @@
 package hr.fer.zemris.java.hw10.jnotepadpp;
 
+import hr.fer.zemris.java.hw10.jnotepadpp.localization.DefaultLocalizableAction;
 import hr.fer.zemris.java.hw10.jnotepadpp.localization.FormLocalizationProvider;
 import hr.fer.zemris.java.hw10.jnotepadpp.localization.LocalizableAction;
 import hr.fer.zemris.java.hw10.jnotepadpp.localization.LocalizationProvider;
-import hr.fer.zemris.java.hw10.jnotepadpp.localization.LocalizationProviderBridge;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -20,6 +20,7 @@ import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 
 import javax.swing.AbstractAction;
@@ -112,32 +113,6 @@ public class JNotepadPP extends JFrame {
 	}
 
 	private void createActions() {
-		/*
-		 * LocalizationProvider.getInstance().addLocalizationListener(() -> {
-		 * LocalizationProvider lProvider = LocalizationProvider.getInstance();
-		 * saveDocumentAction.putValue(Action.NAME,
-		 * lProvider.getString("save"));
-		 * openDocumentAction.putValue(Action.NAME,
-		 * lProvider.getString("open"));
-		 * saveDocumentAsAction.putValue(Action.NAME,
-		 * lProvider.getString("save_as")); exitAction.putValue(Action.NAME,
-		 * lProvider.getString("exit")); invertCaseAction.putValue(Action.NAME,
-		 * lProvider.getString("invert"));
-		 * toLowerCaseAction.putValue(Action.NAME,
-		 * lProvider.getString("to_lower_case"));
-		 * toUpperCaseAction.putValue(Action.NAME,
-		 * lProvider.getString("to_upper_case"));
-		 * newDocumentAction.putValue(Action.NAME, lProvider.getString("new"));
-		 * calculateStatisticsAction.putValue(Action.NAME,
-		 * lProvider.getString("statistics"));
-		 * copyTextAction.putValue(Action.NAME, lProvider.getString("copy"));
-		 * cutTextAction.putValue(Action.NAME, lProvider.getString("cut"));
-		 * pasteTextAction.putValue(Action.NAME, lProvider.getString("paste"));
-		 * sortAscendingAction.putValue(Action.NAME,
-		 * lProvider.getString("ascending"));
-		 * sortDescendingAction.putValue(Action.NAME,
-		 * lProvider.getString("descending")); });
-		 */
 
 		openDocumentAction.putValue(Action.SHORT_DESCRIPTION,
 				"Used to open existing document");
@@ -212,6 +187,10 @@ public class JNotepadPP extends JFrame {
 				"Sorts selected text in descending order");
 		sortDescendingAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
 
+		uniqueLines.putValue(Action.SHORT_DESCRIPTION,
+				"Removes all duplicate lines from the selection");
+		uniqueLines.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
+
 	}
 
 	private void createMenus() {
@@ -219,7 +198,7 @@ public class JNotepadPP extends JFrame {
 
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu(lProvider.getString("file"));
+		JMenu fileMenu = new JMenu(new DefaultLocalizableAction("file", lProvider));
 		menuBar.add(fileMenu);
 
 		fileMenu.add(new JMenuItem(openDocumentAction));
@@ -227,32 +206,33 @@ public class JNotepadPP extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(new JMenuItem(exitAction));
 
-		JMenu editMenu = new JMenu(lProvider.getString("edit"));
+		JMenu editMenu = new JMenu(new DefaultLocalizableAction("edit", lProvider));
 		menuBar.add(editMenu);
 
 		editMenu.add(new JMenuItem(copyTextAction));
 		editMenu.add(new JMenuItem(cutTextAction));
 		editMenu.add(new JMenuItem(pasteTextAction));
 
-		JMenu toolsMenu = new JMenu(lProvider.getString("tools"));
+		JMenu toolsMenu = new JMenu(new DefaultLocalizableAction("tools", lProvider));
 		menuBar.add(toolsMenu);
 
-		JMenu transforMenu = new JMenu(lProvider.getString("transform"));
+		JMenu transforMenu = new JMenu(new DefaultLocalizableAction("transform", lProvider));
 		transforMenu.add(new JMenuItem(invertCaseAction));
 		transforMenu.add(new JMenuItem(toLowerCaseAction));
 		transforMenu.add(new JMenuItem(toUpperCaseAction));
 
-		JMenu sortMenu = new JMenu(lProvider.getString("sort"));
+		JMenu sortMenu = new JMenu(new DefaultLocalizableAction("sort", lProvider));
 		sortMenu.add(new JMenuItem(sortAscendingAction));
 		sortMenu.add(new JMenuItem(sortDescendingAction));
 
 		toolsMenu.add(transforMenu);
 		toolsMenu.add(sortMenu);
+		toolsMenu.add(new JMenuItem(uniqueLines));
 		toolsMenu.addSeparator();
 		toolsMenu.add(new JMenuItem(calculateStatisticsAction));
 
-		JMenu helpMenu = new JMenu(lProvider.getString("help"));
-		JMenu languageMenu = new JMenu(lProvider.getString("language"));
+		JMenu helpMenu = new JMenu(new DefaultLocalizableAction("help", lProvider));
+		JMenu languageMenu = new JMenu(new DefaultLocalizableAction("language", lProvider));
 
 		class LanguageSetter extends JMenuItem {
 
@@ -292,7 +272,11 @@ public class JNotepadPP extends JFrame {
 		toolBar.add(new JButton(saveDocumentAction));
 		toolBar.add(new JButton(saveDocumentAsAction));
 		toolBar.addSeparator();
-		// toolBar.add(new JButton(toggleCaseAction));
+		toolBar.add(new JButton(copyTextAction));
+		toolBar.add(new JButton(cutTextAction));
+		toolBar.add(new JButton(pasteTextAction));
+		toolBar.addSeparator();
+		toolBar.add(new JButton(calculateStatisticsAction));
 
 		statusBar = new StatusBar();
 		statusBar.setFloatable(true);
@@ -327,9 +311,9 @@ public class JNotepadPP extends JFrame {
 
 			Path file = fc.getSelectedFile().toPath();
 			if (!Files.isReadable(file)) {
-				JOptionPane.showMessageDialog(JNotepadPP.this, "Selected file "
-						+ file + " isn't readable", "Error",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(JNotepadPP.this,
+						flp.getString("selected_not_readable"),
+						flp.getString("error"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -342,8 +326,8 @@ public class JNotepadPP extends JFrame {
 			} catch (IOException e1) {
 				JOptionPane.showMessageDialog(
 						JNotepadPP.this,
-						"Unable to open the file " + file + ": "
-								+ e1.getMessage(), "Error",
+						flp.getString("unable_to_open_file") + file + ": "
+								+ e1.getMessage(), flp.getString("error"),
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -379,21 +363,21 @@ public class JNotepadPP extends JFrame {
 			fc.setDialogTitle("Save document");
 			if (fc.showSaveDialog(JNotepadPP.this) != JFileChooser.APPROVE_OPTION) {
 				JOptionPane.showMessageDialog(JNotepadPP.this,
-						"Nista nije pogranjeno.", "Poruka",
+						flp.getString("nothing_saved"),
+						flp.getString("message"),
 						JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			}
 
 			Path file = fc.getSelectedFile().toPath();
 			if (Files.exists(file)) {
-				int rez = JOptionPane
-						.showConfirmDialog(
-								JNotepadPP.this,
-								"Odabrana datoteka "
-										+ file
-										+ " vec postoji. Jeste li sigurni da je zelite pregaziti?",
-								"Upozoronje", JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE);
+				int rez = JOptionPane.showConfirmDialog(
+						JNotepadPP.this,
+						flp.getString("selected_file") + " " + file + " "
+								+ flp.getString("already_exists") + " "
+								+ flp.getString("confirm_overwrite"),
+						flp.getString("warning"), JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
 
 				if (rez == JOptionPane.CANCEL_OPTION) {
 					return false;
@@ -413,9 +397,9 @@ public class JNotepadPP extends JFrame {
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(
 					JNotepadPP.this,
-					"Pogreska pri pisanju datoteke "
+					flp.getString("writing_error") + " "
 							+ getActiveEditor().getFilePath() + ": "
-							+ e1.getMessage(), "Pogreska",
+							+ e1.getMessage(), flp.getString("error"),
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -588,7 +572,7 @@ public class JNotepadPP extends JFrame {
 	};
 
 	private LocalizableAction calculateStatisticsAction = new LocalizableAction(
-			"statstics", flp) {
+			"statistics", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -605,8 +589,8 @@ public class JNotepadPP extends JFrame {
 					+ "Non-blank characters: %d%n" + "Lines: %d%n",
 					characterCount, nonBlankCharacterCount, linesCount);
 
-			JOptionPane.showMessageDialog(JNotepadPP.this, "File statistics:"
-					+ statistics, "File statistics: " + editor.getName(),
+			JOptionPane.showMessageDialog(JNotepadPP.this, flp.getString("file_statistics") + ":"
+					+ statistics, flp.getString("file_statistics") + ": " + editor.getName(),
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	};
@@ -647,7 +631,6 @@ public class JNotepadPP extends JFrame {
 			selectedLines = activeEditor.getDocument().getText(offsetStart,
 					offsetEnd - offsetStart);
 		} catch (BadLocationException ignorable) {
-			System.out.println("terrible");
 		}
 
 		String[] lines = selectedLines.split("\\n");
@@ -674,6 +657,52 @@ public class JNotepadPP extends JFrame {
 		} catch (BadLocationException ignorable) {
 		}
 	}
+
+	private LocalizableAction uniqueLines = new LocalizableAction("unique", flp) {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JFileEditor activeEditor = getActiveEditor();
+			int dot = activeEditor.getCaret().getDot();
+			int mark = activeEditor.getCaret().getMark();
+
+			int offsetStart = 0, offsetEnd = 0;
+			try {
+				offsetStart = Utilities.getRowStart(activeEditor,
+						Math.min(mark, dot));
+				offsetEnd = Utilities.getRowEnd(activeEditor,
+						Math.max(mark, dot));
+			} catch (BadLocationException ignorable) {
+			}
+
+			String selectedLines = null;
+			try {
+				selectedLines = activeEditor.getDocument().getText(offsetStart,
+						offsetEnd - offsetStart);
+			} catch (BadLocationException ignorable) {
+			}
+
+			String[] lines = selectedLines.split("\\n");
+			LinkedHashSet<String> lineSet = new LinkedHashSet<String>();
+			lineSet.addAll(Arrays.asList(lines));
+
+			StringBuilder uniqueSelectionBuilder = new StringBuilder(offsetEnd
+					- offsetStart + 2);
+			for (String line : lineSet) {
+				uniqueSelectionBuilder.append(line).append(String.format("%n"));
+			}
+
+			String uniqueSelection = uniqueSelectionBuilder.toString().trim();
+
+			try {
+				activeEditor.getDocument().remove(offsetStart,
+						offsetEnd - offsetStart);
+				activeEditor.getDocument().insertString(offsetStart,
+						uniqueSelection, null);
+			} catch (BadLocationException ignorable) {
+			}
+		}
+	};
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
@@ -824,6 +853,7 @@ public class JNotepadPP extends JFrame {
 		toUpperCaseAction.setEnabled(enable);
 		sortAscendingAction.setEnabled(enable);
 		sortDescendingAction.setEnabled(enable);
+		uniqueLines.setEnabled(enable);
 	}
 
 }
