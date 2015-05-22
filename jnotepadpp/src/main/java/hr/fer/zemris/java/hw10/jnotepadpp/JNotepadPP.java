@@ -155,81 +155,56 @@ public class JNotepadPP extends JFrame {
 	 */
 	private void createActions() {
 
-		openDocumentAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to open existing document");
 		openDocumentAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control O"));
 		openDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_O);
 
-		saveDocumentAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to save currently editing document");
 		saveDocumentAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control S"));
 		saveDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
 
-		saveDocumentAsAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to save currently editing document as a different file");
 		saveDocumentAsAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control shift S"));
 		saveDocumentAsAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
 
-		exitAction.putValue(Action.SHORT_DESCRIPTION, "Exits " + APP_NAME);
 		exitAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control Q"));
 		exitAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_Q);
 
-		invertCaseAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to invert case of selected text");
+		tabCloseAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke("control W"));
+		tabCloseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
+
 		invertCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
 
-		toLowerCaseAction.putValue(Action.SHORT_DESCRIPTION,
-				"Transforms text in lower case");
 		toLowerCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
 
-		toUpperCaseAction.putValue(Action.SHORT_DESCRIPTION,
-				"Transforms text in upper case");
 		toUpperCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
 
-		newDocumentAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to create new document");
 		newDocumentAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control N"));
 		newDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_N);
 
-		openDocumentAction.putValue(Action.SHORT_DESCRIPTION,
-				"Generates statistics for the document");
 		openDocumentAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control T"));
 		openDocumentAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_T);
 
-		copyTextAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to copy selection");
 		copyTextAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control C"));
 		copyTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
 
-		cutTextAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to cut selection");
 		cutTextAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control X"));
 		cutTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_X);
 
-		pasteTextAction.putValue(Action.SHORT_DESCRIPTION,
-				"Used to paste clipboards content");
 		pasteTextAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control V"));
 		pasteTextAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_V);
 
-		sortAscendingAction.putValue(Action.SHORT_DESCRIPTION,
-				"Sorts selected text in ascending order");
 		sortAscendingAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
 
-		sortDescendingAction.putValue(Action.SHORT_DESCRIPTION,
-				"Sorts selected text in descending order");
 		sortDescendingAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
 
-		uniqueLines.putValue(Action.SHORT_DESCRIPTION,
-				"Removes all duplicate lines from the selection");
 		uniqueLines.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
 
 	}
@@ -254,7 +229,9 @@ public class JNotepadPP extends JFrame {
 		JMenu editMenu = new JMenu(new DefaultLocalizableAction("edit",
 				lProvider));
 		menuBar.add(editMenu);
-
+		
+		editMenu.add(new JMenuItem(tabCloseAction));
+		editMenu.addSeparator();
 		editMenu.add(new JMenuItem(copyTextAction));
 		editMenu.add(new JMenuItem(cutTextAction));
 		editMenu.add(new JMenuItem(pasteTextAction));
@@ -309,8 +286,12 @@ public class JNotepadPP extends JFrame {
 						putValue(Action.NAME, language);
 					}
 
-					/* (non-Javadoc)
-					 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+					/*
+					 * (non-Javadoc)
+					 * 
+					 * @see
+					 * java.awt.event.ActionListener#actionPerformed(java.awt
+					 * .event.ActionEvent)
 					 */
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -440,6 +421,7 @@ public class JNotepadPP extends JFrame {
 
 	/**
 	 * Saves document of active JFileEditor. Can be interrupted by the user.
+	 * 
 	 * @return true if saved, false otherwise
 	 */
 	private boolean saveDocument() {
@@ -709,7 +691,8 @@ public class JNotepadPP extends JFrame {
 	};
 
 	/**
-	 * Action which sorts selected lines ascending. If part of the line is selected, whole line will be affected.
+	 * Action which sorts selected lines ascending. If part of the line is
+	 * selected, whole line will be affected.
 	 */
 	private LocalizableAction sortAscendingAction = new LocalizableAction(
 			"sort_asc", flp) {
@@ -721,7 +704,8 @@ public class JNotepadPP extends JFrame {
 	};
 
 	/**
-	 * Action which sorts selected lines descending. If part of the line is selected, whole line will be affected.
+	 * Action which sorts selected lines descending. If part of the line is
+	 * selected, whole line will be affected.
 	 */
 	private LocalizableAction sortDescendingAction = new LocalizableAction(
 			"sort_desc", flp) {
@@ -733,8 +717,12 @@ public class JNotepadPP extends JFrame {
 	};
 
 	/**
-	 * Sorts selected lines. If part of the line is selected, whole line will be affected.
-	 * @param ascending if true result will be in ascending order and if false in descending order
+	 * Sorts selected lines. If part of the line is selected, whole line will be
+	 * affected.
+	 * 
+	 * @param ascending
+	 *            if true result will be in ascending order and if false in
+	 *            descending order
 	 */
 	private void sortSelected(boolean ascending) {
 		JFileEditor activeEditor = getActiveEditor();
@@ -782,7 +770,8 @@ public class JNotepadPP extends JFrame {
 	}
 
 	/**
-	 * Action which removes duplicates from selected lines. If part of the line is selected, whole line will be affected.
+	 * Action which removes duplicates from selected lines. If part of the line
+	 * is selected, whole line will be affected.
 	 */
 	private LocalizableAction uniqueLines = new LocalizableAction("unique", flp) {
 
@@ -832,7 +821,9 @@ public class JNotepadPP extends JFrame {
 
 	/**
 	 * Called on program start.
-	 * @param args command line arguments
+	 * 
+	 * @param args
+	 *            command line arguments
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
@@ -848,6 +839,7 @@ public class JNotepadPP extends JFrame {
 
 	/**
 	 * Gets active editor.
+	 * 
 	 * @return active editor
 	 */
 	private JFileEditor getActiveEditor() {
@@ -891,7 +883,7 @@ public class JNotepadPP extends JFrame {
 	/**
 	 * Action which closes active tab.
 	 */
-	private Action tabCloseAction = new AbstractAction() {
+	private LocalizableAction tabCloseAction = new LocalizableAction("tab_close", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -901,6 +893,7 @@ public class JNotepadPP extends JFrame {
 
 	/**
 	 * Closes active tab. Can be interrupted by the user.
+	 * 
 	 * @return true if close, false otherwise
 	 */
 	private boolean closeActiveTab() {
@@ -925,8 +918,12 @@ public class JNotepadPP extends JFrame {
 
 	/**
 	 * Updates clipboard's contents.
-	 * @param text clipboards's new text
-	 * @param oneUse indicates whether clipoboard's contents should be used only once (i.e. if cut is called)
+	 * 
+	 * @param text
+	 *            clipboards's new text
+	 * @param oneUse
+	 *            indicates whether clipoboard's contents should be used only
+	 *            once (i.e. if cut is called)
 	 */
 	private void updateClipboard(String text, boolean oneUse) {
 		clipboard = text;
@@ -935,6 +932,7 @@ public class JNotepadPP extends JFrame {
 
 	/**
 	 * Factory class for JFileEditor.
+	 * 
 	 * @author Luka Skugor
 	 *
 	 */
@@ -942,8 +940,11 @@ public class JNotepadPP extends JFrame {
 
 		/**
 		 * Creates a new JFileEditor and adds appropriate Listeners to it.
-		 * @param text editor's text
-		 * @param filePath editor's source or destination path
+		 * 
+		 * @param text
+		 *            editor's text
+		 * @param filePath
+		 *            editor's source or destination path
 		 * @return created editor
 		 */
 		public JFileEditor createEditor(String text, Path filePath) {
@@ -1016,7 +1017,10 @@ public class JNotepadPP extends JFrame {
 
 	/**
 	 * Updates enable status of actions which are performed on selected text.
-	 * @param enable if no text is selected this parameter should be false, true otherwise
+	 * 
+	 * @param enable
+	 *            if no text is selected this parameter should be false, true
+	 *            otherwise
 	 */
 	private void enableSelectionActions(boolean enable) {
 		copyTextAction.setEnabled(enable);
