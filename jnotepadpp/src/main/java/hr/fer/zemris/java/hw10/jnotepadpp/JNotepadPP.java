@@ -175,6 +175,10 @@ public class JNotepadPP extends JFrame {
 				KeyStroke.getKeyStroke("control W"));
 		tabCloseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
 
+		calculateStatisticsAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke("control I"));
+		calculateStatisticsAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
+
 		invertCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
 
 		toLowerCaseAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
@@ -229,7 +233,7 @@ public class JNotepadPP extends JFrame {
 		JMenu editMenu = new JMenu(new DefaultLocalizableAction("edit",
 				lProvider));
 		menuBar.add(editMenu);
-		
+
 		editMenu.add(new JMenuItem(tabCloseAction));
 		editMenu.addSeparator();
 		editMenu.add(new JMenuItem(copyTextAction));
@@ -680,9 +684,11 @@ public class JNotepadPP extends JFrame {
 			int linesCount = fileContents.length()
 					- fileContents.replaceAll("\\n", "").length();
 
-			String statistics = String.format("%n" + "Characters: %d%n"
-					+ "Non-blank characters: %d%n" + "Lines: %d%n",
-					characterCount, nonBlankCharacterCount, linesCount);
+			String statistics = String.format("%n" + "%s: %d%n" + "%s: %d%n"
+					+ "%s: %d%n", flp.getString("statistics_characters"),
+					characterCount, flp.getString("statistics_non_blanks"),
+					nonBlankCharacterCount, flp.getString("statistics_lines"),
+					linesCount);
 
 			JOptionPane.showMessageDialog(JNotepadPP.this,
 					flp.getString("file_statistics") + ":" + statistics,
@@ -884,7 +890,8 @@ public class JNotepadPP extends JFrame {
 	/**
 	 * Action which closes active tab.
 	 */
-	private LocalizableAction tabCloseAction = new LocalizableAction("tab_close", flp) {
+	private LocalizableAction tabCloseAction = new LocalizableAction(
+			"tab_close", flp) {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -900,10 +907,12 @@ public class JNotepadPP extends JFrame {
 	private boolean closeActiveTab() {
 		if (!editorTabs.isSelectedSaved()) {
 
-			int result = JOptionPane.showConfirmDialog(JNotepadPP.this, "File "
-					+ getActiveEditor().getName()
-					+ " has unsaved changes. Do you want to save changes?",
-					"Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION,
+			int result = JOptionPane.showConfirmDialog(JNotepadPP.this,
+					flp.getString("file") + " " + getActiveEditor().getName()
+							+ " " + flp.getString("has_unsaved_changes") + ". "
+							+ flp.getString("save_prompt"),
+					flp.getString("unsaved_title"),
+					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.WARNING_MESSAGE);
 
 			if (result == JOptionPane.YES_OPTION) {
