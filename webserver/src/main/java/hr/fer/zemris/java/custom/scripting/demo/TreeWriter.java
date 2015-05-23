@@ -41,7 +41,11 @@ public class TreeWriter {
 
 		@Override
 		public void visitForLoopNode(ForLoopNode node) {
-			System.out.println((node != null) ? node.toString() : "{$END$}");
+			System.out.print(node);
+			for (int i = 0, n = node.numberOfChildren(); i < n; i++) {
+				node.getChild(i).accept(this);
+			}
+			System.out.println("{$END$}");
 		}
 
 		@Override
@@ -51,7 +55,9 @@ public class TreeWriter {
 
 		@Override
 		public void visitDocumentNode(DocumentNode node) {
-			return;
+			for (int i = 0, n = node.numberOfChildren(); i < n; i++) {
+				node.getChild(i).accept(this);
+			}
 		}
 
 	}

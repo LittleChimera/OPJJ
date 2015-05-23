@@ -40,10 +40,6 @@ public class ForLoopNode extends Node {
 	@Override
 	public void accept(INodeVisitor visitor) {
 		visitor.visitForLoopNode(this);
-		for (int i = 0, n = numberOfChildren(); i < n; i++) {
-			getChild(i).accept(visitor);
-		}
-		visitor.visitForLoopNode(null);
 	}
 	
 	@Override

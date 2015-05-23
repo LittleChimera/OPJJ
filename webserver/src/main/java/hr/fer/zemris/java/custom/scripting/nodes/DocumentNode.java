@@ -18,9 +18,6 @@ public class DocumentNode extends Node {
 	@Override
 	public void accept(INodeVisitor visitor) {
 		visitor.visitDocumentNode(this);
-		for (int i = 0, n = numberOfChildren(); i < n; i++) {
-			getChild(i).accept(visitor);
-		}
 	}
 
 }
