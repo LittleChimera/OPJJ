@@ -24,5 +24,18 @@ public class TokenString extends Token {
 	public String asText() {
 		return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
 	}
+	
+	@Override
+	public void accept(ITokenVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	/**
+	 * Gets token's string.
+	 * @return token's string
+	 */
+	public String getValue() {
+		return value;
+	}
 
 }

@@ -567,7 +567,9 @@ public class SmartScriptParser {
 		// doesn't check starting conditions!
 
 		StringBuilder functionName = new StringBuilder();
-		functionName.append(takeNextDefault());
+		//TODO changed
+		takeNextDefault();
+		//functionName.append(takeNextDefault());
 
 		peekedChar = peekNext();
 		if (peekedChar == null || !Character.isAlphabetic(peekedChar.charAt(0))) {

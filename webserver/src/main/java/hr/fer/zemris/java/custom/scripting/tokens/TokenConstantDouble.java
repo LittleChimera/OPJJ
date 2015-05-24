@@ -24,5 +24,17 @@ public class TokenConstantDouble extends Token {
 	public String asText() {
 		return Double.toString(value);
 	}
-
+	
+	@Override
+	public void accept(ITokenVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	/**
+	 * Gets token's double value.
+	 * @return token's double value
+	 */
+	public double getValue() {
+		return value;
+	}
 }

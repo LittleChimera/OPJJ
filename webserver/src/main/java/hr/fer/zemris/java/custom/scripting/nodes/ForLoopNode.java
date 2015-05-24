@@ -56,5 +56,38 @@ public class ForLoopNode extends Node {
 
 		return forLoopBuilder.toString();
 	}
+	
+	
+	/**
+	 * Gets token variable.
+	 * @return token variable
+	 */
+	public TokenVariable getVariable() {
+		return variable;
+	}
+	
+	/**
+	 * Gets start expression token.
+	 * @return start expression token
+	 */
+	public Token getStartExpression() {
+		return startExpression;
+	}
+
+	/**
+	 * Gets end expression token.
+	 * @return end expression token
+	 */
+	public Token getEndExpression() {
+		return endExpression;
+	}
+	
+	/**
+	 * Gets step expression token.
+	 * @return step expression token
+	 */
+	public Token getStepExpression() {
+		return stepExpression;
+	}
 
 }

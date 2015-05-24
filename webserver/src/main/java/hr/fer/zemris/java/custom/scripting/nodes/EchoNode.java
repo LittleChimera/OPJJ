@@ -1,5 +1,10 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+
 import hr.fer.zemris.java.custom.scripting.tokens.Token;
 
 /**
@@ -61,4 +66,15 @@ public class EchoNode extends Node {
 
 		return echoBuilder.toString();
 	}
+	
+	
+	/**
+	 * Gets an unmodifiable collection of tokens inside echo node.
+	 * @return echo's tokens
+	 */
+	public Iterable<Token> tokens() {
+		return Collections.unmodifiableList(Arrays.asList(tokens));
+	}
+	
+	
 }

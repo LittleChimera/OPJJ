@@ -25,7 +25,19 @@ public class TokenFunction extends Token {
 
 	@Override
 	public String asText() {
+		return "@" + name;
+	}
+	
+	@Override
+	public void accept(ITokenVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	/**
+	 * Gets token's function name.
+	 * @return token's function name
+	 */
+	public String getName() {
 		return name;
 	}
-
 }

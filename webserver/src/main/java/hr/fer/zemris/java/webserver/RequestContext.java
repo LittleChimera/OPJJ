@@ -19,8 +19,8 @@ public class RequestContext {
 
 	private OutputStream outputStream;
 	private Charset charset;
-	private String encoding;
-
+	
+	private String encoding = "UTF-8";
 	private int statusCode = 200;
 	private String statusText = "OK";
 	private String mimeType = "text/html";
@@ -47,26 +47,6 @@ public class RequestContext {
 		this.outputCookies = (outputCookies != null) ? outputCookies
 				: new LinkedList<>();
 
-	}
-
-	public Map<String, String> getParameters() {
-		return Collections.unmodifiableMap(parameters);
-	}
-
-	public Map<String, String> getTemporaryParameters() {
-		return temporaryParameters;
-	}
-
-	public void setTemporaryParameters(Map<String, String> temporaryParameters) {
-		this.temporaryParameters = temporaryParameters;
-	}
-
-	public Map<String, String> getPersistentParameters() {
-		return persistentParameters;
-	}
-
-	public void setPersistentParameters(Map<String, String> persistentParameters) {
-		this.persistentParameters = persistentParameters;
 	}
 
 	public void setEncoding(String encoding) {
@@ -174,6 +154,7 @@ public class RequestContext {
 	}
 
 	private void createHeader() throws IOException {
+		headerGenerated = true;
 		try {
 			charset = Charset.forName(encoding);			
 		} catch (Exception illegalCharset) {

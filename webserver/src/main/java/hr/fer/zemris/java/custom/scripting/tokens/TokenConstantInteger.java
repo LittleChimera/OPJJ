@@ -25,4 +25,16 @@ public class TokenConstantInteger extends Token {
 		return Integer.toString(value);
 	}
 
+	@Override
+	public void accept(ITokenVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	/**
+	 * Gets token's integer value.
+	 * @return token's integer value
+	 */
+	public int getValue() {
+		return value;
+	}
 }

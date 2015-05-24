@@ -6,7 +6,7 @@ package hr.fer.zemris.java.custom.scripting.tokens;
  * @author luka
  *
  */
-public class Token {
+public abstract class Token {
 
 	/**
 	 * Gets token's String representation.
@@ -16,4 +16,12 @@ public class Token {
 	public String asText() {
 		return new String();
 	}
+
+	/**
+	 * Calls appropriate {@link ITokenVistor}'s method for visiting the token.
+	 * 
+	 * @param visitor
+	 *            token visitor
+	 */
+	public abstract void accept(ITokenVisitor visitor);
 }

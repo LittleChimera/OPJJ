@@ -27,4 +27,17 @@ public class TokenOperator extends Token {
 	public String asText() {
 		return symbol;
 	}
+	
+	@Override
+	public void accept(ITokenVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	/**
+	 * Gets token's operator symbol.
+	 * @return token's operator symbol
+	 */
+	public String getSymbol() {
+		return symbol;
+	}
 }

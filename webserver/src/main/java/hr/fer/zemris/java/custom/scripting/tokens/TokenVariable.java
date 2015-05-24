@@ -27,5 +27,18 @@ public class TokenVariable extends Token {
 	public String asText() {
 		return name;
 	}
+	
+	@Override
+	public void accept(ITokenVisitor visitor) {
+		visitor.visit(this);
+	}
+
+	/**
+	 * Get's token's variable name.
+	 * @return token's variable name
+	 */
+	public String getName() {
+		return name;
+	}
 
 }
