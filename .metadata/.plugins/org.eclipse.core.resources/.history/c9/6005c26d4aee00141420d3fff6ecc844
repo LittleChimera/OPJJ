@@ -1,5 +1,0 @@
-package hr.fer.zemris.linearna;
-
-public interface IDoubleOperator {
-	double calc(double first, double second);
-}

@@ -1,9 +1,0 @@
-package hr.fer.zemris.java.gui.calc.buttons;
-
-import javax.swing.JButton;
-
-public abstract class FunctionButton extends JButton {
-	
-	public double apply(double number);
-	
-}

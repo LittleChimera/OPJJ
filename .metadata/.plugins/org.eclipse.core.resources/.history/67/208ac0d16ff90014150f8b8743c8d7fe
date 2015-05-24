@@ -1,7 +1,0 @@
-package hr.fer.zemris.java.gui.calc;
-
-import hr.fer.zemris.java.gui.calc.buttons.OperatorButton;
-
-public class InvertibleOperatorButton extends OperatorButton {
-
-}
