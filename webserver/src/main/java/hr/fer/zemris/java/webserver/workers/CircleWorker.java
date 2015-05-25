@@ -17,15 +17,21 @@ public class CircleWorker implements IWebWorker {
 	public void processRequest(RequestContext context) {
 		context.setMimeType("image/png");
 		
-		final int width = 200, height = 200;
+		int width = 200, height = 200;
 		BufferedImage bim = new BufferedImage(width, height,
 				BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g2d = bim.createGraphics();
 		
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, width, height);
-		g2d.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
-		g2d.fillOval(0, 0, width, height);
+		final int radiusDecrement = 6;
+		for (int i = 0; height > 0 && width > 0; i++) {
+			g2d.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
+			int iRadiusDecrement = i*radiusDecrement/2;
+			width -= radiusDecrement;
+			height -= radiusDecrement;
+			g2d.fillOval(iRadiusDecrement, iRadiusDecrement, width, height );
+		}
 		g2d.dispose();
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
