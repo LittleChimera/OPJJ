@@ -52,11 +52,25 @@ public class SmartHttpServer {
 	private ExecutorService threadPool;
 
 	private Map<String, SessionMapEntry> sessions = new HashMap<String, SmartHttpServer.SessionMapEntry>();
+	Thread sessionGarbageCollector = new Thread(() -> {
+		while (true) {
+			try {
+				Thread.sleep(1000*60*5);
+			} catch (InterruptedException ignorable) {
+			}
+			sessions.values().removeIf(e -> {
+				return e.validUntil > System.currentTimeMillis();
+			});
+		}
+	});
 	private Random sessionRandom = new Random();
 
 	final static private String WORKERS_PACKAGE = "hr.fer.zemris.java.webserver.workers";
 
 	public SmartHttpServer(String configFileName) throws IOException {
+		sessionGarbageCollector.setDaemon(true);
+		sessionGarbageCollector.start();
+
 		Properties serverProperties = new Properties();
 		serverProperties.load(new BufferedReader(new FileReader(Paths.get(
 				configFileName).toFile())));
@@ -103,8 +117,7 @@ public class SmartHttpServer {
 		Class<?> referenceToClass;
 		Object newObject;
 		try {
-			referenceToClass = this.getClass().getClassLoader()
-					.loadClass((String) fqcn);
+			referenceToClass = this.getClass().getClassLoader().loadClass(fqcn);
 			newObject = referenceToClass.newInstance();
 		} catch (ClassNotFoundException notFound) {
 			throw new IllegalArgumentException("Class doesn't exist: " + fqcn);
@@ -189,7 +202,6 @@ public class SmartHttpServer {
 			try {
 				serverSocket = new ServerSocket();
 				serverSocket.bind(new InetSocketAddress(address, port));
-				serverSocket.setSoTimeout(sessionTimeout);
 			} catch (IOException e) {
 				throw new RuntimeException(
 						"Unable to open socket on configured port.");
@@ -244,6 +256,8 @@ public class SmartHttpServer {
 				List<String> request = readRequest();
 				parseFirstLine(request);
 
+				checkSession(request);
+
 				// if request path is above document root "403 forbidden"
 				// respond is sent
 				if (!requestedPath.normalize().toAbsolutePath()
@@ -263,7 +277,7 @@ public class SmartHttpServer {
 
 				if (!(Files.exists(requestedPath)
 						&& Files.isRegularFile(requestedPath) && Files
-							.isReadable(requestedPath))) {
+						.isReadable(requestedPath))) {
 					sendError(404, "File not found.");
 					return;
 				} else {
@@ -291,6 +305,28 @@ public class SmartHttpServer {
 			} catch (IOException e) {
 				System.err.println("IO error occured at " + new Date() + e);
 			}
+		}
+
+		private void checkSession(List<String> headers) {
+
+			for (String line : headers) {
+				if (!line.startsWith("Cookie:")) {
+					continue;
+				}
+				String sid = parseCookies(line).get("sid");
+
+			}
+		}
+
+		private Map<String, String> parseCookies(String cookiesString) {
+			Map<String, String> cookies = new HashMap<String, String>();
+
+			for (String cookie : cookiesString.trim().split(";")) {
+				String[] cookieArgs = cookie.split("=", 2);
+				cookies.put(cookieArgs[0],
+						(cookieArgs.length == 2) ? cookieArgs[1] : null);
+			}
+			return cookies;
 		}
 
 		private void sendFile(Path requestedPath, RequestContext rc)
@@ -382,7 +418,7 @@ public class SmartHttpServer {
 					new SmartScriptParser(new String(
 							Files.readAllBytes(requestedPath),
 							StandardCharsets.UTF_8)).getDocumentNode(),
-					new RequestContext(ostream, params)).execute();
+							new RequestContext(ostream, params)).execute();
 			ostream.close();
 		}
 

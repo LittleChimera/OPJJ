@@ -1,10 +1,5 @@
 package hr.fer.zemris.java.custom.scripting.exec;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Stack;
-
-
 import hr.fer.zemris.java.custom.collections.EmptyStackException;
 import hr.fer.zemris.java.custom.scripting.nodes.DocumentNode;
 import hr.fer.zemris.java.custom.scripting.nodes.EchoNode;
@@ -20,6 +15,10 @@ import hr.fer.zemris.java.custom.scripting.tokens.TokenOperator;
 import hr.fer.zemris.java.custom.scripting.tokens.TokenString;
 import hr.fer.zemris.java.custom.scripting.tokens.TokenVariable;
 import hr.fer.zemris.java.webserver.RequestContext;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Stack;
 
 public class SmartScriptEngine {
 
@@ -70,7 +69,7 @@ public class SmartScriptEngine {
 			for (Object object : printStack) {
 				if (object instanceof Double
 						&& (double) object == (int) ((Double) object)
-								.doubleValue()) {
+						.doubleValue()) {
 					writeToContext("" + (int) ((Double) object).doubleValue());
 					continue;
 				}
@@ -98,7 +97,7 @@ public class SmartScriptEngine {
 			RequestContext requestContext) {
 		this.documentNode = documentNode;
 		this.requestContext = requestContext;
-		requestContext.setMimeType("text/plain");
+		//requestContext.setMimeType("text/plain");
 	}
 
 	public void execute() {
@@ -171,7 +170,7 @@ public class SmartScriptEngine {
 					executionStack.push(value == null ? defaultValue : value);
 					break;
 				case "pparamGet":
-					
+
 					break;
 				case "pparamSet":
 
