@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class RequestContext {
-	
+
 	private static final Charset HEADER_CHARSET = Charset.forName("ISO_8859_1");
 	private static final String HTTP_VERSION = "HTTP/1.1";
 	private static final String CONTENT_TYPE = "Content-Type";
@@ -19,7 +19,7 @@ public class RequestContext {
 
 	private OutputStream outputStream;
 	private Charset charset;
-	
+
 	private String encoding = "UTF-8";
 	private int statusCode = 200;
 	private String statusText = "OK";
@@ -28,6 +28,7 @@ public class RequestContext {
 	private Map<String, String> parameters;
 	private Map<String, String> temporaryParameters;
 	private Map<String, String> persistentParameters;
+	private Map<String, String> headers = new HashMap<String, String>();
 	private List<RCCookie> outputCookies;
 
 	private boolean headerGenerated = false;
@@ -47,6 +48,15 @@ public class RequestContext {
 		this.outputCookies = (outputCookies != null) ? outputCookies
 				: new LinkedList<>();
 
+	}
+
+	public RequestContext(OutputStream outputStream,
+			Map<String, String> parameters) {
+		this(outputStream, parameters, null, null);
+	}
+	
+	public void addHeader(String headerTag, String headerValue) {
+		headers.put(headerTag, headerValue);
 	}
 
 	public void setEncoding(String encoding) {
@@ -72,7 +82,8 @@ public class RequestContext {
 			throw new RuntimeException(
 					"Header has already been generated and you're not allowed to modify it.");
 		} else if (statusText == null) {
-			throw new IllegalArgumentException("Null status text is not allowed");
+			throw new IllegalArgumentException(
+					"Null status text is not allowed");
 		}
 		this.statusText = statusText;
 	}
@@ -138,10 +149,14 @@ public class RequestContext {
 	}
 
 	public RequestContext write(byte[] data) throws IOException {
+		return write(data, 0, data.length);
+	}
+	
+	public RequestContext write(byte[] data, int offset, int length) throws IOException {
 		if (!headerGenerated) {
 			createHeader();
 		}
-		outputStream.write(data);
+		outputStream.write(data, offset, length);
 		return this;
 	}
 
@@ -156,11 +171,11 @@ public class RequestContext {
 	private void createHeader() throws IOException {
 		headerGenerated = true;
 		try {
-			charset = Charset.forName(encoding);			
+			charset = Charset.forName(encoding);
 		} catch (Exception illegalCharset) {
 			throw new RuntimeException("Illegal charset given");
 		}
-		
+
 		// Header first line
 		writeHeader(HTTP_VERSION);
 		writeHeader(" ");
@@ -168,7 +183,7 @@ public class RequestContext {
 		writeHeader(" ");
 		writeHeader(statusText);
 		writeHeader("\r\n");
-		
+
 		// Header content-type
 		writeHeader(CONTENT_TYPE);
 		writeHeader(": ");
@@ -178,7 +193,7 @@ public class RequestContext {
 			writeHeader(encoding);
 		}
 		writeHeader("\r\n");
-		
+
 		// Header set cookies
 		for (RCCookie rcCookie : outputCookies) {
 			writeHeader(SET_COOKIE);
@@ -186,10 +201,15 @@ public class RequestContext {
 			writeHeader(rcCookie.toString());
 			writeHeader("\r\n");
 		}
-		
+
+		for (Map.Entry<String, String> headerLine : headers.entrySet()) {
+			writeHeader(headerLine.getKey() + ": " + headerLine.getValue()
+					+ "\r\n");
+		}
+
 		writeHeader("\r\n");
 	}
-	
+
 	private void writeHeader(String text) throws IOException {
 		outputStream.write(text.getBytes(HEADER_CHARSET));
 	}
@@ -230,23 +250,26 @@ public class RequestContext {
 		public Integer getMaxAge() {
 			return maxAge;
 		}
-		
+
 		@Override
 		public String toString() {
 			StringBuilder stringBuilder = new StringBuilder();
-			
+
 			stringBuilder.append(name).append("=\"").append(value).append("\"");
-			
+
 			if (domain != null) {
-				stringBuilder.append("; ").append("Domain").append("=").append(domain);
+				stringBuilder.append("; ").append("Domain").append("=")
+						.append(domain);
 			}
 			if (path != null) {
-				stringBuilder.append("; ").append("Path").append("=").append(path);
+				stringBuilder.append("; ").append("Path").append("=")
+						.append(path);
 			}
 			if (maxAge != null) {
-				stringBuilder.append("; ").append("Max-Age").append("=").append(maxAge);
+				stringBuilder.append("; ").append("Max-Age").append("=")
+						.append(maxAge);
 			}
-			
+
 			return stringBuilder.toString();
 		}
 	}

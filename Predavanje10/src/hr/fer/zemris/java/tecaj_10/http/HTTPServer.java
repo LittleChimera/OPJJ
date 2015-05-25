@@ -83,7 +83,6 @@ public class HTTPServer {
 			
 			if (path.equals("/slika")) {
 				generateImage(cos, version);
-				System.out.println("asdf");
 				return;
 			}
 			

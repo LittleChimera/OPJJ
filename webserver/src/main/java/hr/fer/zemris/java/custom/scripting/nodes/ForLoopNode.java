@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
 import hr.fer.zemris.java.custom.scripting.tokens.Token;
+import hr.fer.zemris.java.custom.scripting.tokens.TokenConstantInteger;
 import hr.fer.zemris.java.custom.scripting.tokens.TokenVariable;
 
 /**
@@ -34,7 +35,8 @@ public class ForLoopNode extends Node {
 		this.variable = variable;
 		this.startExpression = startExpression;
 		this.endExpression = endExpression;
-		this.stepExpression = stepExpression;
+		this.stepExpression = (stepExpression == null)?new TokenConstantInteger(1):stepExpression;
+		
 	}
 
 	@Override

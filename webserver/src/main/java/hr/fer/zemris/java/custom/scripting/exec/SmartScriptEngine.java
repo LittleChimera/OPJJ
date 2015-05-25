@@ -1,7 +1,9 @@
 package hr.fer.zemris.java.custom.scripting.exec;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Stack;
+
 
 import hr.fer.zemris.java.custom.collections.EmptyStackException;
 import hr.fer.zemris.java.custom.scripting.nodes.DocumentNode;
@@ -60,13 +62,19 @@ public class SmartScriptEngine {
 
 		@Override
 		public void visitEchoNode(EchoNode node) {
-			TokenExecutor tokenExecutor = new TokenExecutor(multistack);
+			TokenExecutor tokenExecutor = new TokenExecutor();
 			for (Token token : node.tokens()) {
 				token.accept(tokenExecutor);
 			}
 			Stack<Object> printStack = tokenExecutor.getReverseStack();
 			for (Object object : printStack) {
-				System.out.print(object);
+				if (object instanceof Double
+						&& (double) object == (int) ((Double) object)
+								.doubleValue()) {
+					writeToContext("" + (int) ((Double) object).doubleValue());
+					continue;
+				}
+				writeToContext(object.toString());
 			}
 		}
 
@@ -90,24 +98,20 @@ public class SmartScriptEngine {
 			RequestContext requestContext) {
 		this.documentNode = documentNode;
 		this.requestContext = requestContext;
+		requestContext.setMimeType("text/plain");
 	}
 
 	public void execute() {
 		documentNode.accept(visitor);
 	}
 
-	private static class TokenExecutor implements ITokenVisitor {
+	private class TokenExecutor implements ITokenVisitor {
 
-		private Stack<Object> calculationStack = new Stack<Object>();
-		private ObjectMultistack multistack;
-
-		public TokenExecutor(ObjectMultistack multistack) {
-			this.multistack = multistack;
-		}
+		private Stack<Object> executionStack = new Stack<Object>();
 
 		public Stack<Object> getReverseStack() {
 			Stack<Object> reversedStack = new Stack<Object>();
-			for (Object object : calculationStack) {
+			for (Object object : executionStack) {
 				reversedStack.push(object);
 			}
 
@@ -116,66 +120,88 @@ public class SmartScriptEngine {
 
 		@Override
 		public void visit(TokenConstantDouble token) {
-			calculationStack.push(token.getValue());
+			executionStack.push(token.getValue());
 		}
 
 		@Override
 		public void visit(TokenConstantInteger token) {
-			calculationStack.push(token.getValue());
+			executionStack.push(token.getValue());
 		}
 
 		@Override
 		public void visit(TokenFunction token) {
 			String functionName = token.getName();
-			switch (functionName) {
-			case "sin":
-				validateStackMinimumSize(1, functionName);
-				double x = (double) calculationStack.pop();
-				calculationStack.push(Math.sin(x));
-				break;
-			case "decfmt":
+			try {
 
-				break;
-			case "dup":
+				switch (functionName) {
+				case "sin":
+					validateStackMinimumSize(1, functionName);
+					double x = (double) executionStack.pop();
+					executionStack.push(Math.sin(x));
+					break;
+				case "decfmt":
+					validateStackMinimumSize(2, functionName);
+					String format = (String) executionStack.pop();
+					DecimalFormat decmft;
+					try {
+						decmft = new DecimalFormat(format);
+					} catch (IllegalArgumentException e) {
+						throw new RuntimeException("Illegal decimal format pattern for function: @" + functionName);
+					}
+					Double number = (Double) executionStack.pop();
+					executionStack.push(decmft.format(number));
+					break;
+				case "dup":
 
-				break;
-			case "swap":
+					break;
+				case "swap":
 
-				break;
-			case "setMimeType":
+					break;
+				case "setMimeType":
+					String mimeType = (String) executionStack.pop();
+					requestContext.setMimeType(mimeType);
+					break;
+				case "paramGet":
+					validateStackMinimumSize(2, functionName);
+					Number defaultValue = (Number) executionStack.pop();
+					String param = (String) executionStack.pop();
+					String paramValue = requestContext.getParameter(param);
+					Number value = (paramValue != null)?Double.parseDouble(paramValue):null;
+					//TODO obradi exception
+					executionStack.push(value == null ? defaultValue : value);
+					break;
+				case "pparamGet":
+					
+					break;
+				case "pparamSet":
 
-				break;
-			case "paramGet":
+					break;
+				case "pparamDel":
 
-				break;
-			case "pparamGet":
+					break;
+				case "tparamGet":
 
-				break;
-			case "pparamSet":
+					break;
+				case "tparamSet":
 
-				break;
-			case "pparamDel":
+					break;
+				case "tparamDel":
 
-				break;
-			case "tparamGet":
+					break;
 
-				break;
-			case "tparamSet":
+				default:
+					throw new RuntimeException("Unsupported function: "
+							+ token.getName());
+				}
 
-				break;
-			case "tparamDel":
-
-				break;
-
-			default:
-				throw new RuntimeException("Unsupported function: "
-						+ token.getName());
+			} catch (ClassCastException illegalArguments) {
+				throw new RuntimeException("Illegal arguments for function: @" + functionName);
 			}
 		}
 
 		private void validateStackMinimumSize(int minimumSize,
 				String functionName) {
-			if (calculationStack.size() < 1) {
+			if (executionStack.size() < 1) {
 				throw new RuntimeException("Expected at least " + minimumSize
 						+ " arguments for function @" + functionName);
 			}
@@ -185,8 +211,8 @@ public class SmartScriptEngine {
 		public void visit(TokenOperator token) {
 			double operand1 = 0, operand2 = 0;
 			try {
-				operand2 = (double) calculationStack.pop();
-				operand1 = (double) calculationStack.pop();
+				operand2 = (double) executionStack.pop();
+				operand1 = (double) executionStack.pop();
 			} catch (EmptyStackException e) {
 				// TODO: handle exception
 			} catch (ClassCastException notANumber) {
@@ -214,13 +240,13 @@ public class SmartScriptEngine {
 				result = operand1 / operand2;
 				break;
 			}
-			calculationStack.push((result == (int) result) ? (int) result
+			executionStack.push((result == (int) result) ? (int) result
 					: result);
 		}
 
 		@Override
 		public void visit(TokenString token) {
-			calculationStack.push(token.getValue());
+			executionStack.push(token.getValue());
 		}
 
 		@Override
@@ -232,7 +258,7 @@ public class SmartScriptEngine {
 				throw new RuntimeException("Variable " + token.getName()
 						+ " is not initialized");
 			}
-			calculationStack.push(variableValue);
+			executionStack.push(variableValue);
 		}
 
 	}
