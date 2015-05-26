@@ -54,7 +54,7 @@ public class RequestContext {
 			Map<String, String> parameters) {
 		this(outputStream, parameters, null, null);
 	}
-	
+
 	public void addHeader(String headerTag, String headerValue) {
 		headers.put(headerTag, headerValue);
 	}
@@ -151,7 +151,7 @@ public class RequestContext {
 	public RequestContext write(byte[] data) throws IOException {
 		return write(data, 0, data.length);
 	}
-	
+
 	public RequestContext write(byte[] data, int offset, int length) throws IOException {
 		if (!headerGenerated) {
 			createHeader();
@@ -220,6 +220,7 @@ public class RequestContext {
 		private String domain;
 		private String path;
 		private Integer maxAge;
+		private boolean httpOnly;
 
 		public RCCookie(String name, String value, Integer maxAge,
 				String domain, String path) {
@@ -251,6 +252,10 @@ public class RequestContext {
 			return maxAge;
 		}
 
+		public void setHttpOnly(boolean set) {
+			httpOnly = set;
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder stringBuilder = new StringBuilder();
@@ -259,15 +264,18 @@ public class RequestContext {
 
 			if (domain != null) {
 				stringBuilder.append("; ").append("Domain").append("=")
-						.append(domain);
+				.append(domain);
 			}
 			if (path != null) {
 				stringBuilder.append("; ").append("Path").append("=")
-						.append(path);
+				.append(path);
 			}
 			if (maxAge != null) {
 				stringBuilder.append("; ").append("Max-Age").append("=")
-						.append(maxAge);
+				.append(maxAge);
+			}
+			if (httpOnly) {
+				stringBuilder.append("; HttpOnly");
 			}
 
 			return stringBuilder.toString();

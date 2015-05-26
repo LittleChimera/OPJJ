@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -58,9 +59,11 @@ public class SmartHttpServer {
 				Thread.sleep(1000*60*5);
 			} catch (InterruptedException ignorable) {
 			}
-			sessions.values().removeIf(e -> {
-				return e.validUntil > System.currentTimeMillis();
-			});
+			synchronized (sessions) {
+				sessions.values().removeIf(e -> {
+					return e.validUntil < System.currentTimeMillis();
+				});
+			}
 		}
 	});
 	private Random sessionRandom = new Random();
@@ -252,33 +255,40 @@ public class SmartHttpServer {
 				istream = new PushbackInputStream(csocket.getInputStream(), 4);
 				ostream = new BufferedOutputStream(csocket.getOutputStream());
 
+				RequestContext rc = new RequestContext(ostream, params);
+
 				// get headers
 				List<String> request = readRequest();
-				parseFirstLine(request);
 
-				checkSession(request);
+				checkSession(request, rc);
+				parseFirstLine(request, rc);
+
 
 				// if request path is above document root "403 forbidden"
 				// respond is sent
 				if (!requestedPath.normalize().toAbsolutePath()
 						.startsWith(documentRoot)) {
-					sendError(403, "Forbidden");
+					sendError(403, "Forbidden", rc);
 					return;
 				}
 
-				RequestContext rc = new RequestContext(ostream, params);
 
 				// inspect if requested path should be delegated to a worker
-				if (giveToWorker(requestedPath, rc)) {
-					ostream.flush();
-					ostream.close();
+				try {
+					if (giveToWorker(requestedPath, rc)) {
+						ostream.flush();
+						ostream.close();
+						return;
+					}
+				} catch (Exception e) {
+					sendError(404, "No such worker.", rc);
 					return;
 				}
 
 				if (!(Files.exists(requestedPath)
 						&& Files.isRegularFile(requestedPath) && Files
 						.isReadable(requestedPath))) {
-					sendError(404, "File not found.");
+					sendError(404, "File not found.", rc);
 					return;
 				} else {
 					String fileName = requestedPath.getFileName().toString();
@@ -307,15 +317,59 @@ public class SmartHttpServer {
 			}
 		}
 
-		private void checkSession(List<String> headers) {
+		private void checkSession(List<String> headers, RequestContext rc) {
 
+			final String cookieHeader = "Cookie:";
+
+			String sidCandidate = null;
 			for (String line : headers) {
-				if (!line.startsWith("Cookie:")) {
+				if (!line.startsWith(cookieHeader)) {
 					continue;
 				}
-				String sid = parseCookies(line).get("sid");
-
+				sidCandidate = parseCookies(line.substring(cookieHeader.length())).get("sid");
+				break;
 			}
+			if (sidCandidate == null) {
+				createSID(rc);
+			} else {
+				SessionMapEntry sessionEntry;
+				synchronized (sessions) {
+					sessionEntry = sessions.get(sidCandidate);
+					if (sessionEntry == null
+							|| sessionEntry.validUntil < System
+							.currentTimeMillis()) {
+						createSID(rc);
+					} else {
+						sessionEntry.updateValidity(sessionTimeout);
+						permPrams = sessionEntry.map;
+					}
+				}
+			}
+		}
+
+		private void createSID(RequestContext rc) {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			sessionRandom.ints(20).forEach(i -> {
+				// ASCII values of A and Z
+				final int A = 65;
+				final int Z = 90;
+				bos.write(Math.abs(i) % (Z - A) + A);
+			});
+			SID = new String(bos.toByteArray(), StandardCharsets.US_ASCII);
+
+			SessionMapEntry sessionEntry = new SessionMapEntry();
+			sessionEntry.map = new ConcurrentHashMap<String, String>();
+			sessionEntry.sid = SID;
+			sessionEntry.updateValidity(sessionTimeout);
+			permPrams = sessionEntry.map;
+
+			synchronized (sessions) {
+				sessions.put(SID, sessionEntry);
+			}
+
+			RCCookie newSid = new RCCookie("sid", SID, null, address, "/");
+			newSid.setHttpOnly(true);
+			rc.addRCCookie(newSid);
 		}
 
 		private Map<String, String> parseCookies(String cookiesString) {
@@ -323,6 +377,9 @@ public class SmartHttpServer {
 
 			for (String cookie : cookiesString.trim().split(";")) {
 				String[] cookieArgs = cookie.split("=", 2);
+				if (cookieArgs[1].startsWith("\"") && cookieArgs[1].endsWith("\"")) {
+					cookieArgs[1] = cookieArgs[1].substring(1, cookieArgs[1].length() - 1);
+				}
 				cookies.put(cookieArgs[0],
 						(cookieArgs.length == 2) ? cookieArgs[1] : null);
 			}
@@ -366,9 +423,9 @@ public class SmartHttpServer {
 			return false;
 		}
 
-		private boolean parseFirstLine(List<String> request) throws IOException {
+		private boolean parseFirstLine(List<String> request, RequestContext rc) throws IOException {
 			if (request == null || request.size() < 1) {
-				sendError(400, "Invalid header");
+				sendError(400, "Invalid header", rc);
 				return false;
 			}
 
@@ -385,7 +442,7 @@ public class SmartHttpServer {
 					|| !method.equals("GET")
 					|| !(version.equals("HTTP/1.1") || version
 							.equals("HTTP/1.1"))) {
-				sendError(400, "Invalid request");
+				sendError(400, "Invalid request", rc);
 				return false;
 			}
 
@@ -448,7 +505,7 @@ public class SmartHttpServer {
 				}
 				if (end.startsWith("\r\n") || end.startsWith("\n")) {
 					if (!foundEnding) {
-						int lineBreak = end.indexOf("\n");
+						int lineBreak = end.indexOf("\n") + 1;
 						istream.unread(buffer, lineBreak, r - lineBreak);
 					}
 					lines.add(new String(bos.toByteArray(),
@@ -461,10 +518,9 @@ public class SmartHttpServer {
 			return lines;
 		}
 
-		private void sendError(int statusCode, String statusText)
+		private void sendError(int statusCode, String statusText, RequestContext rc)
 				throws IOException {
-			RequestContext rc = new RequestContext(ostream,
-					new HashMap<String, String>());
+
 			rc.setStatusCode(statusCode);
 			rc.setStatusText(statusText);
 			rc.addHeader("Connection", "close");
@@ -481,6 +537,10 @@ public class SmartHttpServer {
 		String sid;
 		long validUntil;
 		Map<String, String> map;
+
+		public void updateValidity(long timeout) {
+			validUntil = System.currentTimeMillis() + timeout*1000;
+		}
 	}
 
 	public static void main(String[] args) {
