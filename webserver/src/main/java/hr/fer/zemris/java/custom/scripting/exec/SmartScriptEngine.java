@@ -212,14 +212,14 @@ public class SmartScriptEngine {
 
 			} catch (ClassCastException illegalArguments) {
 				throw new RuntimeException("Illegal arguments for function: @" + functionName);
-			} catch (EmptyStackException notEnoughArguments) {
-
+			} catch (java.util.EmptyStackException notEnoughArguments) {
+				throw new RuntimeException("Not enough arguments given for function: @" + functionName);
 			}
 		}
 
 		private void validateStackMinimumSize(int minimumSize,
 				String functionName) {
-			if (executionStack.size() < 1) {
+			if (executionStack.size() < minimumSize) {
 				throw new RuntimeException("Expected at least " + minimumSize
 						+ " arguments for function @" + functionName);
 			}
@@ -232,26 +232,30 @@ public class SmartScriptEngine {
 			try {
 				operand2 = executionStack.pop().getValue();
 				operand1 = executionStack.pop();
-			} catch (EmptyStackException e) {
-				// TODO: handle exception
+			} catch (java.util.EmptyStackException e) {
+				throw new RuntimeException("Not enough operands for operation: " + token.getSymbol());
 			}
 
-			switch (token.getSymbol()) {
-			case "+":
-				operand1.increment(operand2);
-				break;
+			try {
+				switch (token.getSymbol()) {
+				case "+":
+					operand1.increment(operand2);
+					break;
 
-			case "-":
-				operand1.decrement(operand2);
-				break;
+				case "-":
+					operand1.decrement(operand2);
+					break;
 
-			case "*":
-				operand1.multiply(operand2);
-				break;
+				case "*":
+					operand1.multiply(operand2);
+					break;
 
-			case "/":
-				operand1.divide(operand2);
-				break;
+				case "/":
+					operand1.divide(operand2);
+					break;
+				}
+			} catch (Exception e) {
+				throw new RuntimeException("Math error");
 			}
 			executionStack.push(operand1);
 		}

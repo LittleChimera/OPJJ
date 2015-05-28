@@ -471,11 +471,16 @@ public class SmartHttpServer {
 		}
 
 		private void runSmartScript(Path requestedPath, RequestContext rc) throws IOException {
-			new SmartScriptEngine(
-					new SmartScriptParser(new String(
-							Files.readAllBytes(requestedPath),
-							StandardCharsets.UTF_8)).getDocumentNode(),
-							rc).execute();
+			try {
+				new SmartScriptEngine(
+						new SmartScriptParser(new String(
+								Files.readAllBytes(requestedPath),
+								StandardCharsets.UTF_8)).getDocumentNode(),
+								rc).execute();
+			} catch (Exception e) {
+				rc.write("Error: " + e.getMessage());
+			}
+			ostream.flush();
 			ostream.close();
 		}
 
