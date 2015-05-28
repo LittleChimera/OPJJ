@@ -17,7 +17,7 @@ import hr.fer.zemris.java.custom.scripting.tokens.TokenVariable;
 
 /**
  * Smart parser for custom language described in 2nd Homework of class OPJJ.
- * 
+ *
  * @author Luka Skugor
  *
  */
@@ -38,7 +38,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Creates a parser with text it needs to parse.
-	 * 
+	 *
 	 * @param documentBody
 	 *            text of the document
 	 */
@@ -52,7 +52,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Parses the document and builds document's tree model.
-	 * 
+	 *
 	 * @return document node of built tree model
 	 */
 	public DocumentNode parse() {
@@ -115,7 +115,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Tests if next characters are Text inside of Document Body
-	 * 
+	 *
 	 * @return true if characters are Text, else false
 	 */
 	private boolean isNextText() {
@@ -135,7 +135,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Tests if next characters are opening of a tag.
-	 * 
+	 *
 	 * @return true if tag is opened, else false
 	 */
 	private boolean isNextTagOpening() {
@@ -145,7 +145,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Tests if next characters have number format.
-	 * 
+	 *
 	 * @return true if next characters have number format, else false
 	 */
 	private boolean isNextANumber() {
@@ -154,8 +154,8 @@ public class SmartScriptParser {
 		try {
 			if (Character.isDigit(nextCharacters.charAt(0))
 					|| ((nextCharacters.charAt(0) == '+' || nextCharacters
-							.charAt(0) == '-') && Character
-							.isDigit(nextCharacters.charAt(1)))) {
+					.charAt(0) == '-') && Character
+					.isDigit(nextCharacters.charAt(1)))) {
 				return true;
 			} else {
 				return false;
@@ -168,21 +168,21 @@ public class SmartScriptParser {
 	/**
 	 * Array of all known tags which can be parsed. Each one has its own parsing
 	 * method
-	 * 
+	 *
 	 * "=" - Echo tag
-	 * 
+	 *
 	 * "FOR " - ForLoop tag (This tag requires space at the end. Only then tag's
 	 * tokens can be parsed.)
-	 * 
+	 *
 	 * "END" - Closing of ForLoop tag
 	 */
 	private static String[] knownTags = { "=", "FOR ", "END" };
 
 	/**
 	 * Parses next characters as tag opening and tag name.
-	 * 
+	 *
 	 * This method should be called only when tag is opened.
-	 * 
+	 *
 	 * @return name of the tag
 	 * @throws SmartScriptParserException
 	 *             if tag is unknown
@@ -242,7 +242,7 @@ public class SmartScriptParser {
 	 * Reads next characters form document body with escaping. If next character
 	 * is an escaping character ('\') method will try to escape next character.
 	 * If next character is not escapable method returns both of them.
-	 * 
+	 *
 	 * @param escapableCharacters
 	 *            array of characters which can be escaped
 	 * @return next characters
@@ -283,7 +283,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Reads next characters using escaping inside of a string.
-	 * 
+	 *
 	 * @return next characters
 	 */
 	private String takeNextFromString() {
@@ -293,7 +293,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Reads next characters using escaping inside of the document body.
-	 * 
+	 *
 	 * @return next characters
 	 */
 	private String takeNextFromBody() {
@@ -303,7 +303,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Reads next character with no escaping.
-	 * 
+	 *
 	 * @return next characters
 	 */
 	private String takeNextDefault() {
@@ -313,7 +313,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Peeks at next character without incrementing position in document.
-	 * 
+	 *
 	 * @return next character or null if end of document is reached
 	 */
 	private String peekNext() {
@@ -326,7 +326,7 @@ public class SmartScriptParser {
 
 	/**
 	 * Peeks at next characters without incrementing position in document.
-	 * 
+	 *
 	 * @param length
 	 *            number of next characters to read
 	 * @return String of next characters with requested length or maximum length
@@ -343,7 +343,7 @@ public class SmartScriptParser {
 	/**
 	 * Parses next characters as text from document body as long as next
 	 * character is text.
-	 * 
+	 *
 	 * @return parsed text
 	 */
 	private String parseText() {
@@ -359,7 +359,7 @@ public class SmartScriptParser {
 	/**
 	 * Parses next characters as closing of a tag. This method should only be
 	 * called when tag is closing.
-	 * 
+	 *
 	 * @throws SmartScriptParserException
 	 *             if closing tag is not found
 	 */
@@ -376,7 +376,7 @@ public class SmartScriptParser {
 	/**
 	 * Parses next characters as opening of a tag. This method should only be
 	 * called when tag is opening.
-	 * 
+	 *
 	 * @throws SmartScriptParserException
 	 *             if opening tag is not found
 	 */
@@ -401,7 +401,7 @@ public class SmartScriptParser {
 	/**
 	 * Parses next characters as FOR Tag. This method should only be called when
 	 * opening of END Tag is read.
-	 * 
+	 *
 	 * @return node of parsed ForLoop
 	 * @throws SmartScriptParserException
 	 *             if tag's tokens are invalid.
@@ -446,7 +446,7 @@ public class SmartScriptParser {
 	/**
 	 * Parses next characters as ECHO Tag. This method should only be called
 	 * when opening of ECHO Tag is read.
-	 * 
+	 *
 	 * @return node of parsed Echo
 	 * @throws SmartScriptParserException
 	 *             if tag isn't properly closed
@@ -484,7 +484,7 @@ public class SmartScriptParser {
 	 * Reads next characters as a token. This method should only be called when
 	 * parser is positioned inside of a tag. Method automatically detects which
 	 * type of token should be read.
-	 * 
+	 *
 	 * @return read token
 	 */
 	private Token readToken() {
@@ -525,10 +525,10 @@ public class SmartScriptParser {
 
 	/**
 	 * Parses next characters as a Token Variable.
-	 * 
+	 *
 	 * This method should NOT be called on its own. Delegate the job of reading
 	 * a token to the readToken().
-	 * 
+	 *
 	 * @return read Token Variable
 	 */
 	private Token parseTokenVariable() {
@@ -556,10 +556,10 @@ public class SmartScriptParser {
 
 	/**
 	 * Parses next characters as a Token Function.
-	 * 
+	 *
 	 * This method should NOT be called on its own. Delegate the job of reading
 	 * a token to the readToken().
-	 * 
+	 *
 	 * @return read Token Function
 	 */
 	private Token parseTokenFunction() {
@@ -567,9 +567,9 @@ public class SmartScriptParser {
 		// doesn't check starting conditions!
 
 		StringBuilder functionName = new StringBuilder();
-		//TODO changed
+		// TODO changed
 		takeNextDefault();
-		//functionName.append(takeNextDefault());
+		// functionName.append(takeNextDefault());
 
 		peekedChar = peekNext();
 		if (peekedChar == null || !Character.isAlphabetic(peekedChar.charAt(0))) {
@@ -594,10 +594,10 @@ public class SmartScriptParser {
 	/**
 	 * Parses next characters in document as a Number Token. If decimal point is
 	 * found treats a number as a double, else as an integer.
-	 * 
+	 *
 	 * This method should NOT be called on its own. Delegate the job of reading
 	 * a token to the readToken().
-	 * 
+	 *
 	 * @return parsed Double Token for double or parsed Integer Token for
 	 *         integer
 	 */
@@ -641,10 +641,10 @@ public class SmartScriptParser {
 
 	/**
 	 * Parses next characters in document as a Token String.
-	 * 
+	 *
 	 * This method should NOT be called on its own. Delegate the job of reading
 	 * a token to the readToken().
-	 * 
+	 *
 	 * @return parsed String Token
 	 */
 	private Token parseTokenString() {
@@ -666,7 +666,9 @@ public class SmartScriptParser {
 			throw new SmartScriptParserException("String not closed");
 		}
 
-		return new TokenString(variableName.toString());
+		return new TokenString(variableName.toString()
+				.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r")
+				.replaceAll("\\\\t", "\t"));
 	}
 
 	private Token parseTokenOperator() {
@@ -675,9 +677,9 @@ public class SmartScriptParser {
 
 	/**
 	 * Tests if the character is a space.
-	 * 
+	 *
 	 * Following characters are treated as spaces: ' ', '\t', '\n', '\r'
-	 * 
+	 *
 	 * @param test
 	 *            character to be tested
 	 * @return true if character is treated as space, else false
@@ -693,9 +695,9 @@ public class SmartScriptParser {
 	/**
 	 * Ignores all following spaces from current position in document. Position
 	 * is set to index of next character which is not space.
-	 * 
+	 *
 	 * Following characters are treated as spaces: ' ', '\t', '\n', '\r'
-	 * 
+	 *
 	 */
 	private void skipSpaces() {
 		String nextChar = peekNext();
@@ -714,7 +716,7 @@ public class SmartScriptParser {
 	/**
 	 * Gets document node. If document is not yet parsed calls parse function
 	 * first.
-	 * 
+	 *
 	 * @return document node
 	 */
 	public DocumentNode getDocumentNode() {

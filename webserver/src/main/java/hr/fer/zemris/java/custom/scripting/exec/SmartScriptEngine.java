@@ -39,7 +39,7 @@ public class SmartScriptEngine {
 			double end = getTokenValue(node.getEndExpression());
 			double step = getTokenValue(node.getStepExpression());
 
-			while (currentValue < end) {
+			while (currentValue <= end) {
 				multistack.push(variableName, new ValueWrapper(currentValue));
 				for (int j = 0, n = node.numberOfChildren(); j < n; j++) {
 					node.getChild(j).accept(this);
@@ -97,7 +97,6 @@ public class SmartScriptEngine {
 			RequestContext requestContext) {
 		this.documentNode = documentNode;
 		this.requestContext = requestContext;
-		//requestContext.setMimeType("text/plain");
 	}
 
 	public void execute() {
@@ -106,12 +105,12 @@ public class SmartScriptEngine {
 
 	private class TokenExecutor implements ITokenVisitor {
 
-		private Stack<Object> executionStack = new Stack<Object>();
+		private Stack<ValueWrapper> executionStack = new Stack<ValueWrapper>();
 
 		public Stack<Object> getReverseStack() {
 			Stack<Object> reversedStack = new Stack<Object>();
-			for (Object object : executionStack) {
-				reversedStack.push(object);
+			for (ValueWrapper wrapper : executionStack) {
+				reversedStack.push(wrapper.getValue());
 			}
 
 			return reversedStack;
@@ -119,12 +118,12 @@ public class SmartScriptEngine {
 
 		@Override
 		public void visit(TokenConstantDouble token) {
-			executionStack.push(token.getValue());
+			executionStack.push(new ValueWrapper(token.getValue()));
 		}
 
 		@Override
 		public void visit(TokenConstantInteger token) {
-			executionStack.push(token.getValue());
+			executionStack.push(new ValueWrapper(token.getValue()));
 		}
 
 		@Override
@@ -135,57 +134,75 @@ public class SmartScriptEngine {
 				switch (functionName) {
 				case "sin":
 					validateStackMinimumSize(1, functionName);
-					double x = (double) executionStack.pop();
-					executionStack.push(Math.sin(x));
+					double x = (double) executionStack.pop().getValue();
+					// calculate for degrees
+					executionStack.push(new ValueWrapper(Math.sin(x*Math.PI/180)));
 					break;
+
 				case "decfmt":
 					validateStackMinimumSize(2, functionName);
-					String format = (String) executionStack.pop();
+					String format = (String) executionStack.pop().getValue();
 					DecimalFormat decmft;
 					try {
 						decmft = new DecimalFormat(format);
 					} catch (IllegalArgumentException e) {
 						throw new RuntimeException("Illegal decimal format pattern for function: @" + functionName);
 					}
-					Double number = (Double) executionStack.pop();
-					executionStack.push(decmft.format(number));
+					double number = (double) executionStack.pop().getValue();
+					executionStack.push(new ValueWrapper(decmft.format(number)));
 					break;
 				case "dup":
-
+					executionStack.push(new ValueWrapper(executionStack.peek().getValue()));
 					break;
 				case "swap":
-
+					ValueWrapper top = executionStack.pop();
+					ValueWrapper second = executionStack.pop();
+					executionStack.push(top);
+					executionStack.push(second);
 					break;
 				case "setMimeType":
-					String mimeType = (String) executionStack.pop();
+					String mimeType = (String) executionStack.pop().getValue();
 					requestContext.setMimeType(mimeType);
 					break;
 				case "paramGet":
 					validateStackMinimumSize(2, functionName);
-					Number defaultValue = (Number) executionStack.pop();
-					String param = (String) executionStack.pop();
+					Object defaultValue = executionStack.pop().getValue();
+					String param = (String) executionStack.pop().getValue();
 					String paramValue = requestContext.getParameter(param);
-					Number value = (paramValue != null)?Double.parseDouble(paramValue):null;
-					//TODO obradi exception
-					executionStack.push(value == null ? defaultValue : value);
+					executionStack.push(paramValue != null ? new ValueWrapper(paramValue) : new ValueWrapper(defaultValue));
 					break;
-				case "pparamGet":
 
+				case "pparamGet":
+					validateStackMinimumSize(2, functionName);
+					defaultValue = executionStack.pop().getValue();
+					param = (String) executionStack.pop().getValue();
+					paramValue = requestContext.getPersistentParameter(param);
+					executionStack.push(paramValue != null ? new ValueWrapper(paramValue) : new ValueWrapper(defaultValue));
 					break;
 				case "pparamSet":
-
+					String name = (String) executionStack.pop().getValue();
+					Object value = executionStack.pop().getValue();
+					requestContext.setPersistentParameter(name, value.toString());
 					break;
 				case "pparamDel":
-
+					String paramName = (String) executionStack.pop().getValue();
+					requestContext.removePersistentParameter(paramName);
 					break;
 				case "tparamGet":
-
+					validateStackMinimumSize(2, functionName);
+					defaultValue = executionStack.pop().getValue();
+					param = (String) executionStack.pop().getValue();
+					paramValue = requestContext.getTemporaryParameter(param);
+					executionStack.push(paramValue != null ? new ValueWrapper(paramValue) : new ValueWrapper(defaultValue));
 					break;
 				case "tparamSet":
-
+					name = (String) executionStack.pop().getValue();
+					value = executionStack.pop().getValue();
+					requestContext.setTemporaryParameter(name, value.toString());
 					break;
 				case "tparamDel":
-
+					paramName = (String) executionStack.pop().getValue();
+					requestContext.removeTemporaryParameter(paramName);
 					break;
 
 				default:
@@ -195,6 +212,8 @@ public class SmartScriptEngine {
 
 			} catch (ClassCastException illegalArguments) {
 				throw new RuntimeException("Illegal arguments for function: @" + functionName);
+			} catch (EmptyStackException notEnoughArguments) {
+
 			}
 		}
 
@@ -208,44 +227,38 @@ public class SmartScriptEngine {
 
 		@Override
 		public void visit(TokenOperator token) {
-			double operand1 = 0, operand2 = 0;
+			ValueWrapper operand1 = null;
+			Object operand2 = null;
 			try {
-				operand2 = (double) executionStack.pop();
-				operand1 = (double) executionStack.pop();
+				operand2 = executionStack.pop().getValue();
+				operand1 = executionStack.pop();
 			} catch (EmptyStackException e) {
 				// TODO: handle exception
-			} catch (ClassCastException notANumber) {
-				throw new RuntimeException("One of operands is not a number");
 			}
 
-			double result = 0;
 			switch (token.getSymbol()) {
 			case "+":
-				result = operand1 + operand2;
+				operand1.increment(operand2);
 				break;
 
 			case "-":
-				result = operand1 - operand2;
+				operand1.decrement(operand2);
 				break;
 
 			case "*":
-				result = operand1 * operand2;
+				operand1.multiply(operand2);
 				break;
 
 			case "/":
-				if (operand2 == 0) {
-					throw new RuntimeException("Attempted to divide with zero");
-				}
-				result = operand1 / operand2;
+				operand1.divide(operand2);
 				break;
 			}
-			executionStack.push((result == (int) result) ? (int) result
-					: result);
+			executionStack.push(operand1);
 		}
 
 		@Override
 		public void visit(TokenString token) {
-			executionStack.push(token.getValue());
+			executionStack.push(new ValueWrapper(token.getValue()));
 		}
 
 		@Override
@@ -257,7 +270,7 @@ public class SmartScriptEngine {
 				throw new RuntimeException("Variable " + token.getName()
 						+ " is not initialized");
 			}
-			executionStack.push(variableValue);
+			executionStack.push(new ValueWrapper(variableValue));
 		}
 
 	}

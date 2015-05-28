@@ -47,6 +47,7 @@ public class RequestContext {
 				: new HashMap<String, String>();
 		this.outputCookies = (outputCookies != null) ? outputCookies
 				: new LinkedList<>();
+		temporaryParameters = new HashMap<String, String>();
 
 	}
 
@@ -280,6 +281,18 @@ public class RequestContext {
 
 			return stringBuilder.toString();
 		}
+	}
+
+	public void setPersistentParameters(Map<String, String> persistentParameters) {
+		this.persistentParameters = persistentParameters;
+	}
+
+	public void setTemporaryParameters(Map<String, String> temporaryParameters) {
+		this.temporaryParameters = temporaryParameters;
+	}
+
+	public void setOutputCookies(List<RCCookie> outputCookies) {
+		this.outputCookies = outputCookies;
 	}
 
 }

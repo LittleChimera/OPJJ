@@ -239,7 +239,7 @@ public class SmartHttpServer {
 		private Path requestedPath;
 
 		private Map<String, String> params = new HashMap<String, String>();
-		private Map<String, String> permPrams = null;
+		private Map<String, String> permParams = null;
 
 		private List<RCCookie> outputCookies = new ArrayList<RequestContext.RCCookie>();
 		private String SID;
@@ -255,14 +255,14 @@ public class SmartHttpServer {
 				istream = new PushbackInputStream(csocket.getInputStream(), 4);
 				ostream = new BufferedOutputStream(csocket.getOutputStream());
 
-				RequestContext rc = new RequestContext(ostream, params);
 
 				// get headers
 				List<String> request = readRequest();
 
-				checkSession(request, rc);
-				parseFirstLine(request, rc);
+				checkSession(request);
+				parseFirstLine(request);
 
+				RequestContext rc = new RequestContext(ostream, params, permParams, outputCookies);
 
 				// if request path is above document root "403 forbidden"
 				// respond is sent
@@ -296,7 +296,7 @@ public class SmartHttpServer {
 							.substring(fileName.indexOf(".") + 1);
 
 					if (extension.equals(smartScriptExt)) {
-						runSmartScript(requestedPath);
+						runSmartScript(requestedPath, rc);
 					} else {
 						String extMimeType = mimeTypes.get(extension);
 						final String defaultMime = "application/octet-stream";
@@ -317,7 +317,7 @@ public class SmartHttpServer {
 			}
 		}
 
-		private void checkSession(List<String> headers, RequestContext rc) {
+		private void checkSession(List<String> headers) {
 
 			final String cookieHeader = "Cookie:";
 
@@ -330,7 +330,7 @@ public class SmartHttpServer {
 				break;
 			}
 			if (sidCandidate == null) {
-				createSID(rc);
+				createSID();
 			} else {
 				SessionMapEntry sessionEntry;
 				synchronized (sessions) {
@@ -338,16 +338,16 @@ public class SmartHttpServer {
 					if (sessionEntry == null
 							|| sessionEntry.validUntil < System
 							.currentTimeMillis()) {
-						createSID(rc);
+						createSID();
 					} else {
 						sessionEntry.updateValidity(sessionTimeout);
-						permPrams = sessionEntry.map;
+						permParams = sessionEntry.map;
 					}
 				}
 			}
 		}
 
-		private void createSID(RequestContext rc) {
+		private void createSID() {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			sessionRandom.ints(20).forEach(i -> {
 				// ASCII values of A and Z
@@ -361,7 +361,7 @@ public class SmartHttpServer {
 			sessionEntry.map = new ConcurrentHashMap<String, String>();
 			sessionEntry.sid = SID;
 			sessionEntry.updateValidity(sessionTimeout);
-			permPrams = sessionEntry.map;
+			permParams = sessionEntry.map;
 
 			synchronized (sessions) {
 				sessions.put(SID, sessionEntry);
@@ -369,7 +369,7 @@ public class SmartHttpServer {
 
 			RCCookie newSid = new RCCookie("sid", SID, null, address, "/");
 			newSid.setHttpOnly(true);
-			rc.addRCCookie(newSid);
+			outputCookies.add(newSid);
 		}
 
 		private Map<String, String> parseCookies(String cookiesString) {
@@ -423,9 +423,9 @@ public class SmartHttpServer {
 			return false;
 		}
 
-		private boolean parseFirstLine(List<String> request, RequestContext rc) throws IOException {
+		private boolean parseFirstLine(List<String> request) throws IOException {
 			if (request == null || request.size() < 1) {
-				sendError(400, "Invalid header", rc);
+				sendError(400, "Invalid header", null);
 				return false;
 			}
 
@@ -442,7 +442,7 @@ public class SmartHttpServer {
 					|| !method.equals("GET")
 					|| !(version.equals("HTTP/1.1") || version
 							.equals("HTTP/1.1"))) {
-				sendError(400, "Invalid request", rc);
+				sendError(400, "Invalid request", null);
 				return false;
 			}
 
@@ -470,12 +470,12 @@ public class SmartHttpServer {
 			this.params = params;
 		}
 
-		private void runSmartScript(Path requestedPath) throws IOException {
+		private void runSmartScript(Path requestedPath, RequestContext rc) throws IOException {
 			new SmartScriptEngine(
 					new SmartScriptParser(new String(
 							Files.readAllBytes(requestedPath),
 							StandardCharsets.UTF_8)).getDocumentNode(),
-							new RequestContext(ostream, params)).execute();
+							rc).execute();
 			ostream.close();
 		}
 
@@ -520,6 +520,9 @@ public class SmartHttpServer {
 
 		private void sendError(int statusCode, String statusText, RequestContext rc)
 				throws IOException {
+			if (rc == null) {
+				rc = new RequestContext(ostream, params);
+			}
 
 			rc.setStatusCode(statusCode);
 			rc.setStatusText(statusText);

@@ -55,7 +55,7 @@ public class SmartScriptEngineDemo {
 	}
 
 	private static void runDemo3() throws IOException {
-		String documentBody = readFromDisk("brojPoziva.smscr");
+		String documentBody = readFromDisk("scripts/brojPoziva.smscr");
 		Map<String, String> parameters = new HashMap<String, String>();
 		Map<String, String> persistentParameters = new HashMap<String, String>();
 		List<RCCookie> cookies = new ArrayList<RequestContext.RCCookie>();
@@ -64,13 +64,13 @@ public class SmartScriptEngineDemo {
 				persistentParameters, cookies);
 		new SmartScriptEngine(
 				new SmartScriptParser(documentBody).getDocumentNode(), rc)
-				.execute();
+		.execute();
 		System.out.println("Vrijednost u mapi: "
 				+ rc.getPersistentParameter("brojPoziva"));
 	}
 
 	private static void runDemo4() throws IOException {
-		String documentBody = readFromDisk("fibonacci.smscr");
+		String documentBody = readFromDisk("scripts/fibonacci.smscr");
 		Map<String, String> parameters = new HashMap<String, String>();
 		Map<String, String> persistentParameters = new HashMap<String, String>();
 		List<RCCookie> cookies = new ArrayList<RequestContext.RCCookie>();
@@ -80,7 +80,7 @@ public class SmartScriptEngineDemo {
 				new RequestContext(System.out, parameters,
 						persistentParameters, cookies)).execute();
 	}
-	
+
 	private static String readFromDisk(String string) throws IOException {
 		return new String(Files.readAllBytes(Paths.get(string)),
 				Charset.forName("UTF-8"));

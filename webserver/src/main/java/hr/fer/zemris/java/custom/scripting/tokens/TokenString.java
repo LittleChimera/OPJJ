@@ -2,7 +2,7 @@ package hr.fer.zemris.java.custom.scripting.tokens;
 
 /**
  * Token representing a String value.
- * 
+ *
  * @author Luka Skugor
  *
  */
@@ -12,7 +12,7 @@ public class TokenString extends Token {
 
 	/**
 	 * Creates a string token with given value.
-	 * 
+	 *
 	 * @param value
 	 *            value of the string
 	 */
@@ -22,16 +22,20 @@ public class TokenString extends Token {
 
 	@Override
 	public String asText() {
-		return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+		return "\""
+				+ value.replaceAll("\\\\", "\\").replaceAll("\"", "\\\"")
+				.replaceAll("\\n", "\\\\n").replaceAll("\\r", "\\\\r")
+				.replaceAll("\\t", "\\\\t") + "\"";
 	}
-	
+
 	@Override
 	public void accept(ITokenVisitor visitor) {
 		visitor.visit(this);
 	}
-	
+
 	/**
 	 * Gets token's string.
+	 *
 	 * @return token's string
 	 */
 	public String getValue() {
