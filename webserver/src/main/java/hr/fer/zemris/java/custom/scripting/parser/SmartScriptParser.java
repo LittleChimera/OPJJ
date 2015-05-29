@@ -567,7 +567,6 @@ public class SmartScriptParser {
 		// doesn't check starting conditions!
 
 		StringBuilder functionName = new StringBuilder();
-		// TODO changed
 		takeNextDefault();
 		// functionName.append(takeNextDefault());
 
