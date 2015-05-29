@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -870,6 +871,19 @@ public class SmartHttpServer {
 			return;
 		}
 
+		System.out.println("Write \"start\" to start the server.");
+		Scanner scanner = new Scanner(System.in);
+		while (!scanner.nextLine().equals("start")) {
+			System.out.println("You can only start the server by typing \"start\"");
+		}
 		server.start();
+		System.out.println("Write \"stop\" to stop the server.");
+
+		while (!scanner.nextLine().equals("stop")) {
+			System.out.println("You can only stop the server by typing \"stop\"");
+		}
+		server.stop();
+
+		scanner.close();
 	}
 }
