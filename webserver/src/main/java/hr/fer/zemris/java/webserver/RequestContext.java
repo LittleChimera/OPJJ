@@ -245,6 +245,25 @@ public class RequestContext {
 		outputCookies.add(cookie);
 	}
 
+
+	/**
+	 * Sets output cookies list.
+	 *
+	 * @param outputCookies
+	 *            output cookies
+	 * @throws RuntimeException
+	 *             if header has already been generated
+	 */
+	public void setOutputCookies(List<RCCookie> outputCookies) {
+		if (headerGenerated) {
+			throw new RuntimeException(
+					"Header has already been generated and you're not allowed to modify it.");
+		} else if (outputCookies == null) {
+			throw new IllegalArgumentException("Null output-cookies is not allowed");
+		}
+		this.outputCookies = outputCookies;
+	}
+
 	/**
 	 * Gets context's parameter by parameter name.
 	 *
@@ -406,6 +425,7 @@ public class RequestContext {
 	 *
 	 * @throws IOException
 	 *             if IO exception occurs
+	 * @throws RuntimeException if response's encoding is doesn't exist
 	 */
 	private void createHeader() throws IOException {
 		headerGenerated = true;
@@ -621,16 +641,6 @@ public class RequestContext {
 	 */
 	public void setTemporaryParameters(Map<String, String> temporaryParameters) {
 		this.temporaryParameters = temporaryParameters;
-	}
-
-	/**
-	 * Sets output cookies list.
-	 *
-	 * @param outputCookies
-	 *            output cookies
-	 */
-	public void setOutputCookies(List<RCCookie> outputCookies) {
-		this.outputCookies = outputCookies;
 	}
 
 	/**

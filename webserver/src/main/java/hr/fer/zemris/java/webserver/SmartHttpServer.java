@@ -342,6 +342,7 @@ public class SmartHttpServer {
 			ServerSocket serverSocket;
 			try {
 				serverSocket = new ServerSocket();
+				serverSocket.setSoTimeout(500);
 				serverSocket.bind(new InetSocketAddress(address, port));
 			} catch (IOException e) {
 				throw new RuntimeException(
