@@ -8,11 +8,28 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+/**
+ * CircleWorker creates a PNG image of a circle with dimensions of 200x200 and
+ * sends it as a reponse.
+ *
+ * @see IWebWorker
+ *
+ * @author Luka Skugor
+ *
+ */
 public class CircleWorker implements IWebWorker {
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * hr.fer.zemris.java.webserver.IWebWorker#processRequest(hr.fer.zemris.
+	 * java.webserver.RequestContext)
+	 */
 	@Override
 	public void processRequest(RequestContext context) {
 		context.setMimeType("image/png");
@@ -24,13 +41,20 @@ public class CircleWorker implements IWebWorker {
 
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, width, height);
-		final int radiusDecrement = 6;
-		for (int i = 0; height > 0 && width > 0; i++) {
-			g2d.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
-			int iRadiusDecrement = i*radiusDecrement/2;
+
+		Random random = new Random();
+		int radiusDecrement = (Math.abs(random.nextInt()) % 15 + 1) * 2;
+		int iRadiusDecrement = 0;
+		while (height > 0 && width > 0) {
+			g2d.setColor(new Color((float) Math.random(),
+					(float) Math.random(), (float) Math.random()));
+			iRadiusDecrement += radiusDecrement / 2;
+
 			width -= radiusDecrement;
 			height -= radiusDecrement;
-			g2d.fillOval(iRadiusDecrement, iRadiusDecrement, width, height );
+			g2d.fillOval(iRadiusDecrement, iRadiusDecrement, width, height);
+
+			radiusDecrement = (Math.abs(random.nextInt()) % 15 + 1) * 2;
 		}
 		g2d.dispose();
 

@@ -2,6 +2,7 @@ package hr.fer.zemris.java.webserver.demo;
 
 import hr.fer.zemris.java.webserver.RequestContext;
 import hr.fer.zemris.java.webserver.RequestContext.RCCookie;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -9,13 +10,37 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Demonstration of {@link RequestContext}.
+ *
+ * @author Luka Skugor
+ *
+ */
 public class RequestContextDemo {
+	/**
+	 * Called on program start.
+	 *
+	 * @param args
+	 *            command line arguments
+	 * @throws IOException
+	 *             if demo destination paths aren't writable
+	 */
 	public static void main(String[] args) throws IOException {
 		demo1("primjer1.txt", "ISO-8859-2");
 		demo1("primjer2.txt", "UTF-8");
 		demo2("primjer3.txt", "UTF-8");
 	}
 
+	/**
+	 * First demonstration.
+	 *
+	 * @param filePath
+	 *            path where result will be written.
+	 * @param encoding
+	 *            result's encoding
+	 * @throws IOException
+	 *             if destination path isn't writable.
+	 */
 	private static void demo1(String filePath, String encoding)
 			throws IOException {
 		OutputStream os = Files.newOutputStream(Paths.get(filePath));
@@ -31,6 +56,16 @@ public class RequestContextDemo {
 		os.close();
 	}
 
+	/**
+	 * Second demonstration.
+	 *
+	 * @param filePath
+	 *            path where result will be written.
+	 * @param encoding
+	 *            result's encoding
+	 * @throws IOException
+	 *             if destination path isn't writable.
+	 */
 	private static void demo2(String filePath, String encoding)
 			throws IOException {
 		OutputStream os = Files.newOutputStream(Paths.get(filePath));

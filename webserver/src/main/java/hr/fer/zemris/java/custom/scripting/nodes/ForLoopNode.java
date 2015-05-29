@@ -6,21 +6,33 @@ import hr.fer.zemris.java.custom.scripting.tokens.TokenVariable;
 
 /**
  * This class represents ForLoop node in document tree model
- * 
+ *
  * @author luka
  *
  */
 public class ForLoopNode extends Node {
 
+	/**
+	 * For loop's variable.
+	 */
 	private TokenVariable variable;
+	/**
+	 * For loop's start expression.
+	 */
 	private Token startExpression;
+	/**
+	 * For loop's end expression
+	 */
 	private Token endExpression;
+	/**
+	 * For loop's step expression.
+	 */
 	private Token stepExpression;
 
 	/**
 	 * Creates ForLoop node with all ForLoop's tokens. stepExpression can be
 	 * null.
-	 * 
+	 *
 	 * @param variable
 	 *            variable token
 	 * @param startExpression
@@ -36,21 +48,21 @@ public class ForLoopNode extends Node {
 		this.startExpression = startExpression;
 		this.endExpression = endExpression;
 		this.stepExpression = (stepExpression == null)?new TokenConstantInteger(1):stepExpression;
-		
+
 	}
 
 	@Override
 	public void accept(INodeVisitor visitor) {
 		visitor.visitForLoopNode(this);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder forLoopBuilder = new StringBuilder();
 
 		forLoopBuilder.append("{$FOR ").append(variable.asText() + " ")
-				.append(startExpression.asText() + " ")
-				.append(endExpression.asText() + " ");
+		.append(startExpression.asText() + " ")
+		.append(endExpression.asText() + " ");
 		if (stepExpression != null) {
 			forLoopBuilder.append(stepExpression.asText() + " ");
 		}
@@ -58,8 +70,8 @@ public class ForLoopNode extends Node {
 
 		return forLoopBuilder.toString();
 	}
-	
-	
+
+
 	/**
 	 * Gets token variable.
 	 * @return token variable
@@ -67,7 +79,7 @@ public class ForLoopNode extends Node {
 	public TokenVariable getVariable() {
 		return variable;
 	}
-	
+
 	/**
 	 * Gets start expression token.
 	 * @return start expression token
@@ -83,7 +95,7 @@ public class ForLoopNode extends Node {
 	public Token getEndExpression() {
 		return endExpression;
 	}
-	
+
 	/**
 	 * Gets step expression token.
 	 * @return step expression token

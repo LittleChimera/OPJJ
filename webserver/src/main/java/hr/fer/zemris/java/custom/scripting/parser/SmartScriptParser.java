@@ -671,6 +671,10 @@ public class SmartScriptParser {
 				.replaceAll("\\\\t", "\t"));
 	}
 
+	/**
+	 * Parses next character as token operator.
+	 * @return parsed token operator
+	 */
 	private Token parseTokenOperator() {
 		return new TokenOperator(takeNextDefault());
 	}

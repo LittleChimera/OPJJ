@@ -1,12 +1,32 @@
 package hr.fer.zemris.java.webserver.workers;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import hr.fer.zemris.java.webserver.IWebWorker;
 import hr.fer.zemris.java.webserver.RequestContext;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * Writes a greeting as a response and calculates length of value under "name"
+ * parameter key.
+ *
+ * @see IWebWorker
+ *
+ * @author Luka Skugor
+ *
+ */
 public class HelloWorker implements IWebWorker {
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * hr.fer.zemris.java.webserver.IWebWorker#processRequest(hr.fer.zemris.
+	 * java.webserver.RequestContext)
+	 */
 	@Override
 	public void processRequest(RequestContext context) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -25,8 +45,12 @@ public class HelloWorker implements IWebWorker {
 			}
 			context.write("</body></html>");
 		} catch (IOException ex) {
-			// Log exception to servers log...
-			ex.printStackTrace();
+			try {
+				Files.write(Paths.get("server.log"),
+						ex.getMessage().getBytes(), StandardOpenOption.APPEND);
+			} catch (IOException logFail) {
+				System.out.println("Logging failed.");
+			}
 		}
 	}
 

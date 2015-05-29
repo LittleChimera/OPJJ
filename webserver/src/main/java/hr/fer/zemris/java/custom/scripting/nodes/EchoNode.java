@@ -1,15 +1,13 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
+import hr.fer.zemris.java.custom.scripting.tokens.Token;
+
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import hr.fer.zemris.java.custom.scripting.tokens.Token;
 
 /**
  * Represents ECHO Tag node in document tree model.
- * 
+ *
  * @author Luka Skugor
  *
  */
@@ -22,7 +20,7 @@ public class EchoNode extends Node {
 
 	/**
 	 * Creates an echo node with fixed number of tokens.
-	 * 
+	 *
 	 * @param numberOfTokens
 	 *            fixed number of tokens
 	 */
@@ -33,7 +31,7 @@ public class EchoNode extends Node {
 	/**
 	 * Inserts a token at given index. If token exists at given index it
 	 * overwrites it.
-	 * 
+	 *
 	 * @param index
 	 *            position to be inserted at
 	 * @param token
@@ -48,7 +46,7 @@ public class EchoNode extends Node {
 		}
 		tokens[index] = token;
 	}
-	
+
 	@Override
 	public void accept(INodeVisitor visitor) {
 		visitor.visitEchoNode(this);
@@ -66,8 +64,8 @@ public class EchoNode extends Node {
 
 		return echoBuilder.toString();
 	}
-	
-	
+
+
 	/**
 	 * Gets an unmodifiable collection of tokens inside echo node.
 	 * @return echo's tokens
@@ -75,6 +73,6 @@ public class EchoNode extends Node {
 	public Iterable<Token> tokens() {
 		return Collections.unmodifiableList(Arrays.asList(tokens));
 	}
-	
-	
+
+
 }

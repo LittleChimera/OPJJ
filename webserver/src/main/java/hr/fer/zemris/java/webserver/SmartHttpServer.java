@@ -35,28 +35,85 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * SmartHttpServer is a simple HTTP server which takes GET requests. It's run by
+ * typing "start" in program's input and shutdown by typing "stop".
+ *
+ * Server can be configured with a .properties which which should be given as
+ * only argument to the program. Configuration file should have all the
+ * properties which default configuration has. No additional properties are
+ * defined. Configuration file also needs a path to two additional .properties
+ * files. One is a workers configuration file which specifies all workers paths.
+ * Second configuration file defines all supported mime types.
+ *
+ * Smart scripts are also supported and are executed with
+ * {@link SmartScriptEngine} which writes their output to the client.
+ *
+ * @author Luka Skugor
+ *
+ */
 public class SmartHttpServer {
 
+	/**
+	 * Root folder of the server where accessible documents are stored.
+	 */
 	private Path documentRoot;
+	/**
+	 * Server's address.
+	 */
 	private String address;
+	/**
+	 * Server's access port.
+	 */
 	private int port;
+	/**
+	 * Session timeout in milliseconds.
+	 */
 	private int sessionTimeout;
 
+	/**
+	 * Map of supported mime types.
+	 */
 	private Map<String, String> mimeTypes = new HashMap<String, String>();
+	/**
+	 * Extension of smart script files.
+	 */
 	private String smartScriptExt;
 
+	/**
+	 * Map of workers. Keys are worker's names and values are actual workers.
+	 */
 	private Map<String, IWebWorker> workersMap;
+	/**
+	 * Number of worker threads.
+	 */
 	private int workerThreads;
+	/**
+	 * Path in which only workers should be loaded.
+	 */
 	private String workersSubfolder;
 
+	/**
+	 * Thread which takes requests. This thread only takes requests and
+	 * delegates processing of that request to other threads.
+	 */
 	private ServerThread serverThread;
+	/**
+	 * Thread pool which processes requests.
+	 */
 	private ExecutorService threadPool;
 
+	/**
+	 * Map which stores clients' sessions.
+	 */
 	private Map<String, SessionMapEntry> sessions = new HashMap<String, SmartHttpServer.SessionMapEntry>();
+	/**
+	 * This thread cleans up {@link #sessions}.
+	 */
 	Thread sessionGarbageCollector = new Thread(() -> {
 		while (true) {
 			try {
-				Thread.sleep(1000*60*5);
+				Thread.sleep(1000 * 60 * 5);
 			} catch (InterruptedException ignorable) {
 			}
 			synchronized (sessions) {
@@ -66,10 +123,26 @@ public class SmartHttpServer {
 			}
 		}
 	});
+	/**
+	 * Random generator which is used to creates {@link ClientWorker#SID}.
+	 */
 	private Random sessionRandom = new Random();
 
+	/**
+	 * Name of the package where workers are packaged.
+	 */
 	final static private String WORKERS_PACKAGE = "hr.fer.zemris.java.webserver.workers";
 
+	/**
+	 * Creates a new SmartHttpServer with given configuration file.
+	 *
+	 * @param configFileName
+	 *            path to configuration file
+	 * @throws IOException
+	 *             if configuration file doesn't exist or isn't readable.
+	 * @throws RuntimeException
+	 *             if configuration is invalid
+	 */
 	public SmartHttpServer(String configFileName) throws IOException {
 		sessionGarbageCollector.setDaemon(true);
 		sessionGarbageCollector.start();
@@ -102,7 +175,7 @@ public class SmartHttpServer {
 
 		Path workersPath = Paths.get(serverProperties
 				.getProperty("server.workers"));
-		checkForDuplicates(workersPath);
+		checkPropertyForDuplicates(workersPath);
 		Properties workersProperties = new Properties();
 		workersProperties.load(new BufferedReader(new FileReader(workersPath
 				.toFile())));
@@ -116,6 +189,15 @@ public class SmartHttpServer {
 		});
 	}
 
+	/**
+	 * Loads a worker for given fully qualified class name.
+	 *
+	 * @param fqcn
+	 *            fully qualified class name of the worker
+	 * @return loaded worker
+	 * @throws RuntimeException
+	 *             if worker couldn't be loaded.
+	 */
 	private IWebWorker loadWorker(String fqcn) {
 		Class<?> referenceToClass;
 		Object newObject;
@@ -132,7 +214,19 @@ public class SmartHttpServer {
 		return iww;
 	}
 
-	private void checkForDuplicates(Path propertiesPath) throws IOException {
+	/**
+	 * Checks property file for duplicate keys and throws exception if
+	 * duplicates are found.
+	 *
+	 * @param propertiesPath
+	 *            path to .properties file
+	 * @throws IOException
+	 *             if properties file doesn't exist or isn't readable
+	 * @throws RuntimeException
+	 *             if .properties file contains duplicate keys
+	 */
+	private void checkPropertyForDuplicates(Path propertiesPath)
+			throws IOException {
 		Set<String> keys = new HashSet<String>();
 		List<String> lines = Files.readAllLines(propertiesPath);
 		lines.forEach((line) -> {
@@ -146,6 +240,16 @@ public class SmartHttpServer {
 		});
 	}
 
+	/**
+	 * Loads a property from {@link Properties}. If such property doesn't exist
+	 * throws an exception.
+	 *
+	 * @param properties
+	 *            collection which contains a property
+	 * @param name
+	 *            name of property which will be loaded
+	 * @return loaded property
+	 */
 	private String loadProperty(Properties properties, String name) {
 		String value = properties.getProperty(name);
 		if (value == null) {
@@ -155,6 +259,23 @@ public class SmartHttpServer {
 		return value;
 	}
 
+	/**
+	 * Loads an integer property which must be within given constraints.
+	 *
+	 * @param properties
+	 *            collection which contains a property
+	 * @param name
+	 *            name of the property to be loaded
+	 * @param minValue
+	 *            minimum value which property should have or null for -infinity
+	 * @param maxValue
+	 *            maximum value which property should have or null for +infinity
+	 * @return loaded property
+	 * @throws RuntimeException
+	 *             if property's value is not a number
+	 * @throws IllegalArgumentException
+	 *             if property doesn't satisfies given constraints
+	 */
 	private int loadIntegerProperty(Properties properties, String name,
 			Integer minValue, Integer maxValue) {
 		int value;
@@ -177,6 +298,9 @@ public class SmartHttpServer {
 		return value;
 	}
 
+	/**
+	 * Starts server thread.
+	 */
 	protected synchronized void start() {
 		// … start server thread if not already running …
 		if (serverThread == null || !serverThread.isAlive()) {
@@ -189,6 +313,9 @@ public class SmartHttpServer {
 		}
 	}
 
+	/**
+	 * Stops servers thread.
+	 */
 	protected synchronized void stop() {
 		if (serverThread != null) {
 			serverThread.interrupt();
@@ -198,7 +325,18 @@ public class SmartHttpServer {
 		}
 	}
 
+	/**
+	 * ServerThread is server's thread for accepting requests.
+	 *
+	 * @author Luka Skugor
+	 *
+	 */
 	protected class ServerThread extends Thread {
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see java.lang.Thread#run()
+		 */
 		@Override
 		public void run() {
 			ServerSocket serverSocket;
@@ -228,33 +366,80 @@ public class SmartHttpServer {
 		}
 	}
 
+	/**
+	 * ClientWorker processes a request taken by the server. In outer class is
+	 * documented how ClientWorker processes a request.
+	 *
+	 * @author Luka Skugor
+	 *
+	 */
 	private class ClientWorker implements Runnable {
 
+		/**
+		 * Client's socket.
+		 */
 		private Socket csocket;
+		/**
+		 * Input stream of the client's request.
+		 */
 		private PushbackInputStream istream;
+		/**
+		 * Client's output stream.
+		 */
 		private OutputStream ostream;
 
+		/**
+		 * Request's version.
+		 */
 		private String version;
+		/**
+		 * Request's method.
+		 */
 		private String method;
+		/**
+		 * Requested path.
+		 */
 		private Path requestedPath;
 
+		/**
+		 * Request parameters.
+		 */
 		private Map<String, String> params = new HashMap<String, String>();
+		/**
+		 * Request's cookies.
+		 */
 		private Map<String, String> permParams = null;
 
+		/**
+		 * List of cookies which will be set in the response.
+		 */
 		private List<RCCookie> outputCookies = new ArrayList<RequestContext.RCCookie>();
+		/**
+		 * Session identifier.
+		 */
 		private String SID;
 
+		/**
+		 * Creates a new ClientWorker with given client's socket.
+		 *
+		 * @param csocket
+		 *            client's socket
+		 */
 		public ClientWorker(Socket csocket) {
 			super();
 			this.csocket = csocket;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see java.lang.Runnable#run()
+		 */
 		@Override
 		public void run() {
 			try {
 				istream = new PushbackInputStream(csocket.getInputStream(), 4);
 				ostream = new BufferedOutputStream(csocket.getOutputStream());
-
 
 				// get headers
 				List<String> request = readRequest();
@@ -262,7 +447,8 @@ public class SmartHttpServer {
 				checkSession(request);
 				parseFirstLine(request);
 
-				RequestContext rc = new RequestContext(ostream, params, permParams, outputCookies);
+				RequestContext rc = new RequestContext(ostream, params,
+						permParams, outputCookies);
 
 				// if request path is above document root "403 forbidden"
 				// respond is sent
@@ -271,7 +457,6 @@ public class SmartHttpServer {
 					sendError(403, "Forbidden", rc);
 					return;
 				}
-
 
 				// inspect if requested path should be delegated to a worker
 				try {
@@ -317,6 +502,14 @@ public class SmartHttpServer {
 			}
 		}
 
+		/**
+		 * Checks client's session. If session hasn't yet been created or has
+		 * expired it creates a new session. If session already exists and
+		 * hasn't timeout yet it updates session age.
+		 *
+		 * @param headers
+		 *            request's headers
+		 */
 		private void checkSession(List<String> headers) {
 
 			final String cookieHeader = "Cookie:";
@@ -326,7 +519,8 @@ public class SmartHttpServer {
 				if (!line.startsWith(cookieHeader)) {
 					continue;
 				}
-				sidCandidate = parseCookies(line.substring(cookieHeader.length())).get("sid");
+				sidCandidate = parseCookies(
+						line.substring(cookieHeader.length())).get("sid");
 				break;
 			}
 			if (sidCandidate == null) {
@@ -342,11 +536,15 @@ public class SmartHttpServer {
 					} else {
 						sessionEntry.updateValidity(sessionTimeout);
 						permParams = sessionEntry.map;
+						SID = sessionEntry.sid;
 					}
 				}
 			}
 		}
 
+		/**
+		 * Creates a session {@link #SID}.
+		 */
 		private void createSID() {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			sessionRandom.ints(20).forEach(i -> {
@@ -372,13 +570,22 @@ public class SmartHttpServer {
 			outputCookies.add(newSid);
 		}
 
+		/**
+		 * Parses cookies from request's cookie header value.
+		 *
+		 * @param cookiesString
+		 *            cookie header value
+		 * @return map of parsed cookies
+		 */
 		private Map<String, String> parseCookies(String cookiesString) {
 			Map<String, String> cookies = new HashMap<String, String>();
 
 			for (String cookie : cookiesString.trim().split(";")) {
 				String[] cookieArgs = cookie.split("=", 2);
-				if (cookieArgs[1].startsWith("\"") && cookieArgs[1].endsWith("\"")) {
-					cookieArgs[1] = cookieArgs[1].substring(1, cookieArgs[1].length() - 1);
+				if (cookieArgs[1].startsWith("\"")
+						&& cookieArgs[1].endsWith("\"")) {
+					cookieArgs[1] = cookieArgs[1].substring(1,
+							cookieArgs[1].length() - 1);
 				}
 				cookies.put(cookieArgs[0],
 						(cookieArgs.length == 2) ? cookieArgs[1] : null);
@@ -386,6 +593,16 @@ public class SmartHttpServer {
 			return cookies;
 		}
 
+		/**
+		 * Loads a file and sends it to a client as a response.
+		 *
+		 * @param requestedPath
+		 *            full path of requested path
+		 * @param rc
+		 *            client's request's context
+		 * @throws IOException
+		 *             if file doesn't exist or isn't readable
+		 */
 		private void sendFile(Path requestedPath, RequestContext rc)
 				throws IOException {
 			try (InputStream is = new BufferedInputStream(new FileInputStream(
@@ -402,6 +619,18 @@ public class SmartHttpServer {
 			}
 		}
 
+		/**
+		 * Delegates a request to a worker. Delegation to worker is based on
+		 * requested path.
+		 *
+		 * @param requestedPath
+		 *            requested path
+		 * @param rc
+		 *            client's request's context
+		 * @return true if request was given to a worker
+		 * @throws RuntimeException
+		 *             if it fails to load a worker
+		 */
 		private boolean giveToWorker(Path requestedPath, RequestContext rc) {
 			String workerPath = documentRoot.relativize(requestedPath)
 					.toString();
@@ -423,6 +652,15 @@ public class SmartHttpServer {
 			return false;
 		}
 
+		/**
+		 * Parses first line of the request's header.
+		 *
+		 * @param request
+		 *            request headers
+		 * @return true if parsing was successful and otherwise false
+		 * @throws IOException
+		 *             if IO exception occurs
+		 */
 		private boolean parseFirstLine(List<String> request) throws IOException {
 			if (request == null || request.size() < 1) {
 				sendError(400, "Invalid header", null);
@@ -455,6 +693,12 @@ public class SmartHttpServer {
 			return true;
 		}
 
+		/**
+		 * Parses request's parameters.
+		 *
+		 * @param paramString
+		 *            string containing all parameters
+		 */
 		private void parseParameters(String paramString) {
 			Map<String, String> params = new HashMap<String, String>();
 			if (paramString == null) {
@@ -470,13 +714,24 @@ public class SmartHttpServer {
 			this.params = params;
 		}
 
-		private void runSmartScript(Path requestedPath, RequestContext rc) throws IOException {
+		/**
+		 * Runs a Smart Script and writes its result as a response to the
+		 * client.
+		 *
+		 * @param requestedPath
+		 *            requested script to be executed
+		 * @param rc
+		 *            client's request's context
+		 * @throws IOException
+		 *             if IO exception occurs
+		 */
+		private void runSmartScript(Path requestedPath, RequestContext rc)
+				throws IOException {
 			try {
-				new SmartScriptEngine(
-						new SmartScriptParser(new String(
-								Files.readAllBytes(requestedPath),
-								StandardCharsets.UTF_8)).getDocumentNode(),
-								rc).execute();
+				new SmartScriptEngine(new SmartScriptParser(new String(
+						Files.readAllBytes(requestedPath),
+						StandardCharsets.UTF_8)).getDocumentNode(), rc)
+				.execute();
 			} catch (Exception e) {
 				rc.write("Error: " + e.getMessage());
 			}
@@ -484,6 +739,14 @@ public class SmartHttpServer {
 			ostream.close();
 		}
 
+		/**
+		 * Reads client's request line by line.
+		 *
+		 * @return lines of read request or <code>null</code> if header is
+		 *         invalid
+		 * @throws IOException
+		 *             if IO error occurs
+		 */
 		private List<String> readRequest() throws IOException {
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -523,8 +786,20 @@ public class SmartHttpServer {
 			return lines;
 		}
 
-		private void sendError(int statusCode, String statusText, RequestContext rc)
-				throws IOException {
+		/**
+		 * Sends an error response to the client.
+		 *
+		 * @param statusCode
+		 *            error status code
+		 * @param statusText
+		 *            error status text
+		 * @param rc
+		 *            client's request's context
+		 * @throws IOException
+		 *             if IO exception occurs
+		 */
+		private void sendError(int statusCode, String statusText,
+				RequestContext rc) throws IOException {
 			if (rc == null) {
 				rc = new RequestContext(ostream, params);
 			}
@@ -541,16 +816,43 @@ public class SmartHttpServer {
 		}
 	}
 
+	/**
+	 * SessionMapEntry stores data of a client session.
+	 *
+	 * @author Luka Skugor
+	 *
+	 */
 	private static class SessionMapEntry {
+		/**
+		 * Session's identifier.
+		 */
 		String sid;
+		/**
+		 * Time until the session is valid in milliseconds.
+		 */
 		long validUntil;
+		/**
+		 * Session's data.
+		 */
 		Map<String, String> map;
 
+		/**
+		 * Updates validity of the session.
+		 *
+		 * @param timeout
+		 *            session timeout
+		 */
 		public void updateValidity(long timeout) {
-			validUntil = System.currentTimeMillis() + timeout*1000;
+			validUntil = System.currentTimeMillis() + timeout * 1000;
 		}
 	}
 
+	/**
+	 * Called on program start.
+	 *
+	 * @param args
+	 *            command line arguments
+	 */
 	public static void main(String[] args) {
 		if (args.length != 1) {
 			System.out.println("Expected single argument: server config file");

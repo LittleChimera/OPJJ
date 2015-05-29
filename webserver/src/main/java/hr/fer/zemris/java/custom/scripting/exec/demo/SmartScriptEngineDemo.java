@@ -14,8 +14,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Demonstration of a {@link SmartScriptEngine}.
+ * @author Luka Skugor
+ *
+ */
 public class SmartScriptEngineDemo {
 
+	/**
+	 * Called on program start.
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		try {
 			runDemo1();
@@ -28,6 +37,10 @@ public class SmartScriptEngineDemo {
 		}
 	}
 
+	/**
+	 * First demo.
+	 * @throws IOException if demo script doesn't exist.
+	 */
 	private static void runDemo1() throws IOException {
 		String documentBody = readFromDisk("scripts/osnovni.smscr");
 		Map<String, String> parameters = new HashMap<String, String>();
@@ -40,6 +53,10 @@ public class SmartScriptEngineDemo {
 						persistentParameters, cookies)).execute();
 	}
 
+	/**
+	 * Second demo.
+	 * @throws IOException if demo script doesn't exist.
+	 */
 	private static void runDemo2() throws IOException {
 		String documentBody = readFromDisk("scripts/zbrajanje.smscr");
 		Map<String, String> parameters = new HashMap<String, String>();
@@ -54,6 +71,10 @@ public class SmartScriptEngineDemo {
 						persistentParameters, cookies)).execute();
 	}
 
+	/**
+	 * Third demo.
+	 * @throws IOException if demo script doesn't exist.
+	 */
 	private static void runDemo3() throws IOException {
 		String documentBody = readFromDisk("scripts/brojPoziva.smscr");
 		Map<String, String> parameters = new HashMap<String, String>();
@@ -69,6 +90,10 @@ public class SmartScriptEngineDemo {
 				+ rc.getPersistentParameter("brojPoziva"));
 	}
 
+	/**
+	 * Fourth demo.
+	 * @throws IOException if demo script doesn't exist.
+	 */
 	private static void runDemo4() throws IOException {
 		String documentBody = readFromDisk("scripts/fibonacci.smscr");
 		Map<String, String> parameters = new HashMap<String, String>();
@@ -81,6 +106,12 @@ public class SmartScriptEngineDemo {
 						persistentParameters, cookies)).execute();
 	}
 
+	/**
+	 * Reads a scripts from disk as string using UTF-8 encoding.
+	 * @param string script path
+	 * @return read string
+	 * @throws IOException if reading error occurs
+	 */
 	private static String readFromDisk(String string) throws IOException {
 		return new String(Files.readAllBytes(Paths.get(string)),
 				Charset.forName("UTF-8"));
