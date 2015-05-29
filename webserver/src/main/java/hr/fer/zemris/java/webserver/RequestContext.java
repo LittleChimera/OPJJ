@@ -58,19 +58,19 @@ public class RequestContext {
 	/**
 	 * Body encoding as string.
 	 */
-	private String encoding = "UTF-8";
+	public String encoding = "UTF-8";
 	/**
 	 * Response status code.
 	 */
-	private int statusCode = 200;
+	public int statusCode = 200;
 	/**
 	 * Response status text.
 	 */
-	private String statusText = "OK";
+	public String statusText = "OK";
 	/**
 	 * Response mime type.
 	 */
-	private String mimeType = "text/html";
+	public String mimeType = "text/html";
 
 	/**
 	 * Client's request's parameters.
@@ -245,25 +245,6 @@ public class RequestContext {
 		outputCookies.add(cookie);
 	}
 
-
-	/**
-	 * Sets output cookies list.
-	 *
-	 * @param outputCookies
-	 *            output cookies
-	 * @throws RuntimeException
-	 *             if header has already been generated
-	 */
-	public void setOutputCookies(List<RCCookie> outputCookies) {
-		if (headerGenerated) {
-			throw new RuntimeException(
-					"Header has already been generated and you're not allowed to modify it.");
-		} else if (outputCookies == null) {
-			throw new IllegalArgumentException("Null output-cookies is not allowed");
-		}
-		this.outputCookies = outputCookies;
-	}
-
 	/**
 	 * Gets context's parameter by parameter name.
 	 *
@@ -392,7 +373,8 @@ public class RequestContext {
 	 * @param length
 	 *            length of written data
 	 * @return this request context
-	 * @throws IOException if IO error occurs
+	 * @throws IOException
+	 *             if IO error occurs
 	 */
 	public RequestContext write(byte[] data, int offset, int length)
 			throws IOException {
@@ -404,7 +386,7 @@ public class RequestContext {
 	}
 
 	/**
-	 * Writes a string to response's body encoded in request context's charset.
+	 * Writes a string to response's body encoded in request context's encoding.
 	 *
 	 * @param text
 	 *            text to be written
@@ -425,7 +407,8 @@ public class RequestContext {
 	 *
 	 * @throws IOException
 	 *             if IO exception occurs
-	 * @throws RuntimeException if response's encoding is doesn't exist
+	 * @throws RuntimeException
+	 *             if response's encoding is doesn't exist
 	 */
 	private void createHeader() throws IOException {
 		headerGenerated = true;
@@ -621,35 +604,6 @@ public class RequestContext {
 
 			return stringBuilder.toString();
 		}
-	}
-
-	/**
-	 * Sets persistent parameters map.
-	 *
-	 * @param persistentParameters
-	 *            persistent parameters map
-	 */
-	public void setPersistentParameters(Map<String, String> persistentParameters) {
-		this.persistentParameters = persistentParameters;
-	}
-
-	/**
-	 * Sets temporary parameters map.
-	 *
-	 * @param temporaryParameters
-	 *            temporary parameters map
-	 */
-	public void setTemporaryParameters(Map<String, String> temporaryParameters) {
-		this.temporaryParameters = temporaryParameters;
-	}
-
-	/**
-	 * Gets unmodifiable map of parameters.
-	 *
-	 * @return unmodifiable map of parameters
-	 */
-	public Map<String, String> getParameters() {
-		return Collections.unmodifiableMap(parameters);
 	}
 
 }

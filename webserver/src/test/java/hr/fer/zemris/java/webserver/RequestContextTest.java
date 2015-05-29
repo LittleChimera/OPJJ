@@ -7,9 +7,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -30,18 +32,6 @@ public class RequestContextTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void createContextWithNullOutput() {
 		new RequestContext(null, null);
-	}
-
-	@Test
-	public void getParametersTest() {
-		assertEquals(null, EMPTY_REQUEST_CONTEXT.getParameter("none"));
-		assertEquals(PARAMETERS, EMPTY_REQUEST_CONTEXT.getParameters());
-	}
-
-	@Test(expected=UnsupportedOperationException.class)
-	public void modifyGetParametersTest() {
-		Map<String, String> getParameters = EMPTY_REQUEST_CONTEXT.getParameters();
-		getParameters.put("something", "new");
 	}
 
 	@Test
@@ -101,23 +91,30 @@ public class RequestContextTest {
 	@Test
 	public void testCreatedHeaderWithCustomHeaders() throws IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		List<RCCookie> cookies = new LinkedList<RequestContext.RCCookie>();
-		cookies.add(new RCCookie("some", "value", null, null, null));
-		RequestContext rc = new RequestContext(outputStream, null, null, cookies);
+		RequestContext rc = new RequestContext(outputStream, null, null, null);
+		rc.addRCCookie(new RCCookie("some", "value", null, null, null));
 		rc.addHeader("Server", "Smart HTTP Server");
+		rc.setMimeType("application/octet-stream");
 
 		String testOutput = "Some text";
-		rc.write(testOutput.substring(0, 4)).write(testOutput.substring(4));
+		rc.write(testOutput.substring(0, 4).getBytes(StandardCharsets.UTF_8)).write(testOutput.substring(4));
 
 		String expectedOutput =
 				"HTTP/1.1 200 OK\r\n"
-						+ "Content-Type: text/html; charset=UTF-8\r\n"
+						+ "Content-Type: application/octet-stream\r\n"
 						+ "Set-Cookie: some=\"value\"\r\n"
 						+ "Server: Smart HTTP Server\r\n"
 						+ "\r\n"
 						+ testOutput;
 
 		assertEquals(expectedOutput, new String(outputStream.toByteArray(), StandardCharsets.UTF_8));
+	}
+
+	@Test(expected=RuntimeException.class)
+	public void createHeaderWithInvalidEncoding() throws IOException {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setEncoding("asdf");
+		rc.write("");
 	}
 
 	@Test(expected=RuntimeException.class)
@@ -138,11 +135,6 @@ public class RequestContextTest {
 	@Test(expected=RuntimeException.class)
 	public void modifyStatusTextAfterGenerationOfHeader() {
 		EMPTY_REQUEST_CONTEXT.setStatusText("Error");
-	}
-
-	@Test(expected=RuntimeException.class)
-	public void changeOutputCookiesAfterGenerationOfHeader() {
-		EMPTY_REQUEST_CONTEXT.setOutputCookies(new LinkedList<RequestContext.RCCookie>());
 	}
 
 	@Test(expected=RuntimeException.class)
@@ -170,12 +162,104 @@ public class RequestContextTest {
 		new RequestContext(OUTPUT_STREAM, PARAMETERS).addRCCookie(null);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void setOutputCookiesNull() {
-		new RequestContext(OUTPUT_STREAM, PARAMETERS).setOutputCookies(null);
+	@Test
+	public void testEncodingSetter() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setEncoding("ASCII");
+		assertEquals("ASCII", rc.encoding);
 	}
 
+	@Test
+	public void testMimeTypeSetter() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setMimeType("text/plain");
+		assertEquals("text/plain", rc.mimeType);
+	}
 
+	@Test
+	public void testStatusCodeSetter() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setStatusCode(400);
+		assertEquals(400, rc.statusCode);
+	}
 
+	@Test
+	public void testStatusTextSetter() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setStatusText("Not OK");
+		assertEquals("Not OK", rc.statusText);
+	}
+
+	@Test
+	public void getPersistentParameterTest() {
+		HashMap<String, String> peristentParameters = new HashMap<String, String>();
+		peristentParameters.put("some", "value");
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS, peristentParameters, null);
+		assertEquals("value", rc.getPersistentParameter("some"));
+	}
+
+	@Test
+	public void getPersistentParameterNamesTest() {
+		HashMap<String, String> peristentParameters = new HashMap<String, String>();
+		peristentParameters.put("some", "value");
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS, peristentParameters, null);
+		assertEquals(peristentParameters.keySet(), rc.getPersistentParameterNames());
+	}
+
+	@Test
+	public void removePersistentParameterTest() {
+		HashMap<String, String> peristentParameters = new HashMap<String, String>();
+		peristentParameters.put("some", "value");
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS, peristentParameters, null);
+		rc.removePersistentParameter("some");
+		assertEquals(null, rc.getParameter("some"));
+	}
+
+	@Test
+	public void setPersistentParameterTest() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setPersistentParameter("some", "value");
+		assertEquals("value", rc.getPersistentParameter("some"));
+	}
+
+	@Test
+	public void getTemporaryParameterTest() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setTemporaryParameter("some", "value");
+		assertEquals("value", rc.getTemporaryParameter("some"));
+	}
+
+	@Test
+	public void getTemporaryParameterNamesTest() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setTemporaryParameter("some", "value");
+		Set<String> expectedNamesSet = new LinkedHashSet<String>();
+		expectedNamesSet.add("some");
+		assertEquals(expectedNamesSet, rc.getTemporaryParameterNames());
+	}
+
+	@Test
+	public void removeTemporaryParameterTest() {
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, PARAMETERS);
+		rc.setTemporaryParameter("some", "value");
+		rc.removeTemporaryParameter("some");
+		assertEquals(null, rc.getParameter("some"));
+	}
+
+	@Test
+	public void getParameterTest() {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("some", "value");
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, parameters);
+		assertEquals("value", rc.getParameter("some"));
+	}
+
+	@Test
+	public void getParameterNamesTest() {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("some", "value");
+		RequestContext rc = new RequestContext(OUTPUT_STREAM, parameters);
+		assertEquals(parameters.keySet(), rc.getParameterNames());
+	}
 
 }
