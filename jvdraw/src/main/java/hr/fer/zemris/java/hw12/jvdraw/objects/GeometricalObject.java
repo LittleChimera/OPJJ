@@ -19,4 +19,5 @@ public abstract class GeometricalObject extends JComponent {
 	@Override
 	public abstract void paint(Graphics g);
 	
+	public abstract String getSaveFormat();
 }

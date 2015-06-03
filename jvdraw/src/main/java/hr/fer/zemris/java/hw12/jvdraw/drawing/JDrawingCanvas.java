@@ -1,9 +1,12 @@
 package hr.fer.zemris.java.hw12.jvdraw.drawing;
 
+import hr.fer.zemris.java.hw12.jvdraw.objects.FullCircleDrawing;
 import hr.fer.zemris.java.hw12.jvdraw.objects.GeometricalObject;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import javax.swing.JComponent;
@@ -15,6 +18,7 @@ public class JDrawingCanvas extends JComponent{
 	 */
 	private static final long serialVersionUID = 1L;
 	private DrawingModel drawingModel;
+	private Point startPoint;
 
 	public JDrawingCanvas(DrawingModel drawingModel) {
 		this.drawingModel = drawingModel;
@@ -40,9 +44,9 @@ public class JDrawingCanvas extends JComponent{
 	
 	@Override
 	public void paint(Graphics g) {
-		Rectangle bounds = getBounds();
+		Dimension size = getSize();
 		g.setColor(Color.WHITE);
-		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		g.fillRect(0, 0, size.width, size.height);
 		Graphics gc = g.create();
 		for (int i = 0, count = drawingModel.getSize(); i < count; i++) {
 			GeometricalObject object = drawingModel.getObject(i);
@@ -50,6 +54,24 @@ public class JDrawingCanvas extends JComponent{
 		}
 		
 		gc.dispose();
+	}
+
+	public Point getStartPoint() {
+		return startPoint;
+	}
+	
+	public void resetStartPoint() {
+		startPoint = null;
+	}
+	
+	public void setStartPoint(int x, int y) {
+		this.startPoint = new Point(x, y);
+	}
+
+	public void paintDrawingObject(GeometricalObject object) {
+		Graphics g = getGraphics();
+		paint(g);
+		object.paint(g);
 	}
 	
 
