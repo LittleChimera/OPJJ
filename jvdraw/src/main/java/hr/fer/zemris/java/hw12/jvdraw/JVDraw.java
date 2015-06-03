@@ -27,6 +27,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public class JVDraw extends JFrame {
 
@@ -129,7 +130,7 @@ public class JVDraw extends JFrame {
 
 	private void initColorArea(JColorArea colorArea, String name) {
 		colorArea.addColorChangeListener((src, oldC, newC) -> {
-			if (!oldC.equals(newC)) {
+			if (newC != null && !newC.equals(oldC)) {
 				drawingCanvas.setBackground(newC);
 			}
 		});
@@ -188,6 +189,12 @@ public class JVDraw extends JFrame {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
+			
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (Exception ignorable) {
+			}
+			
 			JFrame frame = new JVDraw();
 			frame.pack();
 			frame.setVisible(true);

@@ -8,7 +8,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 public class JDrawingCanvas extends JComponent{
@@ -19,6 +21,7 @@ public class JDrawingCanvas extends JComponent{
 	private static final long serialVersionUID = 1L;
 	private DrawingModel drawingModel;
 	private Point startPoint;
+	private BufferedImage cache;
 
 	public JDrawingCanvas(DrawingModel drawingModel) {
 		this.drawingModel = drawingModel;
@@ -45,13 +48,18 @@ public class JDrawingCanvas extends JComponent{
 	@Override
 	public void paint(Graphics g) {
 		Dimension size = getSize();
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, size.width, size.height);
-		Graphics gc = g.create();
+		
+		cache = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+		Graphics gc = cache.getGraphics();
+		
+		gc.setColor(Color.WHITE);
+		gc.fillRect(0, 0, size.width, size.height);
+		
 		for (int i = 0, count = drawingModel.getSize(); i < count; i++) {
 			GeometricalObject object = drawingModel.getObject(i);
 			object.paint(gc);
 		}
+		g.drawImage(cache, 0, 0, Color.WHITE, null);
 		
 		gc.dispose();
 	}
@@ -70,7 +78,7 @@ public class JDrawingCanvas extends JComponent{
 
 	public void paintDrawingObject(GeometricalObject object) {
 		Graphics g = getGraphics();
-		paint(g);
+		g.drawImage(cache, 0, 0, Color.WHITE, null);
 		object.paint(g);
 	}
 	
