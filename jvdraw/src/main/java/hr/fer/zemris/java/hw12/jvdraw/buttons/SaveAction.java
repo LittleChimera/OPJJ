@@ -30,7 +30,7 @@ public class SaveAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		saveModel();
 	}
-	
+
 	public boolean saveModel() {
 		if (savePath == null) {
 			JFileChooser fileChooser = new JFileChooser();
@@ -54,11 +54,16 @@ public class SaveAction extends AbstractAction {
 					+ e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		
+
 		model.save();
 		JOptionPane.showMessageDialog(parent, "Saved!", "Info",
 				JOptionPane.INFORMATION_MESSAGE);
 		return true;
+	}
+
+	public void update(Path path, DrawingModel drawingModel) {
+		this.savePath = path;
+		this.model = drawingModel;
 	}
 
 }

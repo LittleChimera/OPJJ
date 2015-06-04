@@ -14,8 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class FullCircleDrawing extends GeometricalObject {
-
-	private static final String jvdName = "FCIRCLE";
 	
 	private int x;
 	private int y;
@@ -40,8 +38,8 @@ public class FullCircleDrawing extends GeometricalObject {
 
 	@Override
 	public String getSaveFormat() {
-		return "FCIRCLE " + x + " " + y + " " + r + " " + rgbToSaveFormat(outlineColor)
-				+ " " + rgbToSaveFormat(fillColor);
+		return "FCIRCLE " + x + " " + y + " " + r + " " + rgbToSaveFormat(fillColor)
+				+ " " + rgbToSaveFormat(outlineColor);
 	}
 
 	@Override
@@ -87,10 +85,24 @@ public class FullCircleDrawing extends GeometricalObject {
 
 	}
 	
-	protected void changeObject(int x, int y, int r, Color fill, Color outline) {
+	private void changeObject(int x, int y, int r, Color fill, Color outline) {
 		this.x = x;
 		this.y = y;
 		this.r = r;
 		changeObject(x - r, y - r, 2 * r, 2 * r, fill, outline);
+	}
+	
+	public static FullCircleDrawing fromJvd(String jvd) {
+		try {
+			String[] params = jvd.split(" ", 2)[1].split(" ");
+			int[] values = new int[params.length];
+			for (int i = 0; i < params.length; i++) {
+				values[i] = Integer.parseInt(params[i]);
+			}
+			return new FullCircleDrawing(values[0], values[1], values[2],
+					new Color(values[3], values[4], values[5]), new Color(values[6], values[7], values[8]));
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Invalid format");
+		}
 	}
 }

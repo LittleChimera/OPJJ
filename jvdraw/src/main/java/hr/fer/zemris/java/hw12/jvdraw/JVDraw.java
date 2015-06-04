@@ -26,6 +26,10 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.AbstractAction;
@@ -33,6 +37,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -118,24 +123,49 @@ public class JVDraw extends JFrame {
 		}
 		return JOptionPane.NO_OPTION;
 	}
-	
+
 	private SaveAction saveAction = new SaveAction(null, drawingModel, this);
-	
+
+	private Action loadAction = new AbstractAction() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser fileChooser = new JFileChooser();
+			int r = fileChooser.showOpenDialog(JVDraw.this);
+			if (r == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				List<String> lines = null;
+				try {
+					lines = Files.readAllLines(file.toPath());
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(JVDraw.this,
+							"Error while loading file: " + e1.getMessage(),
+							"Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				drawingModel.setModel(DrawingModel.fromJvdFormat(lines));
+				drawingCanvas.setDrawingModel(drawingModel);
+				saveAction.update(file.toPath(), drawingModel);
+				drawingCanvas.repaint();
+			}
+		}
+	};
+
 	private WindowListener onClosingListener = new WindowAdapter() {
-		
+
 		@Override
 		public void windowClosing(WindowEvent e) {
 			int exit = exit();
 			switch (exit) {
 			case JOptionPane.YES_OPTION:
 				if (!saveAction.saveModel()) {
-					break;					
+					break;
 				}
 
 			case JOptionPane.NO_OPTION:
 				dispose();
 				break;
-			
+
 			case JOptionPane.CANCEL_OPTION:
 				return;
 			}
@@ -144,39 +174,44 @@ public class JVDraw extends JFrame {
 
 	private void addButtons() {
 		JMenuBar menuBar = new JMenuBar();
-		
+
 		JMenu fileMenu = new JMenu("File");
-		
+
 		JMenuItem saveButton = new JMenuItem(saveAction);
 		saveButton.setText("Save");
 		fileMenu.add(saveButton);
-		
-		JMenuItem saveAsButton = new JMenuItem(new SaveAsAction(drawingModel, this));
+
+		JMenuItem saveAsButton = new JMenuItem(new SaveAsAction(drawingModel,
+				this));
 		saveAsButton.setText("Save As");
 		fileMenu.add(saveAsButton);
 		
+		JMenuItem loadButton = new JMenuItem(loadAction);
+		loadButton.setText("Load");
+		fileMenu.add(loadButton);
+
 		fileMenu.addSeparator();
-		
-		JMenuItem exportButton = new JMenuItem(new ExportAction(drawingModel, this));
+
+		JMenuItem exportButton = new JMenuItem(new ExportAction(drawingModel,
+				this));
 		exportButton.setText("Export");
 		fileMenu.add(exportButton);
-		
+
 		fileMenu.addSeparator();
-		
+
 		JMenuItem exit = new JMenuItem(new AbstractAction() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				onClosingListener.windowClosing(null); 
+				onClosingListener.windowClosing(null);
 			}
 		});
 		exit.setText("Exit");
 		fileMenu.add(exit);
-		
+
 		menuBar.add(fileMenu);
 		setJMenuBar(menuBar);
 
-		
 		topPanel.add(new JButton(new AbstractAction() {
 
 			{
@@ -194,8 +229,7 @@ public class JVDraw extends JFrame {
 								.getCurrentColor()));
 			}
 		}));
-		
-		
+
 		for (ObjectCreatorButton creator : initObjectCreators()) {
 			topPanel.add(creator);
 		}
