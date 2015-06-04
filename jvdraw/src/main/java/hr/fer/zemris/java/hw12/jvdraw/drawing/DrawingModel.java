@@ -43,4 +43,11 @@ public class DrawingModel {
 	public void removeListener(DrawingModelListener dml) {
 		listeners.remove(dml);
 	}
+	
+	public static void fireObjectsChanged(DrawingModel source, int index0, int index1) {
+		source.listeners.forEach(l -> {
+			l.objectsChanged(source, index0, index1);
+		});
+	}
+	
 }

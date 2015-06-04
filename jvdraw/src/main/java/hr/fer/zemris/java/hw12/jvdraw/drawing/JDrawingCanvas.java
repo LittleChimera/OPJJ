@@ -1,16 +1,13 @@
 package hr.fer.zemris.java.hw12.jvdraw.drawing;
 
-import hr.fer.zemris.java.hw12.jvdraw.objects.FullCircleDrawing;
 import hr.fer.zemris.java.hw12.jvdraw.objects.GeometricalObject;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 public class JDrawingCanvas extends JComponent{

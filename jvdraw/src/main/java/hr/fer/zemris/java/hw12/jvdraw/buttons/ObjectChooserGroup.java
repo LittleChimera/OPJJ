@@ -19,6 +19,7 @@ public class ObjectChooserGroup extends ButtonGroup {
 		}
 		
 		creator = creators[0];
+		creator.setSelected(true);
 
 		for (ObjectCreatorButton objectCreator : creators) {
 			super.add(objectCreator);

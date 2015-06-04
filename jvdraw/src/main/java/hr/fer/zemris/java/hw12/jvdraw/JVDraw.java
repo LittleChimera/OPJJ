@@ -4,6 +4,7 @@ import hr.fer.zemris.java.hw12.jvdraw.buttons.ObjectChooserGroup;
 import hr.fer.zemris.java.hw12.jvdraw.buttons.ObjectCreatorButton;
 import hr.fer.zemris.java.hw12.jvdraw.colors.JColorArea;
 import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingModel;
+import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingObjectListModel;
 import hr.fer.zemris.java.hw12.jvdraw.drawing.JDrawingCanvas;
 import hr.fer.zemris.java.hw12.jvdraw.objects.EmptyCircleDrawing;
 import hr.fer.zemris.java.hw12.jvdraw.objects.FullCircleDrawing;
@@ -12,6 +13,7 @@ import hr.fer.zemris.java.hw12.jvdraw.objects.LineDrawing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -22,12 +24,17 @@ import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 public class JVDraw extends JFrame {
 
@@ -45,6 +52,7 @@ public class JVDraw extends JFrame {
 	private ObjectChooserGroup objectChooserGroup;
 
 	public JVDraw() {
+		setTitle("JVDraw");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(600, 400);
 		initGUI();
@@ -58,12 +66,22 @@ public class JVDraw extends JFrame {
 		getContentPane().add(drawingCanvas, BorderLayout.CENTER);
 		initDrawingCanvas();
 
+		JList<GeometricalObject> objectList = new JList<GeometricalObject>(
+				new DrawingObjectListModel(drawingModel));
+		initObjectList(objectList);
+		JScrollPane objectListDecorator = new JScrollPane(objectList);
+		objectListDecorator.setPreferredSize(new Dimension(100, 0));
+		objectListDecorator.setBorder(BorderFactory
+				.createRaisedSoftBevelBorder());
+
+		getContentPane().add(objectListDecorator, BorderLayout.AFTER_LINE_ENDS);
+
 		JPanel topPanel = new JPanel(new FlowLayout());
 
-		background = new JColorArea(Color.WHITE);
+		background = new JColorArea(Color.WHITE, "background", this);
 		initColorArea(background, "background");
 
-		foreground = new JColorArea(Color.BLACK);
+		foreground = new JColorArea(Color.BLACK, "foreground", this);
 		initColorArea(foreground, "foreground");
 
 		topPanel.add(foreground);
@@ -90,10 +108,28 @@ public class JVDraw extends JFrame {
 		getContentPane().add(topPanel, BorderLayout.PAGE_START);
 	}
 
+	private void initObjectList(JList<GeometricalObject> objectList) {
+		// set design
+		objectList.setBackground(Color.DARK_GRAY);
+		objectList.setForeground(Color.CYAN);
+
+		objectList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int index = objectList.locationToIndex(e.getPoint());
+					objectList.getModel().getElementAt(index)
+							.showChangeDialog(JVDraw.this);
+					DrawingModel.fireObjectsChanged(drawingModel, index, index);
+				}
+			}
+		});
+	}
+
 	private void initDrawingCanvas() {
 		drawingCanvas.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				Point start = drawingCanvas.getStartPoint();
 				int ex = e.getX();
 				int ey = e.getY();
@@ -132,18 +168,6 @@ public class JVDraw extends JFrame {
 		colorArea.addColorChangeListener((src, oldC, newC) -> {
 			if (newC != null && !newC.equals(oldC)) {
 				drawingCanvas.setBackground(newC);
-			}
-		});
-
-		colorArea.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				Color choosen = JColorChooser.showDialog(JVDraw.this, "Choose "
-						+ name + " color", colorArea.getCurrentColor());
-				if (choosen != colorArea.getCurrentColor()) {
-					colorArea.setColor(choosen);
-					colorArea.repaint();
-				}
 			}
 		});
 	}
@@ -189,14 +213,14 @@ public class JVDraw extends JFrame {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
-			
+
 			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				UIManager.setLookAndFeel(UIManager
+						.getSystemLookAndFeelClassName());
 			} catch (Exception ignorable) {
 			}
-			
+
 			JFrame frame = new JVDraw();
-			frame.pack();
 			frame.setVisible(true);
 		});
 	}

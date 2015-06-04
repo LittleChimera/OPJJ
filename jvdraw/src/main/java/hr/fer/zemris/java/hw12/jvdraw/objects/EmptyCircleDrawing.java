@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw12.jvdraw.objects;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -27,7 +28,17 @@ public class EmptyCircleDrawing extends GeometricalObject {
 
 	@Override
 	public String getSaveFormat() {
-		return x + " " + y + " " + r + " " + outlineColor.toString();
+		return x + " " + y + " " + r + " " + rgbToSaveFormat(outlineColor);
 	}
 
+	@Override
+	public String toString() {
+		return "Circle";
+	}
+
+	@Override
+	public void showChangeDialog(Component parent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

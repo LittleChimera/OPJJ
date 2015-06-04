@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw12.jvdraw.objects;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 
 public class LineDrawing extends GeometricalObject {
@@ -27,7 +28,18 @@ public class LineDrawing extends GeometricalObject {
 
 	@Override
 	public String getSaveFormat() {
-		return x1 + " " + y1 + " " + x2 + " " + y2 + " " + outlineColor.toString();
+		return x1 + " " + y1 + " " + x2 + " " + y2 + " " + rgbToSaveFormat(outlineColor);
 	}
 
+	@Override
+	public String toString() {
+		return "Line";
+	}
+
+	@Override
+	public void showChangeDialog(Component parent) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
