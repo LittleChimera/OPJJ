@@ -68,7 +68,10 @@ public class DrawingModel {
 	}
 	
 	public static DrawingModel fromJvdFormat(List<String> lines) {
-		//TODO
 		return null;
+	}
+	
+	public boolean isModified() {
+		return modified;
 	}
 }

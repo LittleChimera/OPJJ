@@ -8,8 +8,8 @@ import java.nio.file.Path;
 
 public class SaveAsAction extends SaveAction {
 
-	public SaveAsAction(Path savePath, DrawingModel model, Component parent) {
-		super(savePath, model, parent);
+	public SaveAsAction(DrawingModel model, Component parent) {
+		super(null, model, parent);
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 public class LineDrawing extends GeometricalObject {
 	
+	private static final String jvdName = "LINE";
 	private int x1;
 	private int y1;
 	private int x2;
@@ -28,7 +29,7 @@ public class LineDrawing extends GeometricalObject {
 
 	@Override
 	public String getSaveFormat() {
-		return "LINE " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + rgbToSaveFormat(outlineColor);
+		return "LINE " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + rgbToSaveFormat(fillColor);
 	}
 
 	@Override

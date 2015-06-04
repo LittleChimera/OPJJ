@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 
 public class FullCircleDrawing extends GeometricalObject {
 
+	private static final String jvdName = "FCIRCLE";
+	
 	private int x;
 	private int y;
 	private int r;

@@ -23,17 +23,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
@@ -47,44 +53,45 @@ public class JVDraw extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JDrawingCanvas drawingCanvas;
-	private DrawingModel drawingModel;
+	private DrawingModel drawingModel = new DrawingModel();
 
 	private JColorArea background;
 	private JColorArea foreground;
 
 	private ObjectChooserGroup objectChooserGroup;
 
+	private JPanel topPanel;
+
+	private JPanel bottomPanel;
+
 	public JVDraw() {
 		setTitle("JVDraw");
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(onClosingListener);
 		setSize(600, 400);
 		initGUI();
 	}
 
 	private void initGUI() {
-		drawingModel = new DrawingModel();
-		
-		addButtons();
-		
 		getContentPane().setLayout(new BorderLayout());
+
+		topPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
 		drawingCanvas = new JDrawingCanvas(drawingModel);
 		getContentPane().add(drawingCanvas, BorderLayout.CENTER);
 		initDrawingCanvas();
 
-		JList<GeometricalObject> objectList = new JList<GeometricalObject>(
-				new DrawingObjectListModel(drawingModel));
-		initObjectList(objectList);
-		JScrollPane objectListDecorator = new JScrollPane(objectList);
-		objectListDecorator.setPreferredSize(new Dimension(100, 0));
-		objectListDecorator.setBorder(BorderFactory
-				.createRaisedSoftBevelBorder());
+		initObjectList();
+		initColorAreas();
+		addButtons();
 
-		getContentPane().add(objectListDecorator, BorderLayout.AFTER_LINE_ENDS);
+		getContentPane().add(bottomPanel, BorderLayout.PAGE_END);
 
-		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		getContentPane().add(topPanel, BorderLayout.PAGE_START);
+	}
 
+	private void initColorAreas() {
 		background = new JColorArea(Color.WHITE, "background", this);
 		JLabel backgroundColorText = new JLabel();
 		bottomPanel.add(backgroundColorText);
@@ -94,14 +101,82 @@ public class JVDraw extends JFrame {
 		JLabel foregroundColorText = new JLabel();
 		bottomPanel.add(foregroundColorText);
 		initColorArea(foreground, "foreground", foregroundColorText);
-		
-		getContentPane().add(bottomPanel, BorderLayout.PAGE_END);
 
 		topPanel.add(foreground);
 		topPanel.add(background);
-		JButton exportButton = new JButton(new ExportAction(drawingModel, this));
+	}
+
+	private int exit() {
+		if (drawingModel.isModified()) {
+			return JOptionPane
+					.showConfirmDialog(
+							this,
+							"Drawing has been changed. Do you want to save the changes?",
+							"Save before exit",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+		}
+		return JOptionPane.NO_OPTION;
+	}
+	
+	private SaveAction saveAction = new SaveAction(null, drawingModel, this);
+	
+	private WindowListener onClosingListener = new WindowAdapter() {
+		
+		@Override
+		public void windowClosing(WindowEvent e) {
+			int exit = exit();
+			switch (exit) {
+			case JOptionPane.YES_OPTION:
+				if (!saveAction.saveModel()) {
+					break;					
+				}
+
+			case JOptionPane.NO_OPTION:
+				dispose();
+				break;
+			
+			case JOptionPane.CANCEL_OPTION:
+				return;
+			}
+		};
+	};
+
+	private void addButtons() {
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenu fileMenu = new JMenu("File");
+		
+		JMenuItem saveButton = new JMenuItem(saveAction);
+		saveButton.setText("Save");
+		fileMenu.add(saveButton);
+		
+		JMenuItem saveAsButton = new JMenuItem(new SaveAsAction(drawingModel, this));
+		saveAsButton.setText("Save As");
+		fileMenu.add(saveAsButton);
+		
+		fileMenu.addSeparator();
+		
+		JMenuItem exportButton = new JMenuItem(new ExportAction(drawingModel, this));
 		exportButton.setText("Export");
-		topPanel.add(exportButton);
+		fileMenu.add(exportButton);
+		
+		fileMenu.addSeparator();
+		
+		JMenuItem exit = new JMenuItem(new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				onClosingListener.windowClosing(null); 
+			}
+		});
+		exit.setText("Exit");
+		fileMenu.add(exit);
+		
+		menuBar.add(fileMenu);
+		setJMenuBar(menuBar);
+
+		
 		topPanel.add(new JButton(new AbstractAction() {
 
 			{
@@ -119,28 +194,24 @@ public class JVDraw extends JFrame {
 								.getCurrentColor()));
 			}
 		}));
+		
+		
 		for (ObjectCreatorButton creator : initObjectCreators()) {
 			topPanel.add(creator);
 		}
-
-		getContentPane().add(topPanel, BorderLayout.PAGE_START);
 	}
 
-	private void addButtons() {
-		JMenuBar menuBar = new JMenuBar();
-		
-		JMenuItem saveButton = new JMenuItem(new SaveAction(null, drawingModel, this));
-		saveButton.setText("Save");
-		menuBar.add(saveButton);
-		
-		JMenuItem saveAsButton = new JMenuItem(new SaveAsAction(null, drawingModel, this));
-		saveAsButton.setText("Save As");
-		menuBar.add(saveAsButton);
-		
-		setJMenuBar(menuBar);
-	}
+	private void initObjectList() {
+		JList<GeometricalObject> objectList = new JList<GeometricalObject>(
+				new DrawingObjectListModel(drawingModel));
 
-	private void initObjectList(JList<GeometricalObject> objectList) {
+		JScrollPane objectListDecorator = new JScrollPane(objectList);
+		objectListDecorator.setPreferredSize(new Dimension(100, 0));
+		objectListDecorator.setBorder(BorderFactory
+				.createRaisedSoftBevelBorder());
+
+		getContentPane().add(objectListDecorator, BorderLayout.AFTER_LINE_ENDS);
+
 		// set design
 		objectList.setBackground(Color.DARK_GRAY);
 		objectList.setForeground(Color.CYAN);
@@ -196,12 +267,15 @@ public class JVDraw extends JFrame {
 
 	}
 
-	private void initColorArea(JColorArea colorArea, String name, JLabel backgroundColorText) {
-		backgroundColorText.setText(name + " color: " + colorArea.rgbToString());
+	private void initColorArea(JColorArea colorArea, String name,
+			JLabel backgroundColorText) {
+		backgroundColorText
+				.setText(name + " color: " + colorArea.rgbToString());
 		colorArea.addColorChangeListener((src, oldC, newC) -> {
 			if (newC != null && !newC.equals(oldC)) {
 				drawingCanvas.setBackground(newC);
-				backgroundColorText.setText(name + " color: " + colorArea.rgbToString());
+				backgroundColorText.setText(name + " color: "
+						+ colorArea.rgbToString());
 			}
 		});
 	}

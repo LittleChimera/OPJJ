@@ -86,8 +86,7 @@ public class ExportAction extends AbstractAction {
 				String extension = ((FileNameExtensionFilter) fileChooser
 						.getFileFilter()).getExtensions()[0];
 				if (!file.getName().endsWith("." + extension)) {
-					file.renameTo(new File(file.toPath().toString() + "."
-							+ extension));
+					file = new File(file.getPath() + "." + extension);
 				}
 				ImageIO.write(image, extension, file);
 			} catch (IOException e1) {

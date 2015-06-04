@@ -28,13 +28,17 @@ public class SaveAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		saveModel();
+	}
+	
+	public boolean saveModel() {
 		if (savePath == null) {
 			JFileChooser fileChooser = new JFileChooser();
 			int result = fileChooser.showSaveDialog(parent);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				savePath = fileChooser.getSelectedFile().toPath();
 			} else {
-				return;
+				return false;
 			}
 		}
 
@@ -48,11 +52,13 @@ public class SaveAction extends AbstractAction {
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(parent, "Unable to save the file: "
 					+ e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
-
+		
+		model.save();
 		JOptionPane.showMessageDialog(parent, "Saved!", "Info",
 				JOptionPane.INFORMATION_MESSAGE);
+		return true;
 	}
 
 }
