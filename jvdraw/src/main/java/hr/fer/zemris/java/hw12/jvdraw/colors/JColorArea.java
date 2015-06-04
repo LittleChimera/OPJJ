@@ -1,7 +1,5 @@
 package hr.fer.zemris.java.hw12.jvdraw.colors;
 
-import hr.fer.zemris.java.hw12.jvdraw.JVDraw;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -33,7 +31,7 @@ public class JColorArea extends JComponent implements IColorProvider {
 			public void mousePressed(MouseEvent e) {
 				Color choosen = JColorChooser.showDialog(parent, "Choose "
 						+ name + " color", color);
-				if (choosen != color) {
+				if (choosen != null && !choosen.equals(color)) {
 					setColor(choosen);
 					repaint();
 				}
@@ -67,14 +65,15 @@ public class JColorArea extends JComponent implements IColorProvider {
 	}
 	
 	public void setColor(Color color) {
-		colorListeners.forEach(l -> {
-			l.newColorSelected(JColorArea.this, this.color, color);
-		});
+		Color old = this.color;
 		this.color = color;
+		colorListeners.forEach(l -> {
+			l.newColorSelected(JColorArea.this, old, color);
+		});
 	}
 	
 	public String rgbToString() {
-		return String.format("color: (%d, %d, %d)", color.getRed(), color.getGreen(),
+		return String.format("(%d, %d, %d)", color.getRed(), color.getGreen(),
 				color.getBlue());
 	}
 

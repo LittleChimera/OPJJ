@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.hw12.jvdraw;
 
+import hr.fer.zemris.java.hw12.jvdraw.buttons.ExportAction;
 import hr.fer.zemris.java.hw12.jvdraw.buttons.ObjectChooserGroup;
 import hr.fer.zemris.java.hw12.jvdraw.buttons.ObjectCreatorButton;
 import hr.fer.zemris.java.hw12.jvdraw.colors.JColorArea;
@@ -26,15 +27,13 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 public class JVDraw extends JFrame {
 
@@ -76,16 +75,26 @@ public class JVDraw extends JFrame {
 
 		getContentPane().add(objectListDecorator, BorderLayout.AFTER_LINE_ENDS);
 
-		JPanel topPanel = new JPanel(new FlowLayout());
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
 		background = new JColorArea(Color.WHITE, "background", this);
-		initColorArea(background, "background");
+		JLabel backgroundColorText = new JLabel();
+		bottomPanel.add(backgroundColorText);
+		initColorArea(background, "background", backgroundColorText);
 
 		foreground = new JColorArea(Color.BLACK, "foreground", this);
-		initColorArea(foreground, "foreground");
+		JLabel foregroundColorText = new JLabel();
+		bottomPanel.add(foregroundColorText);
+		initColorArea(foreground, "foreground", foregroundColorText);
+		
+		getContentPane().add(bottomPanel, BorderLayout.PAGE_END);
 
 		topPanel.add(foreground);
 		topPanel.add(background);
+		JButton exportButton = new JButton(new ExportAction(drawingModel, this));
+		exportButton.setText("Export");
+		topPanel.add(exportButton);
 		topPanel.add(new JButton(new AbstractAction() {
 
 			{
@@ -95,8 +104,10 @@ public class JVDraw extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Random random = new Random();
-				drawingModel.addObject(new FullCircleDrawing(300 + random
-						.nextInt() % 100, 200 + random.nextInt() % 100, 20,
+				int x = Math.abs(random.nextInt() % getWidth());
+				int y = Math.abs(random.nextInt() % getHeight());
+				int r = 10 + Math.abs(random.nextInt()) % 50;
+				drawingModel.addObject(new FullCircleDrawing(x, y, r,
 						background.getCurrentColor(), foreground
 								.getCurrentColor()));
 			}
@@ -129,7 +140,7 @@ public class JVDraw extends JFrame {
 	private void initDrawingCanvas() {
 		drawingCanvas.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseReleased(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				Point start = drawingCanvas.getStartPoint();
 				int ex = e.getX();
 				int ey = e.getY();
@@ -164,10 +175,12 @@ public class JVDraw extends JFrame {
 
 	}
 
-	private void initColorArea(JColorArea colorArea, String name) {
+	private void initColorArea(JColorArea colorArea, String name, JLabel backgroundColorText) {
+		backgroundColorText.setText(name + " color: " + colorArea.rgbToString());
 		colorArea.addColorChangeListener((src, oldC, newC) -> {
 			if (newC != null && !newC.equals(oldC)) {
 				drawingCanvas.setBackground(newC);
+				backgroundColorText.setText(name + " color: " + colorArea.rgbToString());
 			}
 		});
 	}
