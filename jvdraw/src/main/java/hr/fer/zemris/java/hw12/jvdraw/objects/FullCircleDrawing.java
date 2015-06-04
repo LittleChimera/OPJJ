@@ -38,7 +38,7 @@ public class FullCircleDrawing extends GeometricalObject {
 
 	@Override
 	public String getSaveFormat() {
-		return x + " " + y + " " + r + " " + rgbToSaveFormat(outlineColor)
+		return "FCIRCLE " + x + " " + y + " " + r + " " + rgbToSaveFormat(outlineColor)
 				+ " " + rgbToSaveFormat(fillColor);
 	}
 
@@ -84,7 +84,7 @@ public class FullCircleDrawing extends GeometricalObject {
 		}
 
 	}
-
+	
 	protected void changeObject(int x, int y, int r, Color fill, Color outline) {
 		this.x = x;
 		this.y = y;

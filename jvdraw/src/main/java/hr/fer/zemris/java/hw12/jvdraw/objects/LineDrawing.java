@@ -28,7 +28,7 @@ public class LineDrawing extends GeometricalObject {
 
 	@Override
 	public String getSaveFormat() {
-		return x1 + " " + y1 + " " + x2 + " " + y2 + " " + rgbToSaveFormat(outlineColor);
+		return "LINE " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + rgbToSaveFormat(outlineColor);
 	}
 
 	@Override

@@ -27,16 +27,19 @@ public class JDrawingCanvas extends JComponent{
 			
 			@Override
 			public void objectsRemoved(DrawingModel source, int index0, int index1) {
+				updateCache();
 				repaint();
 			}
 			
 			@Override
 			public void objectsChanged(DrawingModel source, int index0, int index1) {
+				updateCache();
 				repaint();
 			}
 			
 			@Override
 			public void objectsAdded(DrawingModel source, int index0, int index1) {
+				updateCache();
 				repaint();
 			}
 		});
@@ -44,6 +47,17 @@ public class JDrawingCanvas extends JComponent{
 	
 	@Override
 	public void paint(Graphics g) {
+		Dimension size = getSize();
+		
+		if (cache == null || (cache.getWidth() != getWidth() || cache.getHeight() != getHeight())) {
+			updateCache();
+		}
+		
+		g.drawImage(cache, 0, 0, Color.WHITE, null);
+		
+	}
+	
+	private void updateCache() {
 		Dimension size = getSize();
 		
 		cache = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
@@ -56,8 +70,6 @@ public class JDrawingCanvas extends JComponent{
 			GeometricalObject object = drawingModel.getObject(i);
 			object.paint(gc);
 		}
-		g.drawImage(cache, 0, 0, Color.WHITE, null);
-		
 		gc.dispose();
 	}
 

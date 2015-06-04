@@ -21,6 +21,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ExportAction extends AbstractAction {
 
@@ -44,9 +45,9 @@ public class ExportAction extends AbstractAction {
 		BufferedImage image = new BufferedImage(minBounds.width,
 				minBounds.height, BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g = image.createGraphics();
-		
+
 		g.fillRect(0, 0, minBounds.width, minBounds.height);
-		
+
 		for (int i = 0, count = model.getSize(); i < count; i++) {
 			GeometricalObject object = model.getObject(i);
 			Rectangle origBounds = object.getBounds();
@@ -71,14 +72,28 @@ public class ExportAction extends AbstractAction {
 		 */
 
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JPG",
+				"jpg"));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("GIF",
+				"gif"));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG",
+				"png"));
 		int choosen = fileChooser.showSaveDialog(parent);
 		if (choosen == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			try {
-				ImageIO.write(image, "png", file);
+				String extension = ((FileNameExtensionFilter) fileChooser
+						.getFileFilter()).getExtensions()[0];
+				if (!file.getName().endsWith("." + extension)) {
+					file.renameTo(new File(file.toPath().toString() + "."
+							+ extension));
+				}
+				ImageIO.write(image, extension, file);
 			} catch (IOException e1) {
-				JOptionPane.showMessageDialog(parent, "Unable to export image",
-						"Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(parent,
+						"Unable to export image: " + e1.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 

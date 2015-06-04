@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 public class DrawingModel {
+	
+	private boolean modified = false;
 
 	private List<GeometricalObject> drawings;
 	private Set<DrawingModelListener> listeners;
@@ -23,6 +25,7 @@ public class DrawingModel {
 	
 	public void addObject(GeometricalObject object) {
 		drawings.add(object);
+		modified = true;
 		int size = getSize();
 		listeners.forEach(l -> {
 			l.objectsAdded(this, size, size);
@@ -47,7 +50,25 @@ public class DrawingModel {
 	public static void fireObjectsChanged(DrawingModel source, int index0, int index1) {
 		source.listeners.forEach(l -> {
 			l.objectsChanged(source, index0, index1);
+			source.modified = true;
 		});
 	}
+
+	public void save() {
+		modified = false;
+	}
 	
+	public String getAsJvd() {
+		StringBuilder jvdBuilder = new StringBuilder();
+		for (GeometricalObject geometricalObject : drawings) {
+			jvdBuilder.append(geometricalObject.getSaveFormat()).append("\n");
+		}
+		
+		return jvdBuilder.toString();
+	}
+	
+	public static DrawingModel fromJvdFormat(List<String> lines) {
+		//TODO
+		return null;
+	}
 }

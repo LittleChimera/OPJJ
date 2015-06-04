@@ -3,6 +3,8 @@ package hr.fer.zemris.java.hw12.jvdraw;
 import hr.fer.zemris.java.hw12.jvdraw.buttons.ExportAction;
 import hr.fer.zemris.java.hw12.jvdraw.buttons.ObjectChooserGroup;
 import hr.fer.zemris.java.hw12.jvdraw.buttons.ObjectCreatorButton;
+import hr.fer.zemris.java.hw12.jvdraw.buttons.SaveAction;
+import hr.fer.zemris.java.hw12.jvdraw.buttons.SaveAsAction;
 import hr.fer.zemris.java.hw12.jvdraw.colors.JColorArea;
 import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingModel;
 import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingObjectListModel;
@@ -30,6 +32,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
@@ -58,9 +62,12 @@ public class JVDraw extends JFrame {
 	}
 
 	private void initGUI() {
+		drawingModel = new DrawingModel();
+		
+		addButtons();
+		
 		getContentPane().setLayout(new BorderLayout());
 
-		drawingModel = new DrawingModel();
 		drawingCanvas = new JDrawingCanvas(drawingModel);
 		getContentPane().add(drawingCanvas, BorderLayout.CENTER);
 		initDrawingCanvas();
@@ -117,6 +124,20 @@ public class JVDraw extends JFrame {
 		}
 
 		getContentPane().add(topPanel, BorderLayout.PAGE_START);
+	}
+
+	private void addButtons() {
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenuItem saveButton = new JMenuItem(new SaveAction(null, drawingModel, this));
+		saveButton.setText("Save");
+		menuBar.add(saveButton);
+		
+		JMenuItem saveAsButton = new JMenuItem(new SaveAsAction(null, drawingModel, this));
+		saveAsButton.setText("Save As");
+		menuBar.add(saveAsButton);
+		
+		setJMenuBar(menuBar);
 	}
 
 	private void initObjectList(JList<GeometricalObject> objectList) {
