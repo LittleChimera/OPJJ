@@ -1,12 +1,9 @@
 package hr.fer.zemris.java.hw12.jvdraw.buttons;
 
 import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingModel;
-import hr.fer.zemris.java.hw12.jvdraw.drawing.JDrawingCanvas;
 import hr.fer.zemris.java.hw12.jvdraw.objects.GeometricalObject;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -16,23 +13,50 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * Exports a {@link DrawingModel} as an image file.
+ * 
+ * @author Luka Skugor
+ *
+ */
 public class ExportAction extends AbstractAction {
 
+	/**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * Model which is exported.
+	 */
 	private DrawingModel model;
+	/**
+	 * Parent component used for displaying prompt dialogs.
+	 */
 	private Component parent;
 
+	/**
+	 * Creates a new ExportAction for the given model.
+	 * 
+	 * @param model
+	 *            model which is exported
+	 * @param parent
+	 *            top-level element of the GUI where action is instanced
+	 */
 	public ExportAction(DrawingModel model, Component parent) {
 		this.model = model;
 		this.parent = parent;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (model.getSize() == 0) {
@@ -60,17 +84,6 @@ public class ExportAction extends AbstractAction {
 		}
 		g.dispose();
 
-		/*
-		 * JFrame frame = new JFrame();
-		 * frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		 * frame.setSize(minBounds.width, minBounds.height);
-		 * frame.getContentPane().setLayout(new BorderLayout());
-		 * frame.getContentPane().add(new JComponent() {
-		 * 
-		 * @Override public void paint(Graphics g) { g.drawImage(image, 0, 0,
-		 * frame); } }, BorderLayout.CENTER); frame.setVisible(true);
-		 */
-
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JPG",
@@ -81,14 +94,14 @@ public class ExportAction extends AbstractAction {
 				"png"));
 		int choosen = fileChooser.showSaveDialog(parent);
 		if (choosen == JFileChooser.APPROVE_OPTION) {
-			
+
 			File file = fileChooser.getSelectedFile();
 			String extension = ((FileNameExtensionFilter) fileChooser
 					.getFileFilter()).getExtensions()[0];
 			if (!file.getName().endsWith("." + extension)) {
 				file = new File(file.getPath() + "." + extension);
 			}
-			
+
 			try {
 				ImageIO.write(image, extension, file);
 			} catch (IOException e1) {
@@ -100,6 +113,11 @@ public class ExportAction extends AbstractAction {
 
 	}
 
+	/**
+	 * Gets model's minimum bounds so that all elements are displayed.
+	 * 
+	 * @return model's minimum bounds
+	 */
 	private Rectangle getMinimumBounds() {
 		Rectangle minimumBounds = model.getObject(0).getBounds();
 		for (int i = 0, count = model.getSize(); i < count; i++) {

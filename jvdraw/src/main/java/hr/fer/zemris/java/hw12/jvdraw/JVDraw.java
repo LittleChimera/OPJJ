@@ -37,7 +37,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -54,6 +53,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * JVDraw is a drawing program which cna draw circles and lines. It can export
+ * drawing in popular image formats and save or load existing drawing in .jvd
+ * format.
+ * 
+ * @author Luka Skugor
+ *
+ */
 public class JVDraw extends JFrame {
 
 	/**
@@ -61,18 +68,42 @@ public class JVDraw extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Program's drawing canvas.
+	 */
 	private JDrawingCanvas drawingCanvas;
+	/**
+	 * Model containing all drawn objects.
+	 */
 	private DrawingModel drawingModel = new DrawingModel();
 
+	/**
+	 * Picker for background color.
+	 */
 	private JColorArea background;
+	/**
+	 * Picker for foreground color.
+	 */
 	private JColorArea foreground;
 
+	/**
+	 * Button group for selecting a drawing tool.
+	 */
 	private ObjectChooserGroup objectChooserGroup;
 
+	/**
+	 * Program's top panel.
+	 */
 	private JPanel topPanel;
 
+	/**
+	 * Program's bottom panel.
+	 */
 	private JPanel bottomPanel;
 
+	/**
+	 * Creates a new JVDraw window.
+	 */
 	public JVDraw() {
 		setTitle("JVDraw");
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -81,6 +112,9 @@ public class JVDraw extends JFrame {
 		initGUI();
 	}
 
+	/**
+	 * Initializes program's GUI.
+	 */
 	private void initGUI() {
 		getContentPane().setLayout(new BorderLayout());
 
@@ -100,6 +134,9 @@ public class JVDraw extends JFrame {
 		getContentPane().add(topPanel, BorderLayout.PAGE_START);
 	}
 
+	/**
+	 * Initializes color pickers.
+	 */
 	private void initColorAreas() {
 		background = new JColorArea(Color.WHITE, "background", this);
 		JLabel backgroundColorText = new JLabel();
@@ -115,6 +152,12 @@ public class JVDraw extends JFrame {
 		topPanel.add(background);
 	}
 
+	/**
+	 * Checks if current drawing is saved and then exits. If drawing is not
+	 * saved, user will prompted to save changes.
+	 * 
+	 * @return true if user confirmed exit, otherwise false
+	 */
 	private int exit() {
 		if (drawingModel.isModified()) {
 			return JOptionPane
@@ -128,17 +171,28 @@ public class JVDraw extends JFrame {
 		return JOptionPane.NO_OPTION;
 	}
 
+	/**
+	 * Save drawing action.
+	 */
 	private SaveAction saveAction = new SaveAction(null, drawingModel, this);
 
+	/**
+	 * Load drawing action.
+	 */
 	private Action loadAction = new AbstractAction() {
+
+		/**
+		 * Serial
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setAcceptAllFileFilterUsed(false);
-			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JVD",
-					"jvd"));
-			
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(
+					"JVD", "jvd"));
+
 			int r = fileChooser.showOpenDialog(JVDraw.this);
 			if (r == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
@@ -159,6 +213,10 @@ public class JVDraw extends JFrame {
 		}
 	};
 
+	/**
+	 * On windows closing listener. Check if drawing has been saved by calling
+	 * {@link #exit()}.
+	 */
 	private WindowListener onClosingListener = new WindowAdapter() {
 
 		@Override
@@ -180,6 +238,9 @@ public class JVDraw extends JFrame {
 		};
 	};
 
+	/**
+	 * Adds buttons to the program's GUI.
+	 */
 	private void addButtons() {
 		JMenuBar menuBar = new JMenuBar();
 
@@ -193,7 +254,7 @@ public class JVDraw extends JFrame {
 				this));
 		saveAsButton.setText("Save As");
 		fileMenu.add(saveAsButton);
-		
+
 		JMenuItem loadButton = new JMenuItem(loadAction);
 		loadButton.setText("Load");
 		fileMenu.add(loadButton);
@@ -209,6 +270,11 @@ public class JVDraw extends JFrame {
 
 		JMenuItem exit = new JMenuItem(new AbstractAction() {
 
+			/**
+			 * Serial
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				onClosingListener.windowClosing(null);
@@ -221,6 +287,11 @@ public class JVDraw extends JFrame {
 		setJMenuBar(menuBar);
 
 		topPanel.add(new JButton(new AbstractAction() {
+
+			/**
+			 * Serial
+			 */
+			private static final long serialVersionUID = 1L;
 
 			{
 				putValue(Action.NAME, "Generate circle");
@@ -243,6 +314,9 @@ public class JVDraw extends JFrame {
 		}
 	}
 
+	/**
+	 * Initializes list which displays drawn objects.
+	 */
 	private void initObjectList() {
 		JList<GeometricalObject> objectList = new JList<GeometricalObject>(
 				new DrawingObjectListModel(drawingModel));
@@ -269,7 +343,7 @@ public class JVDraw extends JFrame {
 				}
 			}
 		});
-		
+
 		objectList.setCellRenderer(new ListCellRenderer<GeometricalObject>() {
 
 			@Override
@@ -277,16 +351,16 @@ public class JVDraw extends JFrame {
 					JList<? extends GeometricalObject> list,
 					GeometricalObject value, int index, boolean isSelected,
 					boolean cellHasFocus) {
-				
+
 				DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 				JLabel label = (JLabel) defaultRenderer
 						.getListCellRendererComponent(objectList, value, index,
 								isSelected, cellHasFocus);
-				
+
 				DrawingObjectListModel model = (DrawingObjectListModel) list
 						.getModel();
 				int id = 0;
-				
+
 				for (int i = 0, count = model.getSize(); i < count; i++) {
 					GeometricalObject current = model.getElementAt(i);
 					if (current.getClass() == value.getClass()) {
@@ -296,13 +370,16 @@ public class JVDraw extends JFrame {
 						break;
 					}
 				}
-				
+
 				label.setText(value.getName() + " " + id);
 				return label;
 			}
 		});
 	}
 
+	/**
+	 * Initializes drawing canvas.
+	 */
 	private void initDrawingCanvas() {
 		drawingCanvas.addMouseListener(new MouseAdapter() {
 			@Override
@@ -341,6 +418,16 @@ public class JVDraw extends JFrame {
 
 	}
 
+	/**
+	 * Initializes a color picker.
+	 * 
+	 * @param colorArea
+	 *            initializing color picker
+	 * @param name
+	 *            name of the color picker
+	 * @param backgroundColorText
+	 *            {@link JLabel} where area's color will be displayed as string
+	 */
 	private void initColorArea(JColorArea colorArea, String name,
 			JLabel backgroundColorText) {
 		backgroundColorText
@@ -354,10 +441,20 @@ public class JVDraw extends JFrame {
 		});
 	}
 
+	/**
+	 * Initializes tools for creating drawings.
+	 * 
+	 * @return array of buttons which activate tools
+	 */
 	private ObjectCreatorButton[] initObjectCreators() {
 		ObjectCreatorButton[] buttons = new ObjectCreatorButton[3];
 		// FullCircleDrawing creator
 		buttons[0] = new ObjectCreatorButton() {
+			/**
+			 * Serial
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public GeometricalObject createObject(int x, int y, int width,
 					int height, Color bg, Color fg) {
@@ -370,6 +467,11 @@ public class JVDraw extends JFrame {
 		buttons[0].setText("Full Circle");
 
 		buttons[1] = new ObjectCreatorButton() {
+			/**
+			 * Serial
+			 */
+			private static final long serialVersionUID = 1L;
+			
 			@Override
 			public GeometricalObject createObject(int x, int y, int width,
 					int height, Color bg, Color fg) {
@@ -380,6 +482,11 @@ public class JVDraw extends JFrame {
 		buttons[1].setText("Empty Circle");
 
 		buttons[2] = new ObjectCreatorButton() {
+			/**
+			 * Serial
+			 */
+			private static final long serialVersionUID = 1L;
+			
 			@Override
 			public GeometricalObject createObject(int x, int y, int width,
 					int height, Color bg, Color fg) {
@@ -393,6 +500,12 @@ public class JVDraw extends JFrame {
 		return buttons;
 	}
 
+	/**
+	 * Called on program start. Creates a single JVDraw window.
+	 * 
+	 * @param args
+	 *            command line arguments
+	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 
