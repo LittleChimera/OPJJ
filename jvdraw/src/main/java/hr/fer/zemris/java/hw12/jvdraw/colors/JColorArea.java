@@ -13,6 +13,9 @@ import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 
 /**
+ * JColorArea is color picker tool. It's a 15x15 square component colored in
+ * picked color. Picked color can be get with {@link #getCurrentColor()}.
+ * 
  * @author Luka Skugor
  *
  */
@@ -22,20 +25,25 @@ public class JColorArea extends JComponent implements IColorProvider {
 	 * Serial
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * 
+	 * Selected color.
 	 */
 	private Color color;
 	/**
-	 * 
+	 * List of listeners which observe color change.
 	 */
 	private Set<ColorChangeListener> colorListeners;
-	
+
 	/**
+	 * Creates a new JColorArea with given initial color and name.
+	 * 
 	 * @param initColor
+	 *            initial color
 	 * @param name
+	 *            name of the area
 	 * @param parent
+	 *            top-level container of the GUI where action is instanced
 	 */
 	public JColorArea(Color initColor, String name, Component parent) {
 		colorListeners = new HashSet<ColorChangeListener>();
@@ -53,16 +61,21 @@ public class JColorArea extends JComponent implements IColorProvider {
 			}
 		});
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see hr.fer.zemris.java.hw12.jvdraw.colors.IColorProvider#getCurrentColor()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * hr.fer.zemris.java.hw12.jvdraw.colors.IColorProvider#getCurrentColor()
 	 */
+	@Override
 	public Color getCurrentColor() {
 		return color;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	@Override
@@ -70,8 +83,10 @@ public class JColorArea extends JComponent implements IColorProvider {
 		g.setColor(color);
 		g.fillRect(0, 0, getWidth(), getHeight());
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#getPreferredSize()
 	 */
 	@Override
@@ -79,34 +94,38 @@ public class JColorArea extends JComponent implements IColorProvider {
 		final Dimension squareDimension = new Dimension(15, 15);
 		return squareDimension;
 	}
-	
+
 	/**
-	 * @param ccl
+	 * Adds a color change listener.
+	 * @param ccl listener
 	 */
 	public void addColorChangeListener(ColorChangeListener ccl) {
 		colorListeners.add(ccl);
 	}
-	
+
 	/**
-	 * @param ccl
+	 * Removes a color change listener
+	 * @param ccl listener
 	 */
 	public void removeColorChangeListener(ColorChangeListener ccl) {
 		colorListeners.remove(ccl);
 	}
-	
+
 	/**
-	 * @param color
+	 * Sets current color.
+	 * @param color set color
 	 */
-	public void setColor(Color color) {
+	private void setColor(Color color) {
 		Color old = this.color;
 		this.color = color;
 		colorListeners.forEach(l -> {
 			l.newColorSelected(JColorArea.this, old, color);
 		});
 	}
-	
+
 	/**
-	 * @return
+	 * Gets selected RGB color as string in format "({r}, {g}, {b})".
+	 * @return current color as string
 	 */
 	public String rgbToString() {
 		return String.format("(%d, %d, %d)", color.getRed(), color.getGreen(),
