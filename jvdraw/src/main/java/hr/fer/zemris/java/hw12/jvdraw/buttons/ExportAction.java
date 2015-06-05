@@ -81,13 +81,15 @@ public class ExportAction extends AbstractAction {
 				"png"));
 		int choosen = fileChooser.showSaveDialog(parent);
 		if (choosen == JFileChooser.APPROVE_OPTION) {
+			
 			File file = fileChooser.getSelectedFile();
+			String extension = ((FileNameExtensionFilter) fileChooser
+					.getFileFilter()).getExtensions()[0];
+			if (!file.getName().endsWith("." + extension)) {
+				file = new File(file.getPath() + "." + extension);
+			}
+			
 			try {
-				String extension = ((FileNameExtensionFilter) fileChooser
-						.getFileFilter()).getExtensions()[0];
-				if (!file.getName().endsWith("." + extension)) {
-					file = new File(file.getPath() + "." + extension);
-				}
 				ImageIO.write(image, extension, file);
 			} catch (IOException e1) {
 				JOptionPane.showMessageDialog(parent,

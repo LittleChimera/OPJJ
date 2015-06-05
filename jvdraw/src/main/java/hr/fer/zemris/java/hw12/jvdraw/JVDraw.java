@@ -16,6 +16,7 @@ import hr.fer.zemris.java.hw12.jvdraw.objects.LineDrawing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
@@ -35,6 +36,7 @@ import java.util.Random;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -47,8 +49,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class JVDraw extends JFrame {
 
@@ -131,6 +135,10 @@ public class JVDraw extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setAcceptAllFileFilterUsed(false);
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JVD",
+					"jvd"));
+			
 			int r = fileChooser.showOpenDialog(JVDraw.this);
 			if (r == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
@@ -240,7 +248,7 @@ public class JVDraw extends JFrame {
 				new DrawingObjectListModel(drawingModel));
 
 		JScrollPane objectListDecorator = new JScrollPane(objectList);
-		objectListDecorator.setPreferredSize(new Dimension(100, 0));
+		objectListDecorator.setPreferredSize(new Dimension(150, 0));
 		objectListDecorator.setBorder(BorderFactory
 				.createRaisedSoftBevelBorder());
 
@@ -259,6 +267,38 @@ public class JVDraw extends JFrame {
 							.showChangeDialog(JVDraw.this);
 					DrawingModel.fireObjectsChanged(drawingModel, index, index);
 				}
+			}
+		});
+		
+		objectList.setCellRenderer(new ListCellRenderer<GeometricalObject>() {
+
+			@Override
+			public Component getListCellRendererComponent(
+					JList<? extends GeometricalObject> list,
+					GeometricalObject value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				
+				DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+				JLabel label = (JLabel) defaultRenderer
+						.getListCellRendererComponent(objectList, value, index,
+								isSelected, cellHasFocus);
+				
+				DrawingObjectListModel model = (DrawingObjectListModel) list
+						.getModel();
+				int id = 0;
+				
+				for (int i = 0, count = model.getSize(); i < count; i++) {
+					GeometricalObject current = model.getElementAt(i);
+					if (current.getClass() == value.getClass()) {
+						id++;
+					}
+					if (current == value) {
+						break;
+					}
+				}
+				
+				label.setText(value.getName() + " " + id);
+				return label;
 			}
 		});
 	}

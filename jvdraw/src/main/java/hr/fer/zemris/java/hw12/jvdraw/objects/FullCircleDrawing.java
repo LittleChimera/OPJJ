@@ -43,8 +43,8 @@ public class FullCircleDrawing extends GeometricalObject {
 	}
 
 	@Override
-	public String toString() {
-		return "Circle";
+	public String getName() {
+		return "Full Circle";
 	}
 
 	@Override

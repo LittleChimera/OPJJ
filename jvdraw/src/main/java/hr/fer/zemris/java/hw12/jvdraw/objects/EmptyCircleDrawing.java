@@ -41,8 +41,8 @@ public class EmptyCircleDrawing extends GeometricalObject {
 	}
 
 	@Override
-	public String toString() {
-		return "Circle";
+	public String getName() {
+		return "Empty Circle";
 	}
 
 	@Override

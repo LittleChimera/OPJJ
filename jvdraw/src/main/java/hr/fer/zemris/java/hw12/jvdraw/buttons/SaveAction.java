@@ -4,6 +4,7 @@ import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingModel;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -13,6 +14,7 @@ import java.nio.file.StandardOpenOption;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class SaveAction extends AbstractAction {
 
@@ -34,9 +36,21 @@ public class SaveAction extends AbstractAction {
 	public boolean saveModel() {
 		if (savePath == null) {
 			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setAcceptAllFileFilterUsed(false);
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JVD",
+					"jvd"));
+			
 			int result = fileChooser.showSaveDialog(parent);
 			if (result == JFileChooser.APPROVE_OPTION) {
-				savePath = fileChooser.getSelectedFile().toPath();
+				
+				File file = fileChooser.getSelectedFile();
+				String extension = ((FileNameExtensionFilter) fileChooser
+						.getFileFilter()).getExtensions()[0];
+				if (!file.getName().endsWith("." + extension)) {
+					file = new File(file.getPath() + "." + extension);
+				}
+				
+				savePath = file.toPath();
 			} else {
 				return false;
 			}

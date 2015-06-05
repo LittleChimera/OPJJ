@@ -34,4 +34,7 @@ public abstract class GeometricalObject extends JComponent {
 	
 	public abstract void showChangeDialog(Component parent);
 	
+	@Override
+	public abstract String getName();
+	
 }

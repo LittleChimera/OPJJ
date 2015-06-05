@@ -43,7 +43,7 @@ public class LineDrawing extends GeometricalObject {
 	}
 
 	@Override
-	public String toString() {
+	public String getName() {
 		return "Line";
 	}
 
