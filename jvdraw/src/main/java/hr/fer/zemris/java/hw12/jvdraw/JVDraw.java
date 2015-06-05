@@ -159,7 +159,7 @@ public class JVDraw extends JFrame {
 	 * @return true if user confirmed exit, otherwise false
 	 */
 	private int exit() {
-		if (drawingModel.isModified()) {
+		if (saveAction.isModelModified()) {
 			return JOptionPane
 					.showConfirmDialog(
 							this,

@@ -4,7 +4,6 @@ import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingModel;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.nio.file.Path;
 
 /**
  * Does the same thing as {@link SaveAction} except save path is reset each time
@@ -19,9 +18,17 @@ import java.nio.file.Path;
 public class SaveAsAction extends SaveAction {
 
 	/**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Creates a new SaveAsAction for the given {@link DrawingModel}.
-	 * @param model model to save
-	 * @param parent top-level container of the GUI where action is instanced
+	 * 
+	 * @param model
+	 *            model to save
+	 * @param parent
+	 *            top-level container of the GUI where action is instanced
 	 */
 	public SaveAsAction(DrawingModel model, Component parent) {
 		super(null, model, parent);

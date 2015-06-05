@@ -12,14 +12,45 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * LineDrawing is a drawing of a straight line painted in custom color.
+ * 
+ * @see GeometricalObject
+ * 
+ * @author Luka Skugor
+ *
+ */
 public class LineDrawing extends GeometricalObject {
 
-	private static final String jvdName = "LINE";
+	/**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * x-coordinate of starting point of the line.
+	 */
 	private int x1;
+	/**
+	 * y-coordinate of starting point of the line.
+	 */
 	private int y1;
+	/**
+	 * x-coordinate of ending point of the line.
+	 */
 	private int x2;
+	/**
+	 * y-coordinate of ending point of the line.
+	 */
 	private int y2;
 
+	/**
+	 * Creates a new line drawing for given starting and ending point, and line color.
+	 * @param x1 x-coordinate of starting point of the line
+	 * @param y1 y-coordinate of starting point of the line
+	 * @param x2 x-coordinate of ending point of the line
+	 * @param y2 y-coordinate of ending point of the line
+	 * @param color line's color
+	 */
 	public LineDrawing(int x1, int y1, int x2, int y2, Color color) {
 		super(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x1 - x2), Math
 				.abs(y1 - y2), color, null);
@@ -29,6 +60,9 @@ public class LineDrawing extends GeometricalObject {
 		this.y2 = y2;
 	}
 
+	/* (non-Javadoc)
+	 * @see hr.fer.zemris.java.hw12.jvdraw.objects.GeometricalObject#paint(java.awt.Graphics)
+	 */
 	@Override
 	public void paint(Graphics g) {
 
@@ -36,17 +70,26 @@ public class LineDrawing extends GeometricalObject {
 		g.drawLine(x1, y1, x2, y2);
 	}
 
+	/* (non-Javadoc)
+	 * @see hr.fer.zemris.java.hw12.jvdraw.objects.GeometricalObject#getSaveFormat()
+	 */
 	@Override
 	public String getSaveFormat() {
 		return "LINE " + x1 + " " + y1 + " " + x2 + " " + y2 + " "
 				+ rgbToSaveFormat(fillColor);
 	}
 
+	/* (non-Javadoc)
+	 * @see hr.fer.zemris.java.hw12.jvdraw.objects.GeometricalObject#getName()
+	 */
 	@Override
 	public String getName() {
 		return "Line";
 	}
 
+	/* (non-Javadoc)
+	 * @see hr.fer.zemris.java.hw12.jvdraw.objects.GeometricalObject#showChangeDialog(java.awt.Component)
+	 */
 	@Override
 	public void showChangeDialog(Component parent) {
 		JPanel changePanel = new JPanel(new GridLayout(5, 2));
@@ -86,6 +129,14 @@ public class LineDrawing extends GeometricalObject {
 		}
 	}
 
+	/**
+	 * Changes parameters of the line.
+	 * @param x1 x-coordinate of starting point of the line
+	 * @param y1 y-coordinate of starting point of the line
+	 * @param x2 x-coordinate of ending point of the line
+	 * @param y2 y-coordinate of ending point of the line
+	 * @param color line's color
+	 */
 	private void changeObject(int x1, int y1, int x2, int y2, Color color) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -95,6 +146,13 @@ public class LineDrawing extends GeometricalObject {
 				Math.abs(y1 - y2), color, null);
 	}
 
+	/**
+	 * Creates LineDrawing from a JVD format.
+	 * 
+	 * @param jvd
+	 *            JVD format of LineDrawing
+	 * @return created object
+	 */
 	public static LineDrawing fromJvd(String jvd) {
 		try {
 			String[] params = jvd.split(" ", 2)[1].split(" ");

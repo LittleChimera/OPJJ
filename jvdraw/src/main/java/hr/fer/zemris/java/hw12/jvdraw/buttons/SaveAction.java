@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw12.jvdraw.buttons;
 
 import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingModel;
+import hr.fer.zemris.java.hw12.jvdraw.drawing.DrawingModelListener;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -40,6 +41,10 @@ public class SaveAction extends AbstractAction {
 	 * Parent component used for displaying prompt dialogs.
 	 */
 	private Component parent;
+	/**
+	 * Indicates if model has been modified since last save.
+	 */
+	private boolean modified = false;
 
 	/**
 	 * Creates a new SaveAction for given save path and {@link DrawingModel}.
@@ -55,6 +60,23 @@ public class SaveAction extends AbstractAction {
 		this.savePath = savePath;
 		this.model = model;
 		this.parent = parent;
+		model.addListener(new DrawingModelListener() {
+			
+			@Override
+			public void objectsRemoved(DrawingModel source, int index0, int index1) {
+				modified = true;
+			}
+			
+			@Override
+			public void objectsChanged(DrawingModel source, int index0, int index1) {
+				modified = true;
+			}
+			
+			@Override
+			public void objectsAdded(DrawingModel source, int index0, int index1) {
+				modified = true;
+			}
+		});
 	}
 
 	/*
@@ -110,7 +132,7 @@ public class SaveAction extends AbstractAction {
 			return false;
 		}
 
-		model.save();
+		modified = false;
 		JOptionPane.showMessageDialog(parent, "Saved!", "Info",
 				JOptionPane.INFORMATION_MESSAGE);
 		return true;
@@ -124,6 +146,14 @@ public class SaveAction extends AbstractAction {
 	public void update(Path path, DrawingModel drawingModel) {
 		this.savePath = path;
 		this.model = drawingModel;
+	}
+	
+	/**
+	 * Checks if model has been modified since last save.
+	 * @return true if model has been modified, otherwise false
+	 */
+	public boolean isModelModified() {
+		return modified;
 	}
 
 }

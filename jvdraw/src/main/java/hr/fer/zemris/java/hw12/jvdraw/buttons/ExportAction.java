@@ -44,7 +44,7 @@ public class ExportAction extends AbstractAction {
 	 * @param model
 	 *            model which is exported
 	 * @param parent
-	 *            top-level element of the GUI where action is instanced
+	 *            top-level container of the GUI where action is instanced
 	 */
 	public ExportAction(DrawingModel model, Component parent) {
 		this.model = model;
