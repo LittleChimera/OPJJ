@@ -227,6 +227,7 @@ public class JNotepad extends JFrame {
 		SwingUtilities.invokeLater(() -> {
 			new JNotepad().setVisible(true);
 		});
+		System.out.println("something");
 	}
 
 }

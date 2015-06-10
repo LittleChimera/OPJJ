@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"
+  metadata-complete="false">
+
+  <display-name>Moja prva aplikacija</display-name>
+  <description>
+     Prva aplikacija
+  </description>
+
+  <servlet>
+    <servlet-name>servlet1</servlet-name>
+    <servlet-class>hr.fer.zemris.java.tecaj_12.servleti.PrviServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>servlet3</servlet-name>
+    <servlet-class>hr.fer.zemris.java.tecaj_12.servleti.SigurniServlet</servlet-class>
+    <security-role-ref>
+      <description>Može samo administrator</description>
+      <role-name>ADM</role-name>
+      <role-link>administrator</role-link>
+    </security-role-ref>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>servlet1</servlet-name>
+    <url-pattern>/prvi</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>servlet1</servlet-name>
+    <url-pattern>/index.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>servlet3</servlet-name>
+    <url-pattern>/sig</url-pattern>
+  </servlet-mapping>
+
+  <session-config>
+    <session-timeout>15</session-timeout>
+  </session-config>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Stranice za administraciju</web-resource-name>
+      <url-pattern>/sig</url-pattern>
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>administrator</role-name>
+    </auth-constraint>
+  </security-constraint>  
+  
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <form-login-config>
+      <form-login-page>/WEB-INF/pages/prijava.jsp</form-login-page>
+      <form-error-page>/WEB-INF/pages/pogreska.jsp</form-error-page>
+    </form-login-config>
+  </login-config>
+
+  <security-role>
+    <description>Administrator sustava</description>
+    <role-name>administrator</role-name>
+  </security-role>  
+  
+</web-app>
