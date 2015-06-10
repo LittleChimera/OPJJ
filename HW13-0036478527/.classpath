@@ -3,5 +3,9 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="web/aplikacija2/WEB-INF/lib/javax.servlet.jsp.jstl-1.2.1.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija2/WEB-INF/lib/javax.servlet.jsp.jstl-api-1.2.1.jar"/>
+	<classpathentry kind="lib" path="weblib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="weblib/servlet-api.jar"/>
+	<classpathentry kind="output" path="web/aplikacija2/WEB-INF/classes"/>
 </classpath>
