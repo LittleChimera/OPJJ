@@ -4,15 +4,15 @@
 
 <html>
 <head>
-<title>Home</title>
+<title>OS Usage</title>
 </head>
 <body bgColor="<%=session.getAttribute(ColorSetterServlet.BG_COLOR)%>">
-	<ul>
-		<li><a href="colors.jsp">Background color chooser</a></li>
-		<li><a href="trigonometric?a=0&b=90">Trigonometrics</a></li>
-		<li><a href="stories/funny.jsp">State Trooper pulls a car
-				over</a></li>
-		<li><a href="report.jsp">OS Report</a></li>
-	</ul>
+	<h1>OS Usage</h1>
+	<p>Here are the results of OS usage in survey that we completed.</p>
+	<img src='reportImage' ALT='OS statistics' />
+	
+	<br>
+	
+	<a href=index.jsp>Index</a>
 </body>
 </html>

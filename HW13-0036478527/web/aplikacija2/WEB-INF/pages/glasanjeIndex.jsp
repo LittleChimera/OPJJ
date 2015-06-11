@@ -2,17 +2,16 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+
 <html>
-<head>
-<title>Home</title>
-</head>
 <body bgColor="<%=session.getAttribute(ColorSetterServlet.BG_COLOR)%>">
-	<ul>
-		<li><a href="colors.jsp">Background color chooser</a></li>
-		<li><a href="trigonometric?a=0&b=90">Trigonometrics</a></li>
-		<li><a href="stories/funny.jsp">State Trooper pulls a car
-				over</a></li>
-		<li><a href="report.jsp">OS Report</a></li>
-	</ul>
+	<h1>Glasanje za omiljeni bend:</h1>
+	<p>Od sljedećih bendova, koji Vam je bend najdraži? Kliknite na
+		link kako biste glasali!</p>
+	<ol>
+	<c:forEach var="de" items="${definition}">
+		<li><a href="glasanje-glasaj?id=${de.ID}">${de.bandName}</a></li>	
+	</c:forEach>
+	</ol>
 </body>
 </html>

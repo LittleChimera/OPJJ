@@ -3,6 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <html>
+<head>
+	<title>Background color picker</title>
+</head>
 <body bgColor=<%= session.getAttribute(ColorSetterServlet.BG_COLOR) %>>
 	<a href=${pageContext.request.contextPath}/setcolor?<%= ColorSetterServlet.BG_COLOR %>=FFFFFF>WHITE</a>
 	<a href=${pageContext.request.contextPath}/setcolor?<%= ColorSetterServlet.BG_COLOR %>=FF4136>RED</a>
