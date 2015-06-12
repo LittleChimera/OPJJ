@@ -12,13 +12,32 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+/**
+ * PowersServlet generates an XLS document with n sheets. On sheet at index i (1
+ * <= i <= n) i-th power is calculated for number from a to b (both inclusive).
+ * All parameters (a, b, n) are given as request parameters.
+ * 
+ * @author Luka Skugor
+ *
+ */
 @WebServlet(name = "powers", urlPatterns = { "/powers" })
 public class PowersServlet extends HttpServlet {
 
+	/**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
+	 * , javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
 
 		int startFrom = 0, endAt = 0, maxPower = 0;
 		try {
@@ -28,12 +47,13 @@ public class PowersServlet extends HttpServlet {
 		} catch (IllegalArgumentException e) {
 			String message = e.getMessage();
 			req.setAttribute("error", message);
-			req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req, resp);
+			req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,
+					resp);
 			return;
 		}
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		
+
 		for (int i = 1; i <= maxPower; i++) {
 			HSSFSheet sheet = workbook.createSheet(i + "-th power");
 			HSSFRow head = sheet.createRow(0);
@@ -53,6 +73,18 @@ public class PowersServlet extends HttpServlet {
 		workbook.close();
 	}
 
+	/**
+	 * Parses an integer parameter given as string. Parameter must satisfy given
+	 * constraints, otherwise exception will be thrown. If parameters can't be
+	 * parsed as integer, parameter will be parsed as zero.
+	 * 
+	 * @param param parsing parameter
+	 * @param minContraint minimum integer constraint (inclusive)
+	 * @param maxConstraint maximum integer constraint (inclusive)
+	 * @return parsed parameter
+	 * @throws IllegalArgumentException
+	 *             if parameter doesn't satisfy given constraints
+	 */
 	private int parseParameter(String param, int minContraint, int maxConstraint) {
 		Integer value = null;
 		try {
@@ -60,12 +92,12 @@ public class PowersServlet extends HttpServlet {
 		} catch (Exception e) {
 			value = 0;
 		}
+		
 		if (value < minContraint || value > maxConstraint) {
 			throw new IllegalArgumentException(String.format(
 					"Parameter %s doesn't satisfies constraints: [%d, %d].",
 					param, minContraint, maxConstraint));
-		}
-
+		}		
 		return value;
 	}
 

@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="web/aplikacija2/WEB-INF/lib/poi-3.12-20150511.jar" sourcepath="/home/luka/Downloads/poi-3.12"/>
 	<classpathentry kind="lib" path="web/aplikacija2/WEB-INF/lib/jcommon-1.0.23.jar"/>
 	<classpathentry kind="lib" path="web/aplikacija2/WEB-INF/lib/jfreechart-1.0.19.jar" sourcepath="/home/luka/Downloads/jfreechart-1.0.19-fx-javadocs.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="web/aplikacija2/WEB-INF/classes"/>
 </classpath>

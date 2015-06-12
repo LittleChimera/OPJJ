@@ -10,7 +10,7 @@ table.rez td {
 }
 </style>
 </head>
-<body>
+<body bgColor="<%=session.getAttribute(ColorSetterServlet.BG_COLOR)%>">
 	<h1>Rezultati glasanja</h1>
 	<p>Ovo su rezultati glasanja.</p>
 	<table border="1" cellspacing="0" class="rez">

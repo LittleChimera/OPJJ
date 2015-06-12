@@ -5,6 +5,7 @@ import hr.fer.zemris.java.hw13.voting.VotingDatabaseUtility.VotingDefinitionEntr
 import hr.fer.zemris.java.hw13.voting.VotingDatabaseUtility.VotingResultEntry;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -20,9 +21,27 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+/**
+ * GlasanjeXLS generates a XLS file of the voting results.
+ * 
+ * @author Luka Skugor
+ *
+ */
 @WebServlet(name = "GlasanjeXLS", urlPatterns = { "/glasanje-xls" })
 public class GlasanjeXLSServlet extends HttpServlet {
 
+	/**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
+	 * , javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -43,6 +62,29 @@ public class GlasanjeXLSServlet extends HttpServlet {
 				.getResults(resultsPath);
 		req.setAttribute("results", results);
 
+		HSSFWorkbook workbook = createWorkbook(definition, results);
+
+		resp.setContentType("application/vnd.ms-excel");
+		OutputStream os = resp.getOutputStream();
+		workbook.write(os);
+		os.flush();
+
+		workbook.close();
+	}
+
+	/**
+	 * Creates a HSSFWorkbook of the voting results.
+	 * 
+	 * @param definition
+	 *            voting database definition
+	 * @param results
+	 *            voting results
+	 * @return creates workbook
+	 */
+	private HSSFWorkbook createWorkbook(
+			Map<Integer, VotingDefinitionEntry> definition,
+			Collection<VotingResultEntry> results) {
+
 		HSSFWorkbook workbook = new HSSFWorkbook();
 
 		HSSFSheet sheet = workbook.createSheet("Band Voting results");
@@ -60,11 +102,7 @@ public class GlasanjeXLSServlet extends HttpServlet {
 			row.createCell(1).setCellValue(resultEntry.getVotes());
 		}
 
-		resp.setContentType("application/vnd.ms-excel");
-		workbook.write(resp.getOutputStream());
-
-		workbook.close();
+		return workbook;
 	}
-
 
 }

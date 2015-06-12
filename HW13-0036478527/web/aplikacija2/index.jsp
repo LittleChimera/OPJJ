@@ -13,6 +13,8 @@
 		<li><a href="stories/funny.jsp">State Trooper pulls a car
 				over</a></li>
 		<li><a href="report.jsp">OS Report</a></li>
+		<li><a href="appinfo.jsp">App Info</a></li>
+		<li><a href="glasanje">Glasanje</a></li>
 	</ul>
 </body>
 </html>
