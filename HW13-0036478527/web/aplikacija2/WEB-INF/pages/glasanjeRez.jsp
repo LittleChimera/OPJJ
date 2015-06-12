@@ -33,15 +33,15 @@ table.rez td {
 	<img alt="Pie-chart" src="glasanje-grafika" width="600" height="400" />
 	<h2>Rezultati u XLS formatu</h2>
 	<p>
-		Rezultati u XLS formatu dostupni su <a href="/glasanje-xls">ovdje</a>
+		Rezultati u XLS formatu dostupni su <a href="glasanje-xls">ovdje</a>
 	</p>
 	<h2>Razno</h2>
 	<p>Primjeri pjesama pobjedničkih bendova:</p>
 	<ul>
-		<li><a
-			href="http://www.geocities.com/~goldenoldies/SmokeGetsInYourEyes-Platters-
-ver2.mid"
-			target="_blank">The Platters</a></li>
+		<c:forEach var="r" items="${results}" begin="0" end="2">
+			<li><a href="${definition[r.ID].previewSongURL}" target="_blank">
+					${definition[r.ID].bandName}</a></li>
+		</c:forEach>
 	</ul>
 </body>
 </html>

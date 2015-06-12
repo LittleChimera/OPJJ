@@ -114,7 +114,7 @@ public class VotingDatabaseUtility {
 			return ID;
 		}
 
-		public String getPreviewSong() {
+		public String getPreviewSongURL() {
 			return previewSongURL;
 		}
 
