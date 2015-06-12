@@ -13,7 +13,9 @@
 	<property name="build.test" location="${build}/test" />
 	<property name="dist" location="dist" />
 	<property name="weblib" location="weblib" />
-	<property name="lib.dir" location="web/aplikacija2/WEB-INF/lib" />
+	<property name="web.dir" location="web" />
+	<property name="app.dir" location="${web.dir}/aplikacija2" />
+	<property name="lib.dir" location="${app.dir}/WEB-INF/lib" />
 
 	<!-- Dodavanje biblioteka -->
 	<path id="libraries">
@@ -86,7 +88,7 @@
 
 
 	<target name="war" depends="compile" description="Generiranje WAR arhive.">
-		<war destfile="${dist}/aplikacija2.war" webxml="${web.dir}/web.xml">
+		<war destfile="${dist}/aplikacija2.war" webxml="${app.dir}/WEB-INF/web.xml">
 			<fileset dir="${app.dir}" />
 			<lib dir="${lib.dir}" />
 			<classes dir="${build.classes}" />
@@ -104,7 +106,7 @@
 		<!-- Stvaranje direktorija za distribuciju -->
 		<mkdir dir="${dist}/doc" />
 
-		<javadoc packagenames="hr.*" sourcepath="${src.java}" Overview="${src.java}/overview.html" defaultexcludes="yes" destdir="${dist}/doc" encoding="UTF-8" docencoding="UTF-8" charset="UTF-8" author="  true" version="true" use="true" windowtitle="Dokumentacija programa">
+		<javadoc classpathref="libraries" packagenames="hr.*" sourcepath="${src.java}" Overview="${src.java}/overview.html" defaultexcludes="yes" destdir="${dist}/doc" encoding="UTF-8" docencoding="UTF-8" charset="UTF-8" author="  true" version="true" use="true" windowtitle="Dokumentacija programa">
 			<doctitle>
 				<![CDATA[<h1>Prvi program</h1>]]>
   </doctitle>

@@ -13,8 +13,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 /**
- * PowersServlet generates an XLS document with n sheets. On sheet at index i (1
- * <= i <= n) i-th power is calculated for number from a to b (both inclusive).
+ * PowersServlet generates an XLS document with n sheets. On sheet at index i (i
+ * in [1,5]) i-th power is calculated for number from a to b (both inclusive).
  * All parameters (a, b, n) are given as request parameters.
  * 
  * @author Luka Skugor
@@ -78,9 +78,12 @@ public class PowersServlet extends HttpServlet {
 	 * constraints, otherwise exception will be thrown. If parameters can't be
 	 * parsed as integer, parameter will be parsed as zero.
 	 * 
-	 * @param param parsing parameter
-	 * @param minContraint minimum integer constraint (inclusive)
-	 * @param maxConstraint maximum integer constraint (inclusive)
+	 * @param param
+	 *            parsing parameter
+	 * @param minContraint
+	 *            minimum integer constraint (inclusive)
+	 * @param maxConstraint
+	 *            maximum integer constraint (inclusive)
 	 * @return parsed parameter
 	 * @throws IllegalArgumentException
 	 *             if parameter doesn't satisfy given constraints
@@ -92,12 +95,12 @@ public class PowersServlet extends HttpServlet {
 		} catch (Exception e) {
 			value = 0;
 		}
-		
+
 		if (value < minContraint || value > maxConstraint) {
 			throw new IllegalArgumentException(String.format(
 					"Parameter %s doesn't satisfies constraints: [%d, %d].",
 					param, minContraint, maxConstraint));
-		}		
+		}
 		return value;
 	}
 
