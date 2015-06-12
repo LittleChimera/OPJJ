@@ -38,9 +38,14 @@ table.rez td {
 	<h2>Razno</h2>
 	<p>Primjeri pjesama pobjedničkih bendova:</p>
 	<ul>
-		<c:forEach var="r" items="${results}" begin="0" end="2">
-			<li><a href="${definition[r.ID].previewSongURL}" target="_blank">
-					${definition[r.ID].bandName}</a></li>
+		<c:forEach var="r" items="${results}" varStatus="status">
+		<c:if test="${status.index == 0}">
+			<c:set var="maxVotes" value="${r.votes}"></c:set>
+		</c:if>
+			<c:if test="${maxVotes == r.votes}">
+				<li><a href="${definition[r.ID].previewSongURL}"
+					target="_blank"> ${definition[r.ID].bandName}</a></li>
+			</c:if>
 		</c:forEach>
 	</ul>
 </body>
