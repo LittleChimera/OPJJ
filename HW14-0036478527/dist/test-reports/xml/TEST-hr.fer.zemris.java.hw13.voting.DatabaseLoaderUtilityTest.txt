@@ -1,0 +1,4 @@
+Testsuite: hr.fer.zemris.java.hw13.voting.DatabaseLoaderUtilityTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.29 sec
+
+Testcase: testDefinitionLoad took 0.113 sec

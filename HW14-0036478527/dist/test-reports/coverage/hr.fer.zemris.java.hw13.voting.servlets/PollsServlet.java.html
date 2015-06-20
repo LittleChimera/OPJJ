@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PollsServlet.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.hw13.voting.servlets</a> &gt; <span class="el_source">PollsServlet.java</span></div><h1>PollsServlet.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.hw13.voting.servlets;
+
+import hr.fer.zemris.java.hw13.dao.DAOProvider;
+import hr.fer.zemris.java.hw13.model.PollDefinition;
+import hr.fer.zemris.java.hw13.voting.VotingHelper;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet responsible for generating welcome page. It lists all polls.
+ * 
+ * @author Luka Skugor
+ *
+ */
+@WebServlet(name = &quot;polls&quot;, urlPatterns = { &quot;/index.html&quot; })
+<span class="nc" id="L23">public class PollsServlet extends HttpServlet {</span>
+
+	/**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
+	 * , javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+<span class="nc" id="L41">		List&lt;PollDefinition&gt; polls = DAOProvider.getDao().getPolls();</span>
+
+<span class="nc" id="L43">		req.setAttribute(&quot;polls&quot;, polls);</span>
+
+<span class="nc" id="L45">		req.getRequestDispatcher(&quot;/WEB-INF/pages/polls.jsp&quot;).forward(req, resp);</span>
+
+<span class="nc" id="L47">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

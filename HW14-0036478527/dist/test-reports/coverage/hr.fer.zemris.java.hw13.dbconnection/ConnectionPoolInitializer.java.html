@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConnectionPoolInitializer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.hw13.dbconnection</a> &gt; <span class="el_source">ConnectionPoolInitializer.java</span></div><h1>ConnectionPoolInitializer.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.hw13.dbconnection;
+
+import hr.fer.zemris.java.hw13.dao.DAOException;
+import hr.fer.zemris.java.hw13.model.PollDefinition;
+import hr.fer.zemris.java.hw13.model.PollEntry;
+import hr.fer.zemris.java.hw13.sql.SQLConnectionProvider;
+import hr.fer.zemris.java.hw13.sql.SQLDAO;
+import hr.fer.zemris.java.hw13.voting.DatabaseLoaderUtility;
+
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Properties;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import javax.sql.DataSource;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
+
+/**
+ * Initializes connection between app and database and creates needed databases if they do not exist.
+ * 
+ * @author Luka Skugor
+ *
+ */
+@WebListener
+<span class="nc" id="L39">public class ConnectionPoolInitializer implements ServletContextListener {</span>
+
+	/**
+	 * Path to definition of the polls.
+	 */
+	private static final String POLLS_DEFINITION_PATH = &quot;/WEB-INF/polls-definition.txt&quot;;
+	/**
+	 * Path to all poll options.
+	 */
+	private static final String POLLS_OPTIONS_PATH = &quot;/WEB-INF/polls-options.txt&quot;;
+	/**
+	 * Path to database connection settings.
+	 */
+	private static final String dbSettings = &quot;/WEB-INF/dbsettings.properties&quot;;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet
+	 * .ServletContextEvent)
+	 */
+	@Override
+	public void contextInitialized(ServletContextEvent sce) {
+
+<span class="nc" id="L64">		Properties dbProperties = new Properties();</span>
+<span class="nc" id="L65">		Path dbSettingsPath = Paths.get(sce.getServletContext().getRealPath(</span>
+				dbSettings));
+		try {
+<span class="nc" id="L68">			dbProperties.load(Files.newInputStream(dbSettingsPath));</span>
+<span class="nc" id="L69">		} catch (IOException noConfig) {</span>
+<span class="nc" id="L70">			throw new RuntimeException(&quot;Missing databse configuration path: &quot;</span>
+					+ dbSettingsPath);
+<span class="nc" id="L72">		}</span>
+
+<span class="nc" id="L74">		String connectionURL = &quot;jdbc:derby://localhost:1527/&quot; + &quot;votingDB&quot;</span>
+				+ &quot;;user=ivica;password=ivo&quot;;
+
+<span class="nc" id="L77">		ComboPooledDataSource cpds = new ComboPooledDataSource();</span>
+		try {
+<span class="nc" id="L79">			cpds.setDriverClass(&quot;org.apache.derby.jdbc.ClientDriver&quot;);</span>
+<span class="nc" id="L80">		} catch (PropertyVetoException e1) {</span>
+<span class="nc" id="L81">			throw new RuntimeException(&quot;Error occured while getting driver.&quot;,</span>
+					e1);
+<span class="nc" id="L83">		}</span>
+<span class="nc" id="L84">		cpds.setJdbcUrl(connectionURL);</span>
+
+<span class="nc" id="L86">		sce.getServletContext().setAttribute(&quot;hr.fer.zemris.dbpool&quot;, cpds);</span>
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		if (createTables(cpds)) {</span>
+			try {
+<span class="nc" id="L90">				fillTables(sce.getServletContext(), cpds);</span>
+<span class="nc" id="L91">			} catch (Exception e) {</span>
+<span class="nc" id="L92">				throw new RuntimeException(e);</span>
+<span class="nc" id="L93">			}</span>
+		}
+
+<span class="nc" id="L96">	}</span>
+
+	/**
+	 * Fills table with content from {@link #POLLS_DEFINITION_PATH} and {@link #POLLS_OPTIONS_PATH}.
+	 * @param servletContext servlet context
+	 * @param dataSource source providing connection to database
+	 * @throws DAOException if database error occurs
+	 */
+	private void fillTables(ServletContext servletContext, DataSource dataSource)
+			throws DAOException {
+<span class="nc" id="L106">		Connection con = null;</span>
+		try {
+<span class="nc" id="L108">			con = dataSource.getConnection();</span>
+<span class="nc" id="L109">		} catch (SQLException e1) {</span>
+<span class="nc" id="L110">			throw new RuntimeException(</span>
+					&quot;Error occured when connecting to database&quot;, e1);
+<span class="nc" id="L112">		}</span>
+		try {
+<span class="nc" id="L114">			List&lt;PollDefinition&gt; polls = DatabaseLoaderUtility</span>
+<span class="nc" id="L115">					.loadPolls(servletContext</span>
+<span class="nc" id="L116">							.getRealPath(POLLS_DEFINITION_PATH));</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">			for (PollDefinition poll : polls) {</span>
+<span class="nc" id="L118">				try (PreparedStatement pst = con</span>
+<span class="nc" id="L119">						.prepareStatement(&quot;INSERT INTO &quot; + SQLDAO.POLLS_TABLE</span>
+								+ &quot; (title, message) VALUES (?, ?)&quot;)) {
+<span class="nc" id="L121">					pst.setString(1, poll.getTitle());</span>
+<span class="nc" id="L122">					pst.setString(2, poll.getMessage());</span>
+<span class="nc" id="L123">					pst.executeUpdate();</span>
+<span class="nc bnc" id="L124" title="All 8 branches missed.">				} catch (Exception e) {</span>
+<span class="nc" id="L125">					throw new DAOException(&quot;Failed to insert values&quot;);</span>
+<span class="nc" id="L126">				}</span>
+<span class="nc" id="L127">			}</span>
+
+<span class="nc" id="L129">			List&lt;PollEntry&gt; pollOptions = DatabaseLoaderUtility</span>
+<span class="nc" id="L130">					.loadPollEntries(servletContext</span>
+<span class="nc" id="L131">							.getRealPath(POLLS_OPTIONS_PATH));</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">			for (PollEntry option : pollOptions) {</span>
+<span class="nc" id="L133">				try (PreparedStatement pst = con</span>
+<span class="nc" id="L134">						.prepareStatement(&quot;INSERT INTO &quot;</span>
+								+ SQLDAO.POLL_OPTIONS_TABLE
+								+ &quot; (optionTitle, optionLink, pollId, votesCount) VALUES (?, ?, ?, ?)&quot;)) {
+<span class="nc" id="L137">					pst.setString(1, option.getOptionTitle());</span>
+<span class="nc" id="L138">					pst.setString(2, option.getOptionLink());</span>
+<span class="nc" id="L139">					pst.setLong(3, option.getPollId());</span>
+<span class="nc" id="L140">					pst.setLong(4, 0);</span>
+<span class="nc" id="L141">					pst.executeUpdate();</span>
+<span class="nc bnc" id="L142" title="All 8 branches missed.">				} catch (Exception e) {</span>
+<span class="nc" id="L143">					throw new DAOException(&quot;Failed to insert values&quot;);</span>
+<span class="nc" id="L144">				}</span>
+<span class="nc" id="L145">			}</span>
+<span class="nc" id="L146">		} catch (Exception ex) {</span>
+<span class="nc" id="L147">			throw new DAOException(&quot;Error occured in filling tables.&quot;, ex);</span>
+<span class="nc" id="L148">		}</span>
+<span class="nc" id="L149">	}</span>
+
+	/**
+	 * Creates required tables if they do not exist.
+	 * @param dataSource database connection provider
+	 * @return true if all tables were created, otherwise false
+	 */
+	private boolean createTables(DataSource dataSource) {
+<span class="nc" id="L157">		Connection con = null;</span>
+		try {
+<span class="nc" id="L159">			con = dataSource.getConnection();</span>
+<span class="nc" id="L160">		} catch (SQLException e1) {</span>
+<span class="nc" id="L161">			throw new RuntimeException(</span>
+					&quot;Error occured when connecting to database&quot;, e1);
+<span class="nc" id="L163">		}</span>
+
+		try {
+<span class="nc" id="L166">			try (PreparedStatement pst = con.prepareStatement(&quot;CREATE TABLE &quot;</span>
+					+ SQLDAO.POLLS_TABLE
+					+ &quot;(id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,&quot;
+					+ &quot;title VARCHAR(150) NOT NULL,&quot;
+					+ &quot;message CLOB(2048) NOT NULL&quot; + &quot;)&quot;)) {
+<span class="nc" id="L171">				pst.execute();</span>
+<span class="nc bnc" id="L172" title="All 8 branches missed.">			} catch (Exception e) {</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">				if (tableExists(SQLDAO.POLLS_TABLE, con)) {</span>
+<span class="nc" id="L174">					return false;</span>
+				}
+<span class="nc" id="L176">				throw e;</span>
+<span class="nc" id="L177">			}</span>
+<span class="nc" id="L178">			try (PreparedStatement pst = con.prepareStatement(&quot;CREATE TABLE &quot;</span>
+					+ SQLDAO.POLL_OPTIONS_TABLE
+					+ &quot;(id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,&quot;
+					+ &quot;optionTitle VARCHAR(100) NOT NULL,&quot;
+					+ &quot;optionLink VARCHAR(150) NOT NULL,&quot;
+					+ &quot;pollID BIGINT,votesCount BIGINT,&quot;
+					+ &quot;FOREIGN KEY (pollID) REFERENCES Polls(id)&quot; + &quot;)&quot;)) {
+<span class="nc" id="L185">				pst.execute();</span>
+<span class="nc bnc" id="L186" title="All 8 branches missed.">			} catch (SQLException e) {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">				if (tableExists(SQLDAO.POLL_OPTIONS_TABLE, con)) {</span>
+<span class="nc" id="L188">					return false;</span>
+				}
+<span class="nc" id="L190">				throw e;</span>
+<span class="nc" id="L191">			}</span>
+<span class="nc" id="L192">		} catch (Exception ex) {</span>
+<span class="nc" id="L193">			throw new RuntimeException(&quot;Error when creating tables.&quot;, ex);</span>
+<span class="nc" id="L194">		}</span>
+<span class="nc" id="L195">		return true;</span>
+	}
+
+	/**
+	 * Checks if table exists.
+	 * @param tableName name of the table
+	 * @param con connection to the database
+	 * @return true if table exists, otherwise false
+	 * @throws SQLException if database error occurs
+	 */
+	private boolean tableExists(String tableName, Connection con)
+			throws SQLException {
+<span class="nc bnc" id="L207" title="All 2 branches missed.">		if (con != null) {</span>
+<span class="nc" id="L208">			DatabaseMetaData dbmd = con.getMetaData();</span>
+<span class="nc" id="L209">			try (ResultSet rs = dbmd.getTables(null, null,</span>
+<span class="nc" id="L210">					tableName.toUpperCase(), null)) {</span>
+<span class="nc" id="L211">				return rs.next();</span>
+<span class="nc bnc" id="L212" title="All 8 branches missed.">			}</span>
+		}
+<span class="nc" id="L214">		return false;</span>
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
+	 * ServletContextEvent)
+	 */
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+<span class="nc" id="L225">		ComboPooledDataSource cpds = (ComboPooledDataSource) sce</span>
+<span class="nc" id="L226">				.getServletContext().getAttribute(&quot;hr.fer.zemris.dbpool&quot;);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">		if (cpds != null) {</span>
+			try {
+<span class="nc" id="L229">				DataSources.destroy(cpds);</span>
+<span class="nc" id="L230">			} catch (SQLException e) {</span>
+<span class="nc" id="L231">				e.printStackTrace();</span>
+<span class="nc" id="L232">			}</span>
+		}
+<span class="nc" id="L234">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

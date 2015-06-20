@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="weblib/jsp-api.jar" sourcepath="/home/luka/Downloads/apache-tomcat-8.0.22-src.zip"/>
+	<classpathentry kind="lib" path="weblib/servlet-api.jar" sourcepath="/home/luka/Downloads/apache-tomcat-8.0.22-src.zip"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/javax.servlet.jsp.jstl-1.2.1.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/javax.servlet.jsp.jstl-api-1.2.1.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/poi-3.12-20150511.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/c3p0-0.9.5.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/derbyclient.jar"/>
+	<classpathentry kind="lib" path="web/aplikacija5/WEB-INF/lib/mchange-commons-java-0.2.9.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="web/aplikacija5/WEB-INF/classes"/>
+</classpath>

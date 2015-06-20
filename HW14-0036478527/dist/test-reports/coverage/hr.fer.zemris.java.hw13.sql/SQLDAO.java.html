@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SQLDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.hw13.sql</a> &gt; <span class="el_source">SQLDAO.java</span></div><h1>SQLDAO.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.hw13.sql;
+
+import hr.fer.zemris.java.hw13.dao.DAO;
+import hr.fer.zemris.java.hw13.dao.DAOException;
+import hr.fer.zemris.java.hw13.model.PollDefinition;
+import hr.fer.zemris.java.hw13.model.PollEntry;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Implementation of {@link DAO} subsystem using SQL. This implementation
+ * expects that connection is available through {@link SQLConnectionProvider}
+ * class.
+ * 
+ * @author Luka Skugor
+ *
+ */
+<span class="nc" id="L22">public class SQLDAO implements DAO {</span>
+
+	/**
+	 * Name of the polls table.
+	 */
+	public static final String POLLS_TABLE = &quot;Polls&quot;;
+	/**
+	 * Name of the poll options table.
+	 */
+	public static final String POLL_OPTIONS_TABLE = &quot;PollOptions&quot;;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hr.fer.zemris.java.hw13.dao.DAO#getPollEntries(long)
+	 */
+	@Override
+	public List&lt;PollEntry&gt; getPollEntries(long pollID) throws DAOException {
+<span class="nc" id="L40">		List&lt;PollEntry&gt; entryList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L41">		Connection con = SQLConnectionProvider.getConnection();</span>
+
+		try {
+<span class="nc" id="L44">			try (PreparedStatement pst = con</span>
+<span class="nc" id="L45">					.prepareStatement(&quot;select id, optionTitle, optionLink, pollID, votesCount from &quot;</span>
+							+ POLL_OPTIONS_TABLE
+							+ &quot; WHERE pollid = ? order by id&quot;);) {
+<span class="nc" id="L48">				pst.setLong(1, pollID);</span>
+<span class="nc" id="L49">				try (ResultSet rs = pst.executeQuery()) {</span>
+<span class="nc bnc" id="L50" title="All 4 branches missed.">					while (rs != null &amp;&amp; rs.next()) {</span>
+<span class="nc" id="L51">						PollEntry entry = new PollEntry();</span>
+<span class="nc" id="L52">						entry.setId(rs.getLong(1));</span>
+<span class="nc" id="L53">						entry.setOptionTitle(rs.getString(2));</span>
+<span class="nc" id="L54">						entry.setOptionLink(rs.getString(3));</span>
+<span class="nc" id="L55">						entry.setPollId(rs.getLong(4));</span>
+<span class="nc" id="L56">						entry.setVotesCount(rs.getLong(5));</span>
+
+<span class="nc" id="L58">						entryList.add(entry);</span>
+<span class="nc" id="L59">					}</span>
+<span class="nc bnc" id="L60" title="All 8 branches missed.">				}</span>
+<span class="nc bnc" id="L61" title="All 8 branches missed.">			}</span>
+<span class="nc" id="L62">		} catch (Exception ex) {</span>
+<span class="nc" id="L63">			throw new DAOException(&quot;Error in getting poll options list&quot;, ex);</span>
+<span class="nc" id="L64">		}</span>
+<span class="nc" id="L65">		return entryList;</span>
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hr.fer.zemris.java.hw13.dao.DAO#getPollEntry(long)
+	 */
+	@Override
+	public PollEntry getPollEntry(long id) throws DAOException {
+<span class="nc" id="L75">		PollEntry entry = null;</span>
+<span class="nc" id="L76">		Connection con = SQLConnectionProvider.getConnection();</span>
+		try {
+<span class="nc" id="L78">			try (PreparedStatement pst = con</span>
+<span class="nc" id="L79">					.prepareStatement(&quot;select id, optionTitle, optionLink, pollID, votesCount from &quot;</span>
+							+ POLL_OPTIONS_TABLE + &quot; where id=?&quot;);) {
+<span class="nc" id="L81">				pst.setLong(1, Long.valueOf(id));</span>
+<span class="nc" id="L82">				try (ResultSet rs = pst.executeQuery()) {</span>
+<span class="nc bnc" id="L83" title="All 4 branches missed.">					if (rs != null &amp;&amp; rs.next()) {</span>
+<span class="nc" id="L84">						entry = new PollEntry();</span>
+<span class="nc" id="L85">						entry.setId(rs.getLong(1));</span>
+<span class="nc" id="L86">						entry.setOptionTitle(rs.getString(2));</span>
+<span class="nc" id="L87">						entry.setOptionLink(rs.getString(3));</span>
+<span class="nc" id="L88">						entry.setPollId(rs.getLong(4));</span>
+<span class="nc" id="L89">						entry.setVotesCount(rs.getLong(5));</span>
+
+<span class="nc" id="L91">						return entry;</span>
+					}
+<span class="nc bnc" id="L93" title="All 12 branches missed.">				}</span>
+<span class="nc bnc" id="L94" title="All 12 branches missed.">			}</span>
+<span class="nc" id="L95">		} catch (Exception ex) {</span>
+<span class="nc" id="L96">			throw new DAOException(&quot;Error occured in getting entry&quot;, ex);</span>
+<span class="nc" id="L97">		}</span>
+<span class="nc" id="L98">		return null;</span>
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hr.fer.zemris.java.hw13.dao.DAO#getPolls()
+	 */
+	@Override
+	public List&lt;PollDefinition&gt; getPolls() throws DAOException {
+<span class="nc" id="L108">		List&lt;PollDefinition&gt; polls = new ArrayList&lt;PollDefinition&gt;();</span>
+
+<span class="nc" id="L110">		PollDefinition entry = null;</span>
+<span class="nc" id="L111">		Connection con = SQLConnectionProvider.getConnection();</span>
+		try {
+<span class="nc" id="L113">			try (PreparedStatement pst = con</span>
+<span class="nc" id="L114">					.prepareStatement(&quot;select id, title, message from &quot;</span>
+							+ POLLS_TABLE)) {
+<span class="nc" id="L116">				try (ResultSet rs = pst.executeQuery()) {</span>
+<span class="nc bnc" id="L117" title="All 4 branches missed.">					if (rs != null &amp;&amp; rs.next()) {</span>
+<span class="nc" id="L118">						entry = new PollDefinition();</span>
+<span class="nc" id="L119">						entry.setId(rs.getLong(1));</span>
+<span class="nc" id="L120">						entry.setTitle(rs.getString(2));</span>
+<span class="nc" id="L121">						entry.setMessage(rs.getString(3));</span>
+
+<span class="nc" id="L123">						polls.add(entry);</span>
+					}
+<span class="nc bnc" id="L125" title="All 8 branches missed.">				}</span>
+<span class="nc bnc" id="L126" title="All 8 branches missed.">			}</span>
+<span class="nc" id="L127">		} catch (Exception ex) {</span>
+<span class="nc" id="L128">			throw new DAOException(&quot;Error occured in getting poll definition&quot;,</span>
+					ex);
+<span class="nc" id="L130">		}</span>
+<span class="nc" id="L131">		return polls;</span>
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hr.fer.zemris.java.hw13.dao.DAO#giveVoteTo(long)
+	 */
+	@Override
+	public void giveVoteTo(long id) throws DAOException {
+<span class="nc" id="L141">		Connection con = SQLConnectionProvider.getConnection();</span>
+		try {
+<span class="nc" id="L143">			try (PreparedStatement pst = con.prepareStatement(&quot;update &quot;</span>
+					+ POLL_OPTIONS_TABLE
+					+ &quot; SET votesCount = votesCount + 1 where id=?&quot;);) {
+<span class="nc" id="L146">				pst.setLong(1, Long.valueOf(id));</span>
+<span class="nc" id="L147">				pst.executeUpdate();</span>
+<span class="nc bnc" id="L148" title="All 8 branches missed.">			}</span>
+<span class="nc" id="L149">		} catch (Exception ex) {</span>
+<span class="nc" id="L150">			throw new DAOException(&quot;Error occured in giving vote to entry&quot;, ex);</span>
+<span class="nc" id="L151">		}</span>
+<span class="nc" id="L152">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

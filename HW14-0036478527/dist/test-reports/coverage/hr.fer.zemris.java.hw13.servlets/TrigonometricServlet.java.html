@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TrigonometricServlet.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.hw13.servlets</a> &gt; <span class="el_source">TrigonometricServlet.java</span></div><h1>TrigonometricServlet.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.hw13.servlets;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * TrigonometricServlet calculates sinuses and cosinuses of integers from a to b
+ * (both inclusive). a and b are given through GET request parameters.
+ * 
+ * @author Luka Skugor
+ *
+ */
+@WebServlet(name = &quot;trigonometric&quot;, urlPatterns = { &quot;/trigonometric&quot; })
+<span class="nc" id="L21">public class TrigonometricServlet extends HttpServlet {</span>
+
+	/**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
+	 * , javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+<span class="nc" id="L39">		Integer startFrom = null;</span>
+<span class="nc" id="L40">		Integer endAt = null;</span>
+
+		try {
+<span class="nc" id="L43">			startFrom = Integer.valueOf(req.getParameter(&quot;a&quot;));</span>
+<span class="nc" id="L44">		} catch (Exception e) {</span>
+<span class="nc" id="L45">			startFrom = 0;</span>
+<span class="nc" id="L46">		}</span>
+
+		try {
+<span class="nc" id="L49">			endAt = Integer.valueOf(req.getParameter(&quot;b&quot;));</span>
+<span class="nc" id="L50">		} catch (Exception e) {</span>
+<span class="nc" id="L51">			endAt = 360;</span>
+<span class="nc" id="L52">		}</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (startFrom &gt; endAt) {</span>
+<span class="nc" id="L55">			Integer tmp = startFrom;</span>
+<span class="nc" id="L56">			startFrom = endAt;</span>
+<span class="nc" id="L57">			endAt = tmp;</span>
+		}
+
+<span class="nc" id="L60">		final int fullCircle = 360;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		if (endAt &gt; startFrom + fullCircle) {</span>
+<span class="nc" id="L62">			endAt = startFrom + 360;</span>
+		}
+
+<span class="nc" id="L65">		List&lt;SinCosEntry&gt; results = new ArrayList&lt;SinCosEntry&gt;();</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		for (int i = startFrom, n = endAt; i &lt;= n; i++) {</span>
+<span class="nc" id="L67">			double angle = i * 2 * Math.PI / 360;</span>
+<span class="nc" id="L68">			results.add(new SinCosEntry(Math.sin(angle), Math.cos(angle)));</span>
+		}
+
+<span class="nc" id="L71">		req.setAttribute(&quot;start&quot;, startFrom);</span>
+<span class="nc" id="L72">		req.setAttribute(&quot;end&quot;, endAt);</span>
+<span class="nc" id="L73">		req.setAttribute(&quot;results&quot;, results);</span>
+
+<span class="nc" id="L75">		req.getRequestDispatcher(&quot;/WEB-INF/pages/trigonometric.jsp&quot;).forward(</span>
+				req, resp);
+<span class="nc" id="L77">	}</span>
+
+	/**
+	 * SinCosEntry holds values of sin(x) and cos(x) for an angle x.
+	 * 
+	 * @author Luka Skugor
+	 *
+	 */
+<span class="nc" id="L85">	public static class SinCosEntry {</span>
+		/**
+		 * sin(x)
+		 */
+		double sin;
+		/**
+		 * cos(x)
+		 */
+		double cos;
+
+		/**
+		 * Creates a new SinCosEntry with given sin(x) and cos(x).
+		 * @param sin sin(x)
+		 * @param cos cos(x)
+		 */
+		public SinCosEntry(double sin, double cos) {
+<span class="nc" id="L101">			super();</span>
+<span class="nc" id="L102">			this.sin = sin;</span>
+<span class="nc" id="L103">			this.cos = cos;</span>
+<span class="nc" id="L104">		}</span>
+
+		/**
+		 * Gets cos(x).
+		 * @return cos(x)
+		 */
+		public double getCos() {
+<span class="nc" id="L111">			return cos;</span>
+		}
+
+		/**
+		 * Gets sin(x).
+		 * @return sin(x)
+		 */
+		public double getSin() {
+<span class="nc" id="L119">			return sin;</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

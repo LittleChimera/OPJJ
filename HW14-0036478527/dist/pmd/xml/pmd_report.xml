@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="5.3.2" timestamp="2015-06-13T00:22:03.243">
+<file name="hr/fer/zemris/java/hw13/servlets/AppInfo.java">
+<violation beginline="32" endline="32" begincolumn="40" endcolumn="62" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="AppInfo" method="contextInitialized" variable="sce" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'sce' is not assigned and could be declared final
+</violation>
+<violation beginline="46" endline="46" begincolumn="38" endcolumn="60" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="AppInfo" method="contextDestroyed" variable="sce" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'sce' is not assigned and could be declared final
+</violation>
+<violation beginline="61" endline="61" begincolumn="48" endcolumn="61" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="AppInfo" method="formatElapsedTime" variable="startTime" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'startTime' is not assigned and could be declared final
+</violation>
+<violation beginline="62" endline="63" begincolumn="17" endcolumn="44" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="AppInfo" method="formatElapsedTime" variable="duration" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'duration' could be declared final
+</violation>
+<violation beginline="64" endline="68" begincolumn="17" endcolumn="80" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="AppInfo" method="formatElapsedTime" variable="elapsedTime" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'elapsedTime' could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/servlets/ColorSetterServlet.java">
+<violation beginline="20" endline="56" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="43" endline="43" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ColorSetterServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="43" endline="43" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ColorSetterServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="46" endline="46" begincolumn="17" endcolumn="57" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ColorSetterServlet" method="doGet" variable="color" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'color' could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/servlets/PowersServlet.java">
+<violation beginline="24" endline="104" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="39" endline="39" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="39" endline="39" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="42" endline="45" begincolumn="25" endcolumn="80" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="endAt" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'endAt' (lines '42'-'45').
+</violation>
+<violation beginline="42" endline="46" begincolumn="25" endcolumn="78" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="maxPower" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'maxPower' (lines '42'-'46').
+</violation>
+<violation beginline="42" endline="44" begincolumn="25" endcolumn="84" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="startFrom" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'startFrom' (lines '42'-'44').
+</violation>
+<violation beginline="42" endline="42" begincolumn="17" endcolumn="58" rule="OneDeclarationPerLine" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="startFrom" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#OneDeclarationPerLine" priority="4">
+Use one line for each declaration, it enhances code readability.
+</violation>
+<violation beginline="44" endline="74" begincolumn="25" endcolumn="84" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="startFrom" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DU'-anomaly for variable 'startFrom' (lines '44'-'74').
+</violation>
+<violation beginline="45" endline="74" begincolumn="25" endcolumn="80" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="endAt" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DU'-anomaly for variable 'endAt' (lines '45'-'74').
+</violation>
+<violation beginline="46" endline="74" begincolumn="25" endcolumn="78" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="maxPower" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DU'-anomaly for variable 'maxPower' (lines '46'-'74').
+</violation>
+<violation beginline="48" endline="48" begincolumn="25" endcolumn="55" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="message" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'message' could be declared final
+</violation>
+<violation beginline="55" endline="55" begincolumn="17" endcolumn="58" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="workbook" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'workbook' could be declared final
+</violation>
+<violation beginline="58" endline="58" begincolumn="25" endcolumn="79" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="sheet" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'sheet' could be declared final
+</violation>
+<violation beginline="59" endline="59" begincolumn="25" endcolumn="57" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="head" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'head' could be declared final
+</violation>
+<violation beginline="64" endline="64" begincolumn="33" endcolumn="80" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="doGet" variable="row" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'row' could be declared final
+</violation>
+<violation beginline="88" endline="88" begincolumn="68" endcolumn="84" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="parseParameter" variable="maxConstraint" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'maxConstraint' is not assigned and could be declared final
+</violation>
+<violation beginline="88" endline="88" begincolumn="50" endcolumn="65" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="parseParameter" variable="minContraint" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'minContraint' is not assigned and could be declared final
+</violation>
+<violation beginline="88" endline="88" begincolumn="36" endcolumn="47" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="parseParameter" variable="param" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'param' is not assigned and could be declared final
+</violation>
+<violation beginline="89" endline="91" begincolumn="25" endcolumn="54" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="parseParameter" variable="value" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'value' (lines '89'-'91').
+</violation>
+<violation beginline="91" endline="93" begincolumn="25" endcolumn="33" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="parseParameter" variable="value" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'value' (lines '91'-'93').
+</violation>
+<violation beginline="92" endline="92" begincolumn="26" endcolumn="34" rule="AvoidCatchingGenericException" ruleset="Strict Exceptions" package="hr.fer.zemris.java.hw13.servlets" class="PowersServlet" method="parseParameter" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/strictexception.html#AvoidCatchingGenericException" priority="3">
+Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/servlets/ReportImageServlet.java">
+<violation beginline="29" endline="92" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="44" endline="44" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="44" endline="44" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="47" endline="47" begincolumn="17" endcolumn="75" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="chart" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'chart' could be declared final
+</violation>
+<violation beginline="49" endline="49" begincolumn="17" endcolumn="51" rule="AvoidFinalLocalVariable" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="width" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AvoidFinalLocalVariable" priority="3">
+Avoid using final local variables, turn them into fields
+</violation>
+<violation beginline="49" endline="49" begincolumn="17" endcolumn="51" rule="OneDeclarationPerLine" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="width" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#OneDeclarationPerLine" priority="4">
+Use one line for each declaration, it enhances code readability.
+</violation>
+<violation beginline="50" endline="50" begincolumn="17" endcolumn="78" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="image" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'image' could be declared final
+</violation>
+<violation beginline="52" endline="52" begincolumn="17" endcolumn="51" rule="AvoidFinalLocalVariable" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="imageExtension" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AvoidFinalLocalVariable" priority="3">
+Avoid using final local variables, turn them into fields
+</violation>
+<violation beginline="55" endline="55" begincolumn="30" endcolumn="31" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="os" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like os
+</violation>
+<violation beginline="55" endline="55" begincolumn="17" endcolumn="56" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="doGet" variable="os" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'os' could be declared final
+</violation>
+<violation beginline="65" endline="65" begincolumn="17" endcolumn="66" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="createDataset" variable="result" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'result' could be declared final
+</violation>
+<violation beginline="79" endline="79" begincolumn="40" endcolumn="57" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="createChart" variable="dataset" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'dataset' is not assigned and could be declared final
+</violation>
+<violation beginline="79" endline="79" begincolumn="60" endcolumn="71" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="createChart" variable="title" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'title' is not assigned and could be declared final
+</violation>
+<violation beginline="81" endline="82" begincolumn="17" endcolumn="44" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="createChart" variable="chart" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'chart' could be declared final
+</violation>
+<violation beginline="84" endline="84" begincolumn="17" endcolumn="60" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="ReportImageServlet" method="createChart" variable="plot" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'plot' could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/servlets/SessionInitializer.java">
+<violation beginline="14" endline="39" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="24" endline="24" begincolumn="53" endcolumn="54" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.servlets" class="SessionInitializer" method="sessionCreated" variable="se" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like se
+</violation>
+<violation beginline="24" endline="24" begincolumn="36" endcolumn="54" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="SessionInitializer" method="sessionCreated" variable="se" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'se' is not assigned and could be declared final
+</violation>
+<violation beginline="37" endline="37" begincolumn="55" endcolumn="56" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.servlets" class="SessionInitializer" method="sessionDestroyed" variable="se" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like se
+</violation>
+<violation beginline="37" endline="38" begincolumn="59" endcolumn="9" rule="UncommentedEmptyMethodBody" ruleset="Design" package="hr.fer.zemris.java.hw13.servlets" class="SessionInitializer" method="sessionDestroyed" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#UncommentedEmptyMethodBody" priority="3">
+Document empty method body
+</violation>
+<violation beginline="37" endline="37" begincolumn="38" endcolumn="56" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="SessionInitializer" method="sessionDestroyed" variable="se" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'se' is not assigned and could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/servlets/TrigonometricServlet.java">
+<violation beginline="21" endline="123" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="36" endline="36" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="36" endline="36" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="39" endline="43" begincolumn="25" endcolumn="74" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="startFrom" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'startFrom' (lines '39'-'43').
+</violation>
+<violation beginline="40" endline="49" begincolumn="25" endcolumn="70" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="endAt" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'endAt' (lines '40'-'49').
+</violation>
+<violation beginline="43" endline="45" begincolumn="25" endcolumn="37" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="startFrom" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'startFrom' (lines '43'-'45').
+</violation>
+<violation beginline="44" endline="44" begincolumn="26" endcolumn="34" rule="AvoidCatchingGenericException" ruleset="Strict Exceptions" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/strictexception.html#AvoidCatchingGenericException" priority="3">
+Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+</violation>
+<violation beginline="49" endline="51" begincolumn="25" endcolumn="35" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="endAt" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DD'-anomaly for variable 'endAt' (lines '49'-'51').
+</violation>
+<violation beginline="50" endline="50" begincolumn="26" endcolumn="34" rule="AvoidCatchingGenericException" ruleset="Strict Exceptions" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/strictexception.html#AvoidCatchingGenericException" priority="3">
+Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+</violation>
+<violation beginline="55" endline="55" begincolumn="25" endcolumn="47" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="tmp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'tmp' could be declared final
+</violation>
+<violation beginline="60" endline="60" begincolumn="17" endcolumn="42" rule="AvoidFinalLocalVariable" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="fullCircle" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AvoidFinalLocalVariable" priority="3">
+Avoid using final local variables, turn them into fields
+</violation>
+<violation beginline="65" endline="65" begincolumn="17" endcolumn="72" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="results" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'results' could be declared final
+</violation>
+<violation beginline="66" endline="66" begincolumn="22" endcolumn="49" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="i" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'n' could be declared final
+</violation>
+<violation beginline="66" endline="66" begincolumn="22" endcolumn="49" rule="OneDeclarationPerLine" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="i" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#OneDeclarationPerLine" priority="4">
+Use one line for each declaration, it enhances code readability.
+</violation>
+<violation beginline="67" endline="67" begincolumn="25" endcolumn="60" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" variable="angle" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'angle' could be declared final
+</violation>
+<violation beginline="68" endline="68" begincolumn="37" endcolumn="85" rule="AvoidInstantiatingObjectsInLoops" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet" method="doGet" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#AvoidInstantiatingObjectsInLoops" priority="3">
+Avoid instantiating new objects inside loops
+</violation>
+<violation beginline="89" endline="89" begincolumn="17" endcolumn="27" rule="DefaultPackage" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet$SinCosEntry" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DefaultPackage" priority="3">
+Use explicit scoping instead of the default package private level
+</violation>
+<violation beginline="93" endline="93" begincolumn="17" endcolumn="27" rule="DefaultPackage" ruleset="Controversial" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet$SinCosEntry" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DefaultPackage" priority="3">
+Use explicit scoping instead of the default package private level
+</violation>
+<violation beginline="100" endline="100" begincolumn="48" endcolumn="57" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet$SinCosEntry" method="SinCosEntry" variable="cos" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'cos' is not assigned and could be declared final
+</violation>
+<violation beginline="100" endline="100" begincolumn="36" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.servlets" class="TrigonometricServlet$SinCosEntry" method="SinCosEntry" variable="sin" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'sin' is not assigned and could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/voting/VotingDatabaseUtility.java">
+<violation beginline="23" endline="284" begincolumn="36" endcolumn="1" rule="UseUtilityClass" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#UseUtilityClass" priority="3">
+All methods are static.  Consider using a utility class instead. Alternatively, you could add a private constructor or make the class abstract to silence this warning.
+</violation>
+<violation beginline="34" endline="49" begincolumn="36" endcolumn="9" rule="AvoidSynchronizedAtMethodLevel" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="getResults" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#AvoidSynchronizedAtMethodLevel" priority="3">
+Use block level rather than method level synchronization
+</violation>
+<violation beginline="35" endline="35" begincolumn="25" endcolumn="42" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="getResults" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resultsPath' is not assigned and could be declared final
+</violation>
+<violation beginline="37" endline="38" begincolumn="17" endcolumn="41" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="getResults" variable="results" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'results' could be declared final
+</violation>
+<violation beginline="44" endline="45" begincolumn="17" endcolumn="75" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="getResults" variable="sortedResults" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'sortedResults' could be declared final
+</violation>
+<violation beginline="61" endline="61" begincolumn="59" endcolumn="76" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="createResultsFile" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resultsPath' is not assigned and could be declared final
+</violation>
+<violation beginline="61" endline="69" begincolumn="36" endcolumn="9" rule="AvoidSynchronizedAtMethodLevel" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="createResultsFile" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#AvoidSynchronizedAtMethodLevel" priority="3">
+Use block level rather than method level synchronization
+</violation>
+<violation beginline="62" endline="62" begincolumn="25" endcolumn="54" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="createResultsFile" variable="definition" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'definition' is not assigned and could be declared final
+</violation>
+<violation beginline="81" endline="81" begincolumn="52" endcolumn="62" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="giveVoteTo" variable="entryID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'entryID' is not assigned and could be declared final
+</violation>
+<violation beginline="81" endline="81" begincolumn="65" endcolumn="82" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="giveVoteTo" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resultsPath' is not assigned and could be declared final
+</violation>
+<violation beginline="81" endline="87" begincolumn="36" endcolumn="9" rule="AvoidSynchronizedAtMethodLevel" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="giveVoteTo" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#AvoidSynchronizedAtMethodLevel" priority="3">
+Use block level rather than method level synchronization
+</violation>
+<violation beginline="101" endline="107" begincolumn="25" endcolumn="53" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'UR'-anomaly for variable 'ID' (lines '101'-'107').
+</violation>
+<violation beginline="101" endline="101" begincolumn="42" endcolumn="59" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resultsPath' is not assigned and could be declared final
+</violation>
+<violation beginline="102" endline="102" begincolumn="25" endcolumn="47" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="IDs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'IDs' is not assigned and could be declared final
+</violation>
+<violation beginline="102" endline="102" begincolumn="50" endcolumn="88" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="results" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'results' is not assigned and could be declared final
+</violation>
+<violation beginline="102" endline="102" begincolumn="45" endcolumn="47" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="IDs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'IDs' starts with uppercase character.
+</violation>
+<violation beginline="105" endline="105" begincolumn="17" endcolumn="66" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="resultsBuilder" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'resultsBuilder' could be declared final
+</violation>
+<violation beginline="106" endline="106" begincolumn="22" endcolumn="31" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'ID' could be declared final
+</violation>
+<violation beginline="106" endline="106" begincolumn="30" endcolumn="31" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'ID' starts with uppercase character.
+</violation>
+<violation beginline="109" endline="109" begincolumn="49" endcolumn="52" rule="AppendCharacterWithChar" ruleset="String and StringBuffer" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/strings.html#AppendCharacterWithChar" priority="3">
+Avoid appending characters as strings in StringBuffer.append.
+</violation>
+<violation beginline="111" endline="111" begincolumn="49" endcolumn="52" rule="AppendCharacterWithChar" ruleset="String and StringBuffer" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="storeResults" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/strings.html#AppendCharacterWithChar" priority="3">
+Avoid appending characters as strings in StringBuffer.append.
+</violation>
+<violation beginline="126" endline="133" begincolumn="34" endcolumn="63" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="line" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'UR'-anomaly for variable 'line' (lines '126'-'133').
+</violation>
+<violation beginline="127" endline="127" begincolumn="25" endcolumn="42" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resultsPath' is not assigned and could be declared final
+</violation>
+<violation beginline="129" endline="129" begincolumn="17" endcolumn="79" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="lines" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'lines' could be declared final
+</violation>
+<violation beginline="130" endline="130" begincolumn="17" endcolumn="47" rule="UseConcurrentHashMap" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
+</violation>
+<violation beginline="130" endline="130" begincolumn="17" endcolumn="73" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="entries" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'entries' could be declared final
+</violation>
+<violation beginline="132" endline="132" begincolumn="22" endcolumn="32" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="line" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'line' could be declared final
+</violation>
+<violation beginline="133" endline="133" begincolumn="25" endcolumn="63" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="entryArray" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'entryArray' could be declared final
+</violation>
+<violation beginline="134" endline="134" begincolumn="33" endcolumn="34" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like ID
+</violation>
+<violation beginline="134" endline="134" begincolumn="25" endcolumn="68" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'ID' could be declared final
+</violation>
+<violation beginline="134" endline="134" begincolumn="33" endcolumn="34" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'ID' starts with uppercase character.
+</violation>
+<violation beginline="136" endline="136" begincolumn="41" endcolumn="98" rule="AvoidInstantiatingObjectsInLoops" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadResults" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#AvoidInstantiatingObjectsInLoops" priority="3">
+Avoid instantiating new objects inside loops
+</violation>
+<violation beginline="150" endline="157" begincolumn="34" endcolumn="63" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="line" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'UR'-anomaly for variable 'line' (lines '150'-'157').
+</violation>
+<violation beginline="151" endline="151" begincolumn="25" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="definitionPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'definitionPath' is not assigned and could be declared final
+</violation>
+<violation beginline="153" endline="153" begincolumn="17" endcolumn="82" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="lines" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'lines' could be declared final
+</violation>
+<violation beginline="154" endline="154" begincolumn="17" endcolumn="51" rule="UseConcurrentHashMap" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
+</violation>
+<violation beginline="154" endline="154" begincolumn="17" endcolumn="77" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="entries" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'entries' could be declared final
+</violation>
+<violation beginline="156" endline="156" begincolumn="22" endcolumn="32" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="line" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'line' could be declared final
+</violation>
+<violation beginline="157" endline="157" begincolumn="25" endcolumn="63" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="entryArray" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'entryArray' could be declared final
+</violation>
+<violation beginline="158" endline="158" begincolumn="33" endcolumn="34" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like ID
+</violation>
+<violation beginline="158" endline="158" begincolumn="25" endcolumn="68" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'ID' could be declared final
+</violation>
+<violation beginline="158" endline="158" begincolumn="33" endcolumn="34" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'ID' starts with uppercase character.
+</violation>
+<violation beginline="159" endline="160" begincolumn="41" endcolumn="54" rule="AvoidInstantiatingObjectsInLoops" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility" method="loadDatabaseDefintion" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#AvoidInstantiatingObjectsInLoops" priority="3">
+Avoid instantiating new objects inside loops
+</violation>
+<violation beginline="176" endline="176" begincolumn="29" endcolumn="30" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like ID
+</violation>
+<violation beginline="176" endline="176" begincolumn="29" endcolumn="30" rule="ImmutableField" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#ImmutableField" priority="3">
+Private field 'ID' could be made final; it is only initialized in the declaration or constructor.
+</violation>
+<violation beginline="176" endline="176" begincolumn="25" endcolumn="31" rule="SuspiciousConstantFieldName" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#SuspiciousConstantFieldName" priority="3">
+The field name indicates a constant but its modifiers do not
+</violation>
+<violation beginline="176" endline="176" begincolumn="29" endcolumn="30" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'ID' starts with uppercase character.
+</violation>
+<violation beginline="180" endline="180" begincolumn="32" endcolumn="39" rule="ImmutableField" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" variable="bandName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#ImmutableField" priority="3">
+Private field 'bandName' could be made final; it is only initialized in the declaration or constructor.
+</violation>
+<violation beginline="184" endline="184" begincolumn="32" endcolumn="45" rule="ImmutableField" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" variable="previewSongURL" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#ImmutableField" priority="3">
+Private field 'previewSongURL' could be made final; it is only initialized in the declaration or constructor.
+</violation>
+<violation beginline="196" endline="196" begincolumn="50" endcolumn="51" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" method="VotingDefinitionEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like ID
+</violation>
+<violation beginline="196" endline="196" begincolumn="46" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" method="VotingDefinitionEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'ID' is not assigned and could be declared final
+</violation>
+<violation beginline="196" endline="196" begincolumn="54" endcolumn="68" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" method="VotingDefinitionEntry" variable="bandName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'bandName' is not assigned and could be declared final
+</violation>
+<violation beginline="196" endline="196" begincolumn="71" endcolumn="88" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" method="VotingDefinitionEntry" variable="previewSong" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'previewSong' is not assigned and could be declared final
+</violation>
+<violation beginline="196" endline="196" begincolumn="50" endcolumn="51" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingDefinitionEntry" method="VotingDefinitionEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'ID' starts with uppercase character.
+</violation>
+<violation beginline="244" endline="244" begincolumn="29" endcolumn="30" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like ID
+</violation>
+<violation beginline="244" endline="244" begincolumn="29" endcolumn="30" rule="ImmutableField" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#ImmutableField" priority="3">
+Private field 'ID' could be made final; it is only initialized in the declaration or constructor.
+</violation>
+<violation beginline="244" endline="244" begincolumn="25" endcolumn="31" rule="SuspiciousConstantFieldName" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#SuspiciousConstantFieldName" priority="3">
+The field name indicates a constant but its modifiers do not
+</violation>
+<violation beginline="244" endline="244" begincolumn="29" endcolumn="30" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'ID' starts with uppercase character.
+</violation>
+<violation beginline="248" endline="248" begincolumn="29" endcolumn="33" rule="ImmutableField" ruleset="Design" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" variable="votes" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#ImmutableField" priority="3">
+Private field 'votes' could be made final; it is only initialized in the declaration or constructor.
+</violation>
+<violation beginline="258" endline="258" begincolumn="46" endcolumn="47" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" method="VotingResultEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like ID
+</violation>
+<violation beginline="258" endline="258" begincolumn="42" endcolumn="47" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" method="VotingResultEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'ID' is not assigned and could be declared final
+</violation>
+<violation beginline="258" endline="258" begincolumn="50" endcolumn="58" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" method="VotingResultEntry" variable="votes" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'votes' is not assigned and could be declared final
+</violation>
+<violation beginline="258" endline="258" begincolumn="46" endcolumn="47" rule="VariableNamingConventions" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting" class="VotingDatabaseUtility$VotingResultEntry" method="VotingResultEntry" variable="ID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#VariableNamingConventions" priority="1">
+Variables should start with a lowercase character, 'ID' starts with uppercase character.
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/voting/servlets/GlasanjeGlasajServlet.java">
+<violation beginline="23" endline="63" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="38" endline="38" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGlasajServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="38" endline="38" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGlasajServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="41" endline="42" begincolumn="17" endcolumn="66" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGlasajServlet" method="doGet" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'resultsPath' could be declared final
+</violation>
+<violation beginline="44" endline="45" begincolumn="25" endcolumn="75" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGlasajServlet" method="doGet" variable="definitionPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'definitionPath' could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/voting/servlets/GlasanjeGrafikaServlet.java">
+<violation beginline="34" endline="125" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="43" endline="43" begincolumn="35" endcolumn="37" rule="FinalFieldCouldBeStatic" ruleset="Design" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#FinalFieldCouldBeStatic" priority="3">
+This final field could be made static
+</violation>
+<violation beginline="47" endline="47" begincolumn="36" endcolumn="38" rule="FinalFieldCouldBeStatic" ruleset="Design" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/design.html#FinalFieldCouldBeStatic" priority="3">
+This final field could be made static
+</violation>
+<violation beginline="57" endline="57" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="57" endline="57" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="60" endline="61" begincolumn="17" endcolumn="67" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="definitionPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'definitionPath' could be declared final
+</violation>
+<violation beginline="62" endline="63" begincolumn="17" endcolumn="66" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'resultsPath' could be declared final
+</violation>
+<violation beginline="65" endline="69" begincolumn="17" endcolumn="49" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="chart" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'chart' could be declared final
+</violation>
+<violation beginline="71" endline="71" begincolumn="17" endcolumn="78" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="image" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'image' could be declared final
+</violation>
+<violation beginline="73" endline="73" begincolumn="17" endcolumn="51" rule="AvoidFinalLocalVariable" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="imageExtension" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AvoidFinalLocalVariable" priority="3">
+Avoid using final local variables, turn them into fields
+</violation>
+<violation beginline="76" endline="76" begincolumn="30" endcolumn="31" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="os" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like os
+</violation>
+<violation beginline="76" endline="76" begincolumn="17" endcolumn="56" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="doGet" variable="os" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'os' could be declared final
+</violation>
+<violation beginline="90" endline="95" begincolumn="25" endcolumn="57" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createDataset" variable="entry" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'UR'-anomaly for variable 'entry' (lines '90'-'95').
+</violation>
+<violation beginline="90" endline="90" begincolumn="42" endcolumn="78" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createDataset" variable="results" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'results' is not assigned and could be declared final
+</violation>
+<violation beginline="91" endline="91" begincolumn="25" endcolumn="70" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createDataset" variable="definition" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'definition' is not assigned and could be declared final
+</violation>
+<violation beginline="92" endline="92" begincolumn="17" endcolumn="66" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createDataset" variable="result" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'result' could be declared final
+</violation>
+<violation beginline="94" endline="94" begincolumn="22" endcolumn="44" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createDataset" variable="entry" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'entry' could be declared final
+</violation>
+<violation beginline="112" endline="112" begincolumn="40" endcolumn="57" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createChart" variable="dataset" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'dataset' is not assigned and could be declared final
+</violation>
+<violation beginline="112" endline="112" begincolumn="60" endcolumn="71" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createChart" variable="title" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'title' is not assigned and could be declared final
+</violation>
+<violation beginline="114" endline="115" begincolumn="17" endcolumn="44" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createChart" variable="chart" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'chart' could be declared final
+</violation>
+<violation beginline="117" endline="117" begincolumn="17" endcolumn="60" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeGrafikaServlet" method="createChart" variable="plot" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'plot' could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/voting/servlets/GlasanjeRezultatiServlet.java">
+<violation beginline="27" endline="66" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="42" endline="42" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeRezultatiServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="42" endline="42" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeRezultatiServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="45" endline="46" begincolumn="17" endcolumn="67" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeRezultatiServlet" method="doGet" variable="definitionPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'definitionPath' could be declared final
+</violation>
+<violation beginline="47" endline="48" begincolumn="17" endcolumn="70" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeRezultatiServlet" method="doGet" variable="definition" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'definition' could be declared final
+</violation>
+<violation beginline="51" endline="52" begincolumn="17" endcolumn="66" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeRezultatiServlet" method="doGet" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'resultsPath' could be declared final
+</violation>
+<violation beginline="58" endline="59" begincolumn="17" endcolumn="56" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeRezultatiServlet" method="doGet" variable="results" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'results' could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/voting/servlets/GlasanjeServlet.java">
+<violation beginline="23" endline="52" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="37" endline="37" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="37" endline="37" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="40" endline="41" begincolumn="17" endcolumn="67" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeServlet" method="doGet" variable="fileName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'fileName' could be declared final
+</violation>
+<violation beginline="43" endline="44" begincolumn="17" endcolumn="73" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeServlet" method="doGet" variable="definition" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'definition' could be declared final
+</violation>
+</file>
+<file name="hr/fer/zemris/java/hw13/voting/servlets/GlasanjeXLSServlet.java">
+<violation beginline="31" endline="108" begincolumn="8" endcolumn="1" rule="AtLeastOneConstructor" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#AtLeastOneConstructor" priority="3">
+Each class should declare at least one constructor
+</violation>
+<violation beginline="46" endline="46" begincolumn="30" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="req" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'req' is not assigned and could be declared final
+</violation>
+<violation beginline="46" endline="46" begincolumn="54" endcolumn="77" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="resp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'resp' is not assigned and could be declared final
+</violation>
+<violation beginline="49" endline="50" begincolumn="17" endcolumn="67" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="definitionPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'definitionPath' could be declared final
+</violation>
+<violation beginline="51" endline="52" begincolumn="17" endcolumn="70" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="definition" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'definition' could be declared final
+</violation>
+<violation beginline="54" endline="55" begincolumn="17" endcolumn="66" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="resultsPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'resultsPath' could be declared final
+</violation>
+<violation beginline="61" endline="62" begincolumn="17" endcolumn="56" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="results" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'results' could be declared final
+</violation>
+<violation beginline="65" endline="65" begincolumn="17" endcolumn="75" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="workbook" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'workbook' could be declared final
+</violation>
+<violation beginline="68" endline="68" begincolumn="30" endcolumn="31" rule="ShortVariable" ruleset="Naming" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="os" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/naming.html#ShortVariable" priority="3">
+Avoid variables with short names like os
+</violation>
+<violation beginline="68" endline="68" begincolumn="17" endcolumn="56" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="doGet" variable="os" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'os' could be declared final
+</violation>
+<violation beginline="84" endline="100" begincolumn="25" endcolumn="90" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="resultEntry" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'UR'-anomaly for variable 'resultEntry' (lines '84'-'100').
+</violation>
+<violation beginline="85" endline="85" begincolumn="25" endcolumn="70" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="definition" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'definition' is not assigned and could be declared final
+</violation>
+<violation beginline="86" endline="86" begincolumn="25" endcolumn="61" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="results" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'results' is not assigned and could be declared final
+</violation>
+<violation beginline="88" endline="88" begincolumn="17" endcolumn="58" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="workbook" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'workbook' could be declared final
+</violation>
+<violation beginline="90" endline="90" begincolumn="17" endcolumn="77" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="sheet" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'sheet' could be declared final
+</violation>
+<violation beginline="91" endline="91" begincolumn="17" endcolumn="49" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="head" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'head' could be declared final
+</violation>
+<violation beginline="95" endline="106" begincolumn="21" endcolumn="34" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="rowCounter" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DU'-anomaly for variable 'rowCounter' (lines '95'-'106').
+</violation>
+<violation beginline="96" endline="96" begincolumn="22" endcolumn="50" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="resultEntry" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'resultEntry' could be declared final
+</violation>
+<violation beginline="97" endline="97" begincolumn="25" endcolumn="65" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="row" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'row' could be declared final
+</violation>
+<violation beginline="98" endline="106" begincolumn="25" endcolumn="36" rule="DataflowAnomalyAnalysis" ruleset="Controversial" package="hr.fer.zemris.java.hw13.voting.servlets" class="GlasanjeXLSServlet" method="createWorkbook" variable="rowCounter" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.3.2/pmd-java/rules/java/controversial.html#DataflowAnomalyAnalysis" priority="5">
+Found 'DU'-anomaly for variable 'rowCounter' (lines '98'-'106').
+</violation>
+</file>
+</pmd>

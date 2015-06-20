@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AppInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW03-0036478527</a> &gt; <a href="index.source.html" class="el_package">hr.fer.zemris.java.hw13.servlets</a> &gt; <span class="el_source">AppInfo.java</span></div><h1>AppInfo.java</h1><pre class="source lang-java linenums">package hr.fer.zemris.java.hw13.servlets;
+
+import java.time.Duration;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+/**
+ * AppInfo is a web listener which remembers system time when application
+ * starts.
+ * 
+ * @author Luka Skugor
+ *
+ */
+<span class="nc" id="L16">public class AppInfo implements ServletContextListener {</span>
+
+	/**
+	 * Time when application started in milliseconds.
+	 */
+	private long startTime;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet
+	 * .ServletContextEvent)
+	 */
+	@Override
+	public void contextInitialized(ServletContextEvent sce) {
+<span class="nc" id="L32">		startTime = System.currentTimeMillis();</span>
+<span class="nc" id="L33">		sce.getServletContext().setAttribute(ColorSetterServlet.BG_COLOR,</span>
+				ColorSetterServlet.DEFAULT_COLOR);
+<span class="nc" id="L35">		sce.getServletContext().setAttribute(&quot;startTime&quot;, startTime);</span>
+<span class="nc" id="L36">	}</span>
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
+	 * ServletContextEvent)
+	 */
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+<span class="nc" id="L46">		System.out.println(formatElapsedTime(startTime));</span>
+<span class="nc" id="L47">	}</span>
+
+	/**
+	 * Formats elapsed time as a string. Elapsed time is calculated as current
+	 * time minus given start time.
+	 * 
+	 * Example of formatted time: 0 days 3 hours 2 minutes 1 seconds 321
+	 * milliseconds
+	 * 
+	 * @param startTime
+	 *            start time
+	 * @return formatted elapsed time
+	 */
+	public static String formatElapsedTime(long startTime) {
+<span class="nc" id="L61">		Duration duration = Duration.ofMillis(System.currentTimeMillis()</span>
+				- startTime);
+<span class="nc" id="L63">		String elapsedTime = String</span>
+<span class="nc" id="L64">				.format(&quot;Server ran for %d days, %d hours, %d minutes, %d seconds, %d milliseconds.&quot;,</span>
+<span class="nc" id="L65">						duration.toDays(), duration.toHours(),</span>
+<span class="nc" id="L66">						duration.toMinutes(), duration.getSeconds() % 60,</span>
+<span class="nc" id="L67">						duration.getNano() / (int) 1e+6);</span>
+
+<span class="nc" id="L69">		return elapsedTime;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
