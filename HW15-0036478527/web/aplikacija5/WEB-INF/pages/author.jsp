@@ -11,29 +11,12 @@
 				</c:when>
 				<c:otherwise>
 					<c:forEach var="blogEntry" items="${blogEntries}">
-						<h1>
-							<c:out value="${blogEntry.title}" />
-						</h1>
-						<p>
-							<c:out value="${blogEntry.text}" />
-						</p>
-						<c:if test="${!blogEntry.comments.isEmpty()}">
-							<ul>
-								<c:forEach var="e" items="${blogEntry.comments}">
-									<li><div style="font-weight: bold">
-											[Korisnik=
-											<c:out value="${e.usersEMail}" />
-											]
-											<c:out value="${e.postedOn}" />
-										</div>
-										<div style="padding-left: 10px;">
-											<c:out value="${e.message}" />
-										</div> <c:if
-											test="${author.equals(sessionScope.get('current.user.nick'))}">
-											<a href="edit?id=${blogEntry.id}">Edit</a>
-										</c:if></li>
-								</c:forEach>
-							</ul>
+						<h3 style="display: inline"><c:out value="${blogEntry.title}" /></h3>
+						<a href="${author.nick}/${blogEntry.id}" style="display: inline">Show</a>
+
+						<c:if
+							test="${author.nick.equals(sessionScope.get('current.user.nick'))}">
+							<a href="edit?id=${blogEntry.id}" style="display: inline">Edit</a>
 						</c:if>
 					</c:forEach>
 				</c:otherwise>

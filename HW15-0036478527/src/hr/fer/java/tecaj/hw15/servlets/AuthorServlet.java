@@ -40,9 +40,15 @@ public class AuthorServlet extends HttpServlet {
 		String loggedAuthorNick = (String) req.getSession().getAttribute(
 				"current.user.nick");
 
+		String authorAction = req.getPathInfo().substring(
+				("/" + requestedAuthorNick).length());
+		if (authorAction.matches("/\\d+")) {
+			dispatchEntry(req, resp, em, Long.parseLong(authorAction.substring(1)));
+			return;
+		}
+
 		BlogEntry editingEntry = null;
-		if (req.getPathInfo().substring(("/" + requestedAuthorNick).length())
-				.equals("/new")) {
+		if (authorAction.equals("/new")) {
 			editingEntry = parseNewEntryRequest(req, resp, requestedAuthorNick,
 					loggedAuthorNick);
 			if (editingEntry == null) {
@@ -50,8 +56,7 @@ public class AuthorServlet extends HttpServlet {
 			}
 		}
 
-		if (req.getPathInfo().substring(("/" + requestedAuthorNick).length())
-				.startsWith("/edit?")) {
+		if (authorAction.startsWith("/edit?")) {
 
 			editingEntry = parseEditingEntryRequest(req, resp, em,
 					requestedAuthorNick, loggedAuthorNick);
@@ -68,7 +73,28 @@ public class AuthorServlet extends HttpServlet {
 		}
 
 		dispatchEntries(em, req, resp);
+
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	private void dispatchEntry(HttpServletRequest req,
+			HttpServletResponse resp, EntityManager em, long entryId) throws ServletException, IOException {
 		
+		String authorNick = getAuthorNick(req.getPathInfo());
+		
+		BlogEntry blogEntry = em.find(BlogEntry.class, entryId);
+		if (!authorNick.equals(blogEntry.getCreator().getNick())) {
+			req.setAttribute("error", "Invalid id");
+			req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(
+					req, resp);
+			return;
+		}
+
+		req.setAttribute("blogEntry", blogEntry);
+		req.getRequestDispatcher("/WEB-INF/pages/blogDisplay.jsp")
+				.forward(req, resp);
+
 		em.getTransaction().commit();
 		em.close();
 	}
@@ -197,7 +223,7 @@ public class AuthorServlet extends HttpServlet {
 
 		req.getRequestDispatcher("/WEB-INF/pages/author.jsp")
 				.forward(req, resp);
-		
+
 		em.getTransaction().commit();
 		em.close();
 

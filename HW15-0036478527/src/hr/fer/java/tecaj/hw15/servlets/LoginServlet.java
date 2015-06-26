@@ -28,12 +28,9 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		BlogUser user = new BlogUser();
 
 		String passwordHash = AuthenticationUtility.encryptPassword(req.getParameter("password"));
-		user.setPasswordHash(passwordHash);
 
-		user.setNick(req.getParameter("nick"));
 		EntityManagerFactory emf = (EntityManagerFactory) req
 				.getServletContext().getAttribute("my.application.emf");
 		EntityManager em = emf.createEntityManager();
@@ -41,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 
 		@SuppressWarnings("unchecked")
 		List<BlogUser> results = em.createNamedQuery("BlogUser.requestUser")
-				.setParameter("givenNick", user.getNick()).getResultList();
+				.setParameter("givenNick", req.getParameter("nick")).getResultList();
 
 		em.getTransaction().commit();
 		em.close();
@@ -49,8 +46,8 @@ public class LoginServlet extends HttpServlet {
 		List<String> loginErrors = new LinkedList<String>();
 		req.setAttribute("loginErrors", loginErrors);
 		
-		if (!results.isEmpty() && passwordHash.equals(user.getPasswordHash())) {
-			user = results.get(0);
+		if (!results.isEmpty() && passwordHash.equals(results.get(0).getPasswordHash())) {
+			BlogUser user = results.get(0);
 			HttpSession session = req.getSession();
 			session.setAttribute("current.user.id", user.getId());
 			session.setAttribute("current.user.fn", user.getFirstName());
