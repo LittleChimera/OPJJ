@@ -24,13 +24,14 @@ public class MainPageServlet extends HttpServlet {
 		EntityManagerFactory emf = (EntityManagerFactory) req
 				.getServletContext().getAttribute("my.application.emf");
 		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
 		
 		@SuppressWarnings("unchecked")
 		List<BlogUser> authors = em.createNamedQuery("BlogUser.listUsers").getResultList();
 		req.setAttribute("blogAuthors", authors);
 		
-		/*em.getTransaction().commit();
-		em.close();*/
+		em.getTransaction().commit();
+		em.close();
 		
 		req.getRequestDispatcher("/WEB-INF/pages/main.jsp").forward(req, resp);
 	}

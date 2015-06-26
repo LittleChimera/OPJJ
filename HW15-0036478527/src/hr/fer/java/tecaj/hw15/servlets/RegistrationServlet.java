@@ -46,6 +46,7 @@ public class RegistrationServlet extends HttpServlet {
 		EntityManagerFactory emf = (EntityManagerFactory) req
 				.getServletContext().getAttribute("my.application.emf");
 		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
 
 		@SuppressWarnings("unchecked")
 		List<BlogUser> results = em.createNamedQuery("BlogUser.requestUser")
@@ -54,16 +55,16 @@ public class RegistrationServlet extends HttpServlet {
 		if (!results.isEmpty()) {
 			errors.add("Nick already taken");
 			req.getRequestDispatcher("/WEB-INF/pages/main.jsp").forward(req, resp);
+			return;
+		} 
+		//add user
 			
-		} else {
-			//add user
-			em.getTransaction().begin();
+		em.persist(user);
 			
-			em.persist(user);
-			
-		}
 		em.getTransaction().commit();
 		em.close();
+		
+		resp.sendRedirect("main");
 	}
 	
 	private List<String> validateRegisterData(BlogUser user, String password) {

@@ -9,6 +9,7 @@
 		<c:when test="${sessionScope.containsKey('current.user.id')}">
 			<h1 style="text-align: center">Welcome
 				${sessionScope.get('current.user.nick')}!</h1>
+				<a href="logout">Logout</a>
 		</c:when>
 		<c:otherwise>
 			<h2>Login</h2>

@@ -26,7 +26,10 @@ import javax.persistence.QueryHint;
 	@NamedQuery(
 		name = "BlogEntry.upit1",
 		query = "select b from BlogComment as b where b.blogEntry=:be and b.postedOn>:when",
-		hints={@QueryHint(name="org.hibernate.cacheable", value="true")})
+		hints={@QueryHint(name="org.hibernate.cacheable", value="true")}),
+	@NamedQuery(
+		name = "BlogEntry.requestById",
+		query = "select b from BlogEntry as b where b.id=:eId")
 	})
 @Entity
 @Table(name = "blog_entries")

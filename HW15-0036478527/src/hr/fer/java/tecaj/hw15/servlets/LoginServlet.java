@@ -37,11 +37,15 @@ public class LoginServlet extends HttpServlet {
 		EntityManagerFactory emf = (EntityManagerFactory) req
 				.getServletContext().getAttribute("my.application.emf");
 		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
 
 		@SuppressWarnings("unchecked")
 		List<BlogUser> results = em.createNamedQuery("BlogUser.requestUser")
 				.setParameter("givenNick", user.getNick()).getResultList();
 
+		em.getTransaction().commit();
+		em.close();
+		
 		List<String> loginErrors = new LinkedList<String>();
 		req.setAttribute("loginErrors", loginErrors);
 		
@@ -57,8 +61,7 @@ public class LoginServlet extends HttpServlet {
 			loginErrors.add("Invalid nick or password.");
 			req.getRequestDispatcher("/WEB-INF/pages/main.jsp").forward(req, resp);
 		}
-		em.getTransaction().commit();
-		em.close();
+		
 	}
 
 }
