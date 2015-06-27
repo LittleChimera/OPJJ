@@ -31,7 +31,7 @@
 			<!-- http://docs.jboss.org/hibernate/orm/4.3/manual/en-US/html_single/ -->
 			<!-- ============================== -->
 			<property name="hibernate.archive.autodetection" value="class" />
-			<property name="hibernate.hbm2ddl.auto" value="create-drop" /> <!-- mogućnosti: create, create-drop, update, validate -->
+			<property name="hibernate.hbm2ddl.auto" value="update" /> <!-- mogućnosti: create, create-drop, update, validate -->
 			<property name="hibernate.format_sql" value="true" /> <!-- kasnije na false -->
 			<property name="hibernate.show_sql" value="true" /> <!-- kasnije na false -->
 			<property name="hibernate.use_sql_comments" value="true" />  <!-- kasnije staviti na false -->
