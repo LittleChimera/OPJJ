@@ -178,7 +178,7 @@ public class AuthorServlet extends HttpServlet {
 		}
 
 		if (authorAction.equals("/save")) {
-			if (saveEntry(req, resp, em)) {
+			if (!saveEntry(req, resp, em)) {
 				return;
 			}
 		}

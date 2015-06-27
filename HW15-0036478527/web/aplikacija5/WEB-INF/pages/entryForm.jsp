@@ -7,7 +7,7 @@
 			<p style="text-align: center; display: inline">Welcome
 				${sessionScope.get('current.user.fn')}
 				${sessionScope.get('current.user.ln')}!</p>
-			<a href="logout">Logout</a>
+			<a href="/aplikacija5/servleti/logout">Logout</a>
 		</c:when>
 		<c:otherwise>
 			<p>Not logged in.</p>

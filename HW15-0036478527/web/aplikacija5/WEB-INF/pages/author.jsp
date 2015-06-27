@@ -7,7 +7,7 @@
 			<p style="text-align: center; display: inline">Welcome
 				${sessionScope.get('current.user.fn')}
 				${sessionScope.get('current.user.ln')}!</p>
-			<a href="logout">Logout</a>
+			<a href="/aplikacija5/servleti/logout">Logout</a>
 		</c:when>
 		<c:otherwise>
 			<p>Not logged in.</p>
@@ -27,7 +27,7 @@
 
 						<c:if
 							test="${author.nick.equals(sessionScope.get('current.user.nick'))}">
-							<a href="edit?id=${blogEntry.id}" style="display: inline">Edit</a>
+							<a href="${author.nick}/edit?id=${blogEntry.id}" style="display: inline">Edit</a>
 						</c:if>
 						<br>
 					</c:forEach>
