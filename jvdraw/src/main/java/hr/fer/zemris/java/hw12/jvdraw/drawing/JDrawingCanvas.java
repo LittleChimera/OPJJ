@@ -13,7 +13,7 @@ import javax.swing.JComponent;
 /**
  * Drawing canvas for drawing {@link GeometricalObject}s. All drawn objects are
  * pulled from a {@link DrawingModel}.
- * 
+ *
  * @author Luka Skugor
  *
  */
@@ -50,7 +50,7 @@ public class JDrawingCanvas extends JComponent {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	@Override
@@ -135,7 +135,7 @@ public class JDrawingCanvas extends JComponent {
 	 * Adds a listener to the model.
 	 */
 	private void addListenerToModel() {
-		
+
 		listener = new DrawingModelListener() {
 
 			@Override
