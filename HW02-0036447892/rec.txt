@@ -1,6 +1,0 @@
-U SmartScriptTester(linija 74) imas puno "string +=". To bi u ovom slucaju bilo bolje napraviti kao StringBuilder.
-
-U rekreiranju dokumenta stavi spaceove izmedju tokena jer npr. za primjer iz zadatka dobijes liniju "{$= ii*@sin"0.000"@decfmt $}" gdje bi prvo i drugo i trebale biti dvije odvojene varijable.
-
-U dva primjera(od 5) u SmartScriptTesteru ne parsira ono sto bi trebalo parsirati.
-Za nepostojeci file i za manjak argumenta nisu obradjene iznimke.

@@ -1,9 +1,0 @@
-Parser ne radi za 1/7 primjera. Ne radi samo na primjeru iz teksta zadatka gdje baca iznimke dok program ne ostane bez memorije.
-
-U ObjectStack si mogao napraviti metodu koja uduplava kapacitet jer na 2 mjesta provjeravas jeli kapacitet dovoljan.
-
-Ostala ti je klasa ObrisiMe.
-
-Kod je dobar.
-
-Neki opisi u javadocu bi mogli biti duzi ali javadoc je na djelovima cak odlican.
